@@ -4,6 +4,7 @@ import saveLoad as sv
 from sys import exit
 from gameplay import Gameplay
 from humanMode import gameManually
+from autoMode import gameAutomatically
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
 screen = mg.screen
@@ -164,7 +165,7 @@ class Menu:
             play.creatingMaze()
             print("MANUALLL")
         elif index == 1:
-            play = Gameplay()
+            play = gameAutomatically()
             play.creatingMaze()
             print("AUTOMATICCC")
         elif index == 2:

@@ -15,7 +15,7 @@ class playAutomatically:
             self.visited = None
             self.parent = None
             self.step = None
-
+            self.searching_area = []
         def createMaze(self, start_point, end_point):
             self.visited = np.array([[False for i in range(self.size)] for j in range(self.size)])
             self.parent = np.array([[None for i in range(self.size)] for j in range(self.size)])
@@ -33,6 +33,7 @@ class playAutomatically:
             queue.append((s, t))
             while(len(queue) > 0):
                 top = queue.pop(0)
+                self.searching_area.append(top)
                 for k in range(4):
                     i1 = top[0] + dx[k]
                     j1 = top[1] + dy[k]
@@ -43,7 +44,7 @@ class playAutomatically:
                             if(i1 == self.B_x and j1 == self.B_y): return
                             queue.append((i1, j1))
                             self.visited[i1, j1] = True
-
+            return self.searching_area
         def Truyvet(self):
             u, v = self.B_x, self.B_y
             way = []
@@ -54,16 +55,7 @@ class playAutomatically:
                 v = temp[1]
                 way.append((u,v))
             way.reverse()
-            # for step in way:
-            #     print(step)
-             #print(self.step[self.B_x, self.B_y])
             return way
-    # A = Maze_bfs_solving()
-    # A.Bfs()
-    # path = A.Truyvet()
-    # print(path)
-    # mG.mazeApplication(matrix, path)
-
     class maze_dijkstra_solving:
         def __init__(self, matrix) -> None:
             self.maze = matrix.copy()
@@ -77,6 +69,7 @@ class playAutomatically:
             self.step = None
             self.maxn = 100001
             self.INF = 1e9
+            self.searching_area = []
         def creatingInfo(self, start_point, end_point):
             self.parent = np.array([[None for i in range(self.size)] for j in range(self.size)])
             self.step = np.array([[self.INF for i in range(self.size)] for j in range(self.size)])
@@ -96,6 +89,7 @@ class playAutomatically:
                 i = u[0]
                 j = u[1]
                 if(kc > self.step[u]): continue
+                self.searching_area.append(u)
                 for k in range(4):
                     newi = i + dx[k]
                     newj = j + dy[k] 
@@ -110,6 +104,7 @@ class playAutomatically:
                             pq.heappush(Q, (self.step[newi, newj], (newi, newj)))
                     if(newi == self.B_x and newj == self.B_y):
                         break
+            return self.searching_area
         def Truyvet(self):
             #print(self.parent[self.B_x, self.B_y])
             u, v = self.B_x, self.B_y
@@ -123,21 +118,17 @@ class playAutomatically:
             way.reverse()
             return way
             
-    # A = maze_dijkstra_solving()
-    # A.Dijkstra()
-    # path = A.Truyvet()
-    # mG.mazeApplication(matrix, path)
-
-
     class A_solving: 
         def __init__(self, matrix) -> None:
-            self.maze = matrix
+            self.maze = matrix.copy()
+
         def heuristic(self, cell1, cell2): # heuristic : manhattan distance
             x1, y1 = cell1
             x2, y2 = cell2
             return abs(x1 - x2) + abs(y1 - y2)
         
-        def A_star(self, maze: np.ndarray, start=(0, 0), end=(5, 5)):
+        def A_star(self,  start, end):
+            maze = np.array(self.maze)
             path = {}
             g_scores = {(i,j): float('inf') for i in range(maze.shape[0]) for j in range(maze.shape[1])} # cost (distance) from current cell to start cell
             g_scores[start] = 0
@@ -178,6 +169,3 @@ class playAutomatically:
             final_path.append(end)
             return final_path
         
-    # A = A_solving()
-    # path = A.A_star(np.array(matrix), start_point, end_point)
-    # mG.mazeApplication(matrix, path)
