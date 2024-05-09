@@ -84,7 +84,6 @@ class gameAutomatically:
                         #Pause game
                         running = False
             if(self.player_pos == self.player_aimbitation): running = False
-        pygame.quit()
     def draw_player(self):
         # Vẽ hình vuông đại diện cho người chơi
         start_x = (screen_width - self.size * cell_size) // 2 + 3
