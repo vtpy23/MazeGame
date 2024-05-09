@@ -3,7 +3,7 @@ import numpy as np
 import heapq as pq
 from queue import PriorityQueue
 
-matrix = mG.Walls
+matrix = mG.mazeGeneration().createMaze()
 
 class playAutomatically:
     class Maze_bfs_solving:
@@ -29,7 +29,6 @@ class playAutomatically:
             dx = [1, 0, -1, 0]
             dy = [0, 1, 0, -1]
             self.createMaze(start_point, end_point)
-            print(self.maze)
             s, t = self.A_x, self.A_y
             u, v = self.B_x, self.B_y
             queue = []

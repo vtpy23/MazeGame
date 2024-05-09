@@ -2,8 +2,8 @@ import pygame
 import mazeGeneration as mg 
 import saveLoad as sv
 from sys import exit
-
-
+from gameplay import Gameplay
+from humanMode import gameManually
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
 screen = mg.screen
@@ -160,9 +160,13 @@ class Menu:
                 self.handle_button_click_start(i)
     def handle_button_click_start(self, index):
         if index == 0:
-            print("MANUAL")
+            play = gameManually()
+            play.creatingMaze()
+            print("MANUALLL")
         elif index == 1:
-            print("AUTOMATIC")
+            play = Gameplay()
+            play.creatingMaze()
+            print("AUTOMATICCC")
         elif index == 2:
             self.run_start = False
     def handle_menu_events_start(self):

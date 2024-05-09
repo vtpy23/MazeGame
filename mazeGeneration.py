@@ -122,12 +122,5 @@ class mazeGeneration:
                 end = (start_x + path[i + 1][1] * cell_size + cell_size // 2,start_y + path[i + 1][0] * cell_size + cell_size // 2)
                 pygame.draw.line(screen, color, start, end, 3)
         pygame.display.flip()
-        # Đặt tốc độ hiển thị
-
-generator = mazeGeneration()
-Walls = generator.createMaze()
-
-
-
-
+        
 
