@@ -23,6 +23,11 @@ class Menu:
         {"text": "CREDITS", "pos_x": 840, "pos_y": 504},
         {"text": "QUIT", "pos_x": 840, "pos_y": 584}
         ]
+        self.buttons_menu_start = [
+        {"text": "MANUAL", "pos_x": 840, "pos_y": 304},
+        {"text": "AUTOMATIC", "pos_x": 840, "pos_y": 384},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464},
+        ]
         self.buttons_menu_setting = None
         self.buttons_menu_setting_on = [
         {"text": "SOUND OFF", "pos_x": 840, "pos_y": 264},
@@ -45,7 +50,9 @@ class Menu:
         self.selected_button_menu = 0
         self.selected_button_setting = 0
         self.selected_button_load_guide_credits = 0
+        self.selected_button_start = 0
         self.selected_music = 0
+        self.run_start = False
         self.run_setting = False
         self.run_load = False
         self.run_guide = False
@@ -82,23 +89,28 @@ class Menu:
                 self.handle_button_click(i)
     def handle_button_click(self, index):
         if index == 0:
-            print("Start game")
+            mg.Initialization().draw_to_delete("CHOOSE MODE")
+            self.run_start = True
+            while self.run_start:
+                self.handle_menu_events_start()
+                self.draw_menu_start()
+            mg.Initialization().draw_floor()
         elif index == 1:
-            mg.Initialization().draw_setting("LOAD")
+            mg.Initialization().draw_to_delete("LOAD")
             self.run_load = True
             while self.run_load:
                 self.handle_menu_events_load()
                 self.draw_menu_load()
             mg.Initialization().draw_floor()
         elif index == 2:
-            mg.Initialization().draw_setting("SETTING")
+            mg.Initialization().draw_to_delete("SETTING")
             self.run_setting = True
             while self.run_setting:
                 self.handle_menu_events_setting()
                 self.draw_menu_setting()
             mg.Initialization().draw_floor()
         elif index == 3:
-            mg.Initialization().draw_setting("GUIDE")
+            mg.Initialization().draw_to_delete("GUIDE")
             self.run_guide = True
             while self.run_guide:
                 self.handle_menu_events_guide()
@@ -107,7 +119,7 @@ class Menu:
         elif index == 4:
             image = pygame.image.load("image/credit.png").convert()
             screen.blit(image, (84, 84))
-            mg.Initialization().draw_setting("Credits")
+            mg.Initialization().draw_to_delete("Credits")
             self.run_credits = True
             while self.run_credits:
                 self.handle_menu_events_credits()
@@ -126,6 +138,43 @@ class Menu:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events()
     
+    # Start
+    def draw_menu_start(self):
+        # Vẽ nút
+        for i, button in enumerate(self.buttons_menu_start):
+            color = (255, 255, 255) if i == self.selected_button_start else (255, 255, 0)
+            mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        pygame.display.flip()
+    def handle_key_events_start(self, event):
+        if event.key == pygame.K_UP:
+            self.selected_button_start = (self.selected_button_start - 1) % len(self.buttons_menu_start)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_start = (self.selected_button_start + 1) % len(self.buttons_menu_start)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_start(self.selected_button_start)
+    def handle_mouse_events_start(self):
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(self.buttons_menu_start):
+            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_start(i)
+    def handle_button_click_start(self, index):
+        if index == 0:
+            print("MANUAL")
+        elif index == 1:
+            print("AUTOMATIC")
+        elif index == 2:
+            self.run_start = False
+    def handle_menu_events_start(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                self.handle_key_events_start(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_events_start()
+
     # Load
     def draw_menu_load(self):
         # Vẽ nút
