@@ -5,7 +5,7 @@ import numpy as np
 # Khởi tạo Pygame
 pygame.init()
 
-size = 20
+size = 100
 cell_size = 25  # Kích thước của mỗi ô trong mê cung
 WINDOW_WIDTH = 1024
 WINDOW_HEIGHT = 768 
@@ -52,49 +52,76 @@ class Initialization:
 
 class mazeGeneration:
     def __init__(self) -> None:
-        self.maze = None
-        self.A_x = None
-        self.A_y = None
-        self.B_x = None
-        self.B_y = None
-        self.parent = None
-        self.dx = [1, 0, -1, 0]
-        self.dy = [0, 1, 0, -1]
         self.size = size
-        self.visited = None
 
     def createMaze(self):
-        self.parent = np.array([[None for i in range(self.size)]for j in range(self.size)])
-        self.maze = [[[1 for i in range(4)] for i in range(self.size)] for j in range(self.size)]
-        self.visited = np.array([[False for i in range(self.size)]for j in range(self.size)])
-        #print(self.maze)
-        self.dfs(0, 0)
-        #print(self.visited)
-        return self.maze
-
-    def dfs(self, s, t):
-        self.visited[s, t] = True
-        way = [0, 1, 2, 3]
-        while(len(way) > 0):
-            k = random.choice(way)
-            way.remove(k)
-            s1 = s + self.dx[k]
-            t1 = t + self.dy[k]
-            if(s1 >= 0 and s1 < self.size and t1 >= 0 and t1 < self.size and self.visited[s1,t1] == False):
-                self.maze[s][t][k] = 0
-                if k == 0: self.maze[s1][t1][2] = 0    
-                if k == 1: self.maze[s1][t1][3] = 0   
-                if k == 2: self.maze[s1][t1][0] = 0   
-                if k == 3: self.maze[s1][t1][1] = 0                 
-                self.dfs(s1, t1)
-
+        maze = np.ones((self.size, self.size, 4), dtype= 'int32') # wall(up, left, right, down)
+        r = 0 # row
+        c = 0 # col
+        cur = [r, c]
+        visited = np.zeros((self.size, self.size), dtype= 'int32')
+        visited[0, 0] = 1
+        visit_log = [[0, 0]]
+        n = 0 # thu tu cua o da di den
+        count_visit = int(0)
+        while count_visit != (self.size * self.size):
+            option = [0, 0, 0, 0] # phia tuong co the remove: down, right, up, left
+            if r != 0:
+                if visited[r - 1][c] == 0:
+                    option[2] = 1 # co the remove up
+            if r != size - 1:
+                if visited[r + 1][c] == 0:
+                    option[0] = 1 # co the remove down
+            if c != 0:
+                if visited[r][c - 1] == 0:
+                    option[3] = 1 # co the remove left
+            if c != size - 1:
+                if visited[r][c + 1] == 0:
+                    option[1] = 1 # co the remove right
+            if option == [0, 0, 0, 0]: # khong the remove bat ki huong nao
+                cur = visit_log[n - 1]
+                visit_log.pop()
+                r = cur[0]
+                c = cur[1]
+                n -= 1
+                # tro lai o truoc do
+            else:
+                nodefound = False
+                while nodefound == False:
+                    remove_wall = random.randint(0,3) # chon ngau nhien 1 phia tuong de xem dieu kien (xoa/ khong xoa)
+                    if option[remove_wall] == 1: # buc tuong da chon co the xoa
+                        if remove_wall == 0: # down
+                            maze[cur[0]][cur[1]][0] = 0 # xoa tuong phia tren
+                            opposite_node = [cur[0] + 1, cur[1]] # di chuyen den o ben tren
+                            maze[opposite_node[0]][opposite_node[1]][3] = 0 # xoa tuong phia duoi cua o moi = tuong phia tren cua o cu
+                        elif remove_wall == 1: # right
+                            maze[cur[0]][cur[1]][1] = 0 # xoa tuong ben trai
+                            opposite_node = [cur[0], cur[1] + 1] # di chuyen den o ben trai
+                            maze[opposite_node[0]][opposite_node[1]][2] = 0 # xoa tuong ben phai cua o moi = tuong phia trai cua o cu
+                        elif remove_wall == 2: # up
+                            maze[cur[0]][cur[1]][2] = 0 # xoa tuong ben phai
+                            opposite_node = [cur[0] - 1, cur[1]] # di chuyen den o ben trai
+                            maze[opposite_node[0]][opposite_node[1]][1] = 0 # xoa tuong ben trai cua o moi = tuong phia phai cua o cu
+                        elif remove_wall == 3: # left
+                            maze[cur[0]][cur[1]][3] = 0 # xoa tuong phia duoi
+                            opposite_node = [cur[0], cur[1] - 1] # di chuyen den o phia duoi
+                            maze[opposite_node[0]][opposite_node[1]][0] = 0 # xoa tuong phia tren cua o moi = tuong phia duoi cua o cu
+                        n += 1
+                        visit_log.append(opposite_node) # them vao danh sach o da di qua -> xac dinh de tro ve
+                        cur = opposite_node # di chuyen den o da di chuyen o phia tren
+                        visited[cur[0]][cur[1]] = 1
+                        r = cur[0]
+                        c = cur[1]
+                        nodefound = True
+            count_visit = visited.sum()
+        return maze
+    
     def draw_maze(self, Walls):
         # Tính toán tọa độ bắt đầu vẽ mê cung để canh chỉnh vào giữa màn hình
         maze_width = size * cell_size
         maze_height = size * cell_size
         start_x = (WINDOW_WIDTH - maze_width) // 2
         start_y = (WINDOW_HEIGHT - maze_height) // 2
-
         for x in range(size):
             for y in range(size):
                 if Walls[y][x][3] == 1:  # Tường bên trái
@@ -109,8 +136,7 @@ class mazeGeneration:
                 if Walls[y][x][0] == 1:  # Tường phía dưới
                     pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + (y + 1) * cell_size),
                                     (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
-
-
+                    
     def mazeApplication(self, Walls, path, color):
         maze_width = size * cell_size
         maze_height = size * cell_size
@@ -126,6 +152,7 @@ class mazeGeneration:
 
 generator = mazeGeneration()
 Walls = generator.createMaze()
+
 
 
 
