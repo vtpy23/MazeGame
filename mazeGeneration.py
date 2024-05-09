@@ -3,29 +3,30 @@ import pygame
 import numpy as np
 
 # Khởi tạo Pygame
+pygame.init()
 
-# self.size = 20
-# self.size = 25  # Kích thước của mỗi ô trong mê cung
-# self.WINDOW_WIDTH = 1024
-# self.WINDOW_HEIGHT = 768 
-# white, black = (255, 255, 255), (0, 0, 0)
-# screen = pygame.display.set_mode((self.WINDOW_WIDTH, self.WINDOW_HEIGHT))
-# screen_color = (0, 0, 150)
-#font_path = 'font/Pixeltype.TTF'
+size = 25
+cell_size = 25  # Kích thước của mỗi ô trong mê cung
+WINDOW_WIDTH = 1024
+WINDOW_HEIGHT = 768 
+white, black = (255, 255, 255), (0, 0, 0)
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+screen_color = (0, 0, 150)
+font_path = 'font/Pixeltype.TTF'
 
 class Initialization:
-    def __init__(self, screen):
-        self.screen_width = 1024
-        self.screen_height = 768
-        self.screen_color = (0, 0, 150)
-        self.font_path = 'font/Pixeltype.TTF'
+    def __init__(self):
+        self.screen_width = WINDOW_WIDTH
+        self.screen_height = WINDOW_HEIGHT
+        self.screen_color = screen_color
+        self.font_path = font_path
         self.screen = screen
 
     def draw_rectangle(self, x, y, width, height, color):
         pygame.draw.rect(self.screen, color, (x, y, width, height))
         pygame.display.flip()
 
-    def draw_text (self, text, text_size, color, x, y):
+    def draw_text(self, text, text_size, color, x, y):
         text = pygame.font.Font(self.font_path, text_size).render(text, True, color)
         text_rect = text.get_rect()
         text_rect.center = (x, y)
@@ -41,10 +42,7 @@ class Initialization:
         self.draw_rectangle(716, (self.screen_height - 618) // 2, 248, 618, (255, 215, 0))
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
         self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
-        self.background_image("image/Tam and gia huy.png")
-    
-    def background_image(self, image_path):
-        image = pygame.image.load(image_path).convert()
+        image = pygame.image.load("image/Tam and gia huy.png").convert()
         self.screen.blit(image, (84, 84))
     
     def draw_to_delete(self, title):
@@ -62,14 +60,8 @@ class mazeGeneration:
         self.parent = None
         self.dx = [1, 0, -1, 0]
         self.dy = [0, 1, 0, -1]
-        self.size = 20
-        self.size = 25
-        pygame.init()
-        self.screen = pygame.display.set_mode((1024, 768))
+        self.size = size
         self.visited = None
-
-    def initialize_pygame(self):
-        Initialization().draw_floor()
 
     def createMaze(self):
         self.parent = np.array([[None for i in range(self.size)]for j in range(self.size)])
@@ -98,44 +90,37 @@ class mazeGeneration:
 
     def draw_maze(self, Walls):
         # Tính toán tọa độ bắt đầu vẽ mê cung để canh chỉnh vào giữa màn hình
-        maze_width = self.size * self.size
-        maze_height = self.size * self.size
-        start_x = (self.WINDOW_WIDTH - maze_width) // 2
-        start_y = (self.WINDOW_HEIGHT - maze_height) // 2
+        maze_width = size * cell_size
+        maze_height = size * cell_size
+        start_x = (WINDOW_WIDTH - maze_width) // 2
+        start_y = (WINDOW_HEIGHT - maze_height) // 2
 
-        for x in range(self.size):
-            for y in range(self.size):
+        for x in range(size):
+            for y in range(size):
                 if Walls[y][x][3] == 1:  # Tường bên trái
-                    pygame.draw.line(self.screen, self.black, (start_x + x * self.size, start_y + y * self.size),
-                                    (start_x + x * self.size, start_y + (y + 1) * self.size))
+                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
+                                    (start_x + x * cell_size, start_y + (y + 1) * cell_size))
                 if Walls[y][x][2] == 1:  # Tường phía trên
-                    pygame.draw.line(self.screen, self.black, (start_x + x * self.size, start_y + y * self.size),
-                                    (start_x + (x + 1) * self.size, start_y + y * self.size))
+                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
+                                    (start_x + (x + 1) * cell_size, start_y + y * cell_size))
                 if Walls[y][x][1] == 1:  # Tường bên phải
-                    pygame.draw.line(self.screen, self.black, (start_x + (x + 1) * self.size, start_y + y * self.size),
-                                    (start_x + (x + 1) * self.size, start_y + (y + 1) * self.size))
+                    pygame.draw.line(screen, black, (start_x + (x + 1) * cell_size, start_y + y * cell_size),
+                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
                 if Walls[y][x][0] == 1:  # Tường phía dưới
-                    pygame.draw.line(self.screen, self.black, (start_x + x * self.size, start_y + (y + 1) * self.size),
-                                    (start_x + (x + 1) * self.size, start_y + (y + 1) * self.size))
+                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + (y + 1) * cell_size),
+                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
 
 
     def mazeApplication(self, Walls, path, color):
-        maze_width = self.size * self.size
-        maze_height = self.size * self.size
-        start_x = (self.WINDOW_WIDTH - maze_width) // 2
-        start_y = (self.WINDOW_HEIGHT - maze_height) // 2
+        maze_width = size * cell_size
+        maze_height = size * cell_size
+        start_x = (WINDOW_WIDTH - maze_width) // 2
+        start_y = (WINDOW_HEIGHT - maze_height) // 2
         # Vòng lặp chính
         for i in range(len(path) - 1):
-                start = (start_x + path[i][1] * self.size + self.size // 2,start_y + path[i][0] * self.size + self.size // 2)
-                end = (start_x + path[i + 1][1] * self.size + self.size // 2,start_y + path[i + 1][0] * self.size + self.size // 2)
-                pygame.draw.line(self.screen, color, start, end, 3)
+                start = (start_x + path[i][1] * cell_size + cell_size // 2,start_y + path[i][0] * cell_size + cell_size // 2)
+                end = (start_x + path[i + 1][1] * cell_size + cell_size // 2,start_y + path[i + 1][0] * cell_size + cell_size // 2)
+                pygame.draw.line(screen, color, start, end, 3)
         pygame.display.flip()
-        # Đặt tốc độ hiển thị
-
-generator = mazeGeneration()
-Walls = generator.createMaze()
-
-
-
-
+        
 
