@@ -80,6 +80,7 @@ class gameAutomatically:
                     elif event.key == pygame.K_d:
                         self.drawMaze()
                     elif event.key == pygame.K_ESCAPE:
+                        #Pause game
                         running = False
             if(self.player_pos == self.player_aimbitation): running = False
         pygame.quit()

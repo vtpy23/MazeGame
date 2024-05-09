@@ -21,6 +21,7 @@ class gameManually:
         self.player_pos = (0,0) #Vi tri co the thay doi
         self.player_aimbitation = (3, 3) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
         self.player_past = None
+        
     def drawMaze(self):
         size = self.size
         # Khởi tạo Pygame
@@ -79,6 +80,7 @@ class gameManually:
                         save = sv.saveLoad()
                         save.saveGame(self.matrix, self.player_pos, self.player_aimbitation)
                     elif event.key == pygame.K_ESCAPE:
+                        ###pause game
                         running = False
             if(self.player_pos == self.player_aimbitation): running = False
         pygame.quit()
