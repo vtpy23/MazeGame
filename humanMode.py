@@ -3,29 +3,26 @@ import pygame
 import mazeGeneration as mg
 from pygame.locals import *
 import playAutomatically as pA
+import saveLoad as sv
 
-screen_width, screen_height = mg.WINDOW_WIDTH, mg.WINDOW_HEIGHT #1200, 900
-screen = pygame.display.set_mode((screen_width, screen_height))
-size = 15
-cell_size = 15  # Kích thước của mỗi ô trong mê cung
+screen = mg.screen
+Walls = mg.mazeGeneration().createMaze()
+screen_width = mg.WINDOW_WIDTH
+screen_height = mg.WINDOW_HEIGHT
+cell_size = mg.cell_size
 white, black = (255, 255, 255), (0, 0, 0)
+
 
 class gameManually:
     def __init__(self) -> None:
         self.screen = None
         self.size = mg.size
-        self.matrix = None
-        self.player_pos = (0,0) #Vi tri co the thay doi
-        self.player_aimbitation = (self.size - 1, self.size - 1) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
-        self.player_past = None
-
-    def creatingMaze(self):
-        size = self.size
-        generator = mg.mazeGeneration()
-        Walls = generator.createMaze()
         self.matrix = Walls
-        WHITE = (255, 255, 255)
-        BLACK = (0, 0, 0)
+        self.player_pos = (0,0) #Vi tri co the thay doi
+        self.player_aimbitation = (3, 3) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
+        self.player_past = None
+    def drawMaze(self):
+        size = self.size
         # Khởi tạo Pygame
         pygame.init()
         screen.fill(white)
@@ -36,21 +33,23 @@ class gameManually:
 
         for x in range(size):
             for y in range(size):
-                if Walls[y][x][3] == 1:  # Tường bên trái
+                if self.matrix[y][x][3] == 1:  # Tường bên trái
                     pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
                                     (start_x + x * cell_size, start_y + (y + 1) * cell_size))
-                if Walls[y][x][2] == 1:  # Tường phía trên
+                if self.matrix[y][x][2] == 1:  # Tường phía trên
                     pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
                                     (start_x + (x + 1) * cell_size, start_y + y * cell_size))
-                if Walls[y][x][1] == 1:  # Tường bên phải
+                if self.matrix[y][x][1] == 1:  # Tường bên phải
                     pygame.draw.line(screen, black, (start_x + (x + 1) * cell_size, start_y + y * cell_size),
                                     (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
-                if Walls[y][x][0] == 1:  # Tường phía dưới
+                if self.matrix[y][x][0] == 1:  # Tường phía dưới
                     pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + (y + 1) * cell_size),
                                     (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
         pygame.draw.rect(screen, (255, 0, 0), ((screen_width - self.size * cell_size) // 2 + 3 + self.player_pos[1] * cell_size 
                                                , (screen_height - self.size * cell_size) // 2 + 3 + self.player_pos[0] * cell_size, cell_size - 5, cell_size - 5))
         pygame.display.flip()
+    def creatingMaze(self):
+        self.drawMaze()
         running = True
         while running:
             for event in pygame.event.get():
@@ -65,13 +64,20 @@ class gameManually:
                         self.Move(0, -1)
                     elif event.key == pygame.K_RIGHT:
                         self.Move(0, 1)
-                    elif event.key == pygame.K_p:
+                    elif event.key == pygame.K_o:
                         ### Goi y nuoc di
-                        play = pA.playAutomatically().Maze_bfs_solving()
+                        play = pA.playAutomatically().Maze_bfs_solving(Walls)
                         play.Bfs(self.player_pos, self.player_aimbitation)
                         path = play.Truyvet()
-                       
-
+                        print(path)
+                        mg.mazeGeneration().mazeApplication(self.matrix, path, (255,0,0))
+                    elif event.key == pygame.K_c:
+                        ### Tat nuoc di goi y
+                        self.drawMaze()
+                    elif event.key == pygame.K_s:
+                        ### Luu game
+                        save = sv.saveLoad()
+                        save.saveGame(self.matrix, self.player_pos, self.player_aimbitation)
                     elif event.key == pygame.K_ESCAPE:
                         running = False
             if(self.player_pos == self.player_aimbitation): running = False
@@ -83,7 +89,6 @@ class gameManually:
         new_y = self.player_pos[1] + dy
         move = [(1,0), (0,1), (-1,0), (0,-1)]
         k = move.index((dx, dy))
-        print(self.player_pos)
         if 0 <= new_x < self.size and 0 <= new_y < self.size:
             # Kiểm tra xem ô mới có là tường không
             if  self.matrix[self.player_pos[0]][self.player_pos[1]][k] == 0:

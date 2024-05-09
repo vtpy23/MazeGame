@@ -5,7 +5,7 @@ import numpy as np
 # Khởi tạo Pygame
 pygame.init()
 
-size = 20
+size = 25
 cell_size = 25  # Kích thước của mỗi ô trong mê cung
 WINDOW_WIDTH = 1024
 WINDOW_HEIGHT = 768 
