@@ -45,7 +45,7 @@ class Initialization:
         image = pygame.image.load("image/Tam and gia huy.png").convert()
         self.screen.blit(image, (84, 84))
     
-    def draw_setting(self, title):
+    def draw_to_delete(self, title):
         self.draw_rectangle(740, (self.screen_height - 600) // 2, 200, 600, self.screen_color)
         self.draw_rectangle(84, 0, 600, 70, self.screen_color)
         self.draw_text(title, 64, (255, 255, 0), 384, 42)
@@ -126,5 +126,8 @@ class mazeGeneration:
 
 generator = mazeGeneration()
 Walls = generator.createMaze()
+
+
+
 
 
