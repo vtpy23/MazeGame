@@ -163,9 +163,11 @@ class Menu:
         if index == 0:
             play = gameManually()
             play.creatingMaze()
+            mg.Initialization().draw_floor()
         elif index == 1:
             play = gameAutomatically()
             play.creatingMaze()
+            mg.Initialization().draw_floor()
         elif index == 2:
             self.run_start = False
     def handle_menu_events_start(self):

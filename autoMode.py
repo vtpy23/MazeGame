@@ -14,6 +14,7 @@ white, black = (255, 255, 255), (0, 0, 0)
 
 
 class gameAutomatically:
+   
     def __init__(self) -> None:
         self.screen = None
         self.size = mg.size
@@ -70,13 +71,13 @@ class gameAutomatically:
                         self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
                         path = play.Truyvet()
                         print(path)
-                        mg.mazeGeneration().mazeApplication(self.matrix, path, (255,0,0))
+                        mg.mazeGeneration().mazeApplication(self.matrix, path, (0,255,0))
                     elif event.key == pygame.K_3:
                         ### A_star
                         play = pA.playAutomatically().A_solving(Walls)
                         path = play.A_star(self.player_pos, self.player_aimbitation)
                         print(path)
-                        mg.mazeGeneration().mazeApplication(self.matrix, path, (255,0,0))
+                        mg.mazeGeneration().mazeApplication(self.matrix, path, (0,0,255))
                     elif event.key == pygame.K_d:
                         self.drawMaze()
                     elif event.key == pygame.K_ESCAPE:

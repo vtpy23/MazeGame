@@ -83,7 +83,6 @@ class gameManually:
                         ###pause game
                         running = False
             if(self.player_pos == self.player_aimbitation): running = False
-        pygame.quit()
 
     def Move(self, dx, dy):
         # Kiểm tra xem người chơi có thể di chuyển đến ô mới không
