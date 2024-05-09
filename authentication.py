@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
 from random import randint, choice, shuffle
+import mazeGeneration as mg
 from database import *
 import menu
 from sys import exit
@@ -667,8 +668,13 @@ class UserInterface():
         self.chpass_frame.destroy()
     
     def run(self):
+        run_ = menu.Menu()
         self.window.destroy()
-        menu.run()
+        mg.Initialization().draw_floor()
+        running = True
+        while running: 
+            run_.handle_menu_events()
+            run_.draw_menu()
 
 def page():
     window = Tk()

@@ -5,12 +5,11 @@ import playManually as pM
 import numpy as np
 
 # Các hằng số
-white = mG.white
-black = mG.black
+white, black = (255, 255, 255), (0, 0, 0)
 cell_size = mG.cell_size
 WINDOW_WIDTH = mG.WINDOW_WIDTH
 WINDOW_HEIGHT = mG.WINDOW_HEIGHT
-screen = mG.screen
+screen = mG.Initialization().screen
 Walls = mG.mazeGeneration().createMaze()
 
 # Lớp Gameplay
