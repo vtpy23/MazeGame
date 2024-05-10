@@ -44,7 +44,15 @@ class Initialization:
         self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
         image = pygame.image.load("image/Tam and gia huy.png").convert()
         self.screen.blit(image, (84, 84))
-
+    def draw_load(self):
+        self.screen.fill(self.screen_color)
+        # Vẽ hình
+        self.draw_rectangle(75, (self.screen_height - 618) // 2, 618, 618, (255, 215, 0))
+        self.draw_rectangle(84, (self.screen_height - 600) // 2, 600, 600, (255, 255, 255))
+        self.draw_rectangle(716, (self.screen_height - 618) // 2, 248, 618, (255, 215, 0))
+        self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
+        self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
+        
     def draw_to_delete(self, title):
         self.draw_rectangle(740, (self.screen_height - 600) // 2, 200, 600, self.screen_color)
         self.draw_rectangle(84, 0, 600, 70, self.screen_color)

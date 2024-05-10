@@ -101,6 +101,7 @@ class Menu:
         elif index == 1:
             mg.Initialization().draw_to_delete("LOAD")
             self.run_load = True
+            mg.Initialization().draw_load()
             while self.run_load:
                 self.handle_menu_events_load()
                 self.draw_menu_load()
