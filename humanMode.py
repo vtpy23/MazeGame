@@ -21,7 +21,7 @@ class gameManually:
         self.player_pos = (0,0) #Vi tri co the thay doi
         self.player_aimbitation = (3, 3) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
         self.player_past = None
-        
+        self.player_step = 0
     def drawMaze(self):
         size = self.size
         # Khởi tạo Pygame
@@ -58,12 +58,16 @@ class gameManually:
                     running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
+                        self.player_step += 1
                         self.Move(-1, 0)
                     elif event.key == pygame.K_DOWN:
+                        self.player_step += 1
                         self.Move(1, 0)
                     elif event.key == pygame.K_LEFT:
+                        self.player_step += 1
                         self.Move(0, -1)
                     elif event.key == pygame.K_RIGHT:
+                        self.player_step += 1
                         self.Move(0, 1)
                     elif event.key == pygame.K_o:
                         ### Goi y nuoc di
@@ -78,7 +82,7 @@ class gameManually:
                     elif event.key == pygame.K_s:
                         ### Luu game
                         save = sv.saveLoad()
-                        save.saveGame(self.matrix, self.player_pos, self.player_aimbitation)
+                        save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
                     elif event.key == pygame.K_ESCAPE:
                         ###pause game
                         running = False
