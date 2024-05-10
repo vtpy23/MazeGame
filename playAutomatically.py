@@ -16,6 +16,7 @@ class playAutomatically:
             self.parent = None
             self.step = None
             self.searching_area = []
+            
         def createMaze(self, start_point, end_point):
             self.visited = np.array([[False for i in range(self.size)] for j in range(self.size)])
             self.parent = np.array([[None for i in range(self.size)] for j in range(self.size)])
@@ -45,6 +46,7 @@ class playAutomatically:
                             queue.append((i1, j1))
                             self.visited[i1, j1] = True
             return self.searching_area
+        
         def Truyvet(self):
             u, v = self.B_x, self.B_y
             way = []
@@ -56,6 +58,7 @@ class playAutomatically:
                 way.append((u,v))
             way.reverse()
             return way
+
     class maze_dijkstra_solving:
         def __init__(self, matrix) -> None:
             self.maze = matrix.copy()
@@ -105,6 +108,7 @@ class playAutomatically:
                     if(newi == self.B_x and newj == self.B_y):
                         break
             return self.searching_area
+
         def Truyvet(self):
             #print(self.parent[self.B_x, self.B_y])
             u, v = self.B_x, self.B_y

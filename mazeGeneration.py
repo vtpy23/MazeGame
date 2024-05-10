@@ -86,6 +86,7 @@ class mazeGeneration:
                 if visited[r][c + 1] == 0:
                     option[1] = 1 # co the remove right
             if option == [0, 0, 0, 0]: # khong the remove bat ki huong nao
+                if n == 0: break
                 cur = visit_log[n - 1]
                 visit_log.pop()
                 r = cur[0]
