@@ -3,15 +3,9 @@ import mazeGeneration as mg
 import json as js
 import time
 
-
-matrix = mg.mazeGeneration().createMaze()
-startpoint = (1, 1)  # Can change the start and end points as needed
-endpoint = (len(matrix) - 3, len(matrix) - 3)  # Can change
-
-
 class saveLoad:
     count = None
-    maxFile = 20
+    maxFile = 10
     def __init__(self):
         self.dataGame = None
         self.name = None
