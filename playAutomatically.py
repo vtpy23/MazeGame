@@ -1,7 +1,10 @@
 import mazeGeneration as mG
 import numpy as np
 import heapq as pq
+import pygame as pg
 from queue import PriorityQueue
+
+pg.init()
 
 class playAutomatically:
     class Maze_bfs_solving:
@@ -16,7 +19,7 @@ class playAutomatically:
             self.parent = None
             self.step = None
             self.searching_area = []
-            
+
         def createMaze(self, start_point, end_point):
             self.visited = np.array([[False for i in range(self.size)] for j in range(self.size)])
             self.parent = np.array([[None for i in range(self.size)] for j in range(self.size)])
@@ -172,4 +175,7 @@ class playAutomatically:
             final_path.reverse()
             final_path.append(end)
             return final_path
+
+class showPath:
+    def 
         
