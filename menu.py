@@ -2,8 +2,9 @@ import pygame
 import mazeGeneration as mg 
 import saveLoad as sv
 from sys import exit
-
-
+from gameplay import Gameplay
+from humanMode import gameManually
+from autoMode import gameAutomatically
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
 screen = mg.screen
@@ -43,6 +44,7 @@ class Menu:
         ]
         self.buttons_menu_load = [
         {"text": "BACK", "pos_x": 840, "pos_y": 384},
+        {"text": "FILE_SAVE", "pos_x": 840, "pos_y": 464}
         ]
         self.buttons_menu_guide_credits = [
         {"text": "BACK", "pos_x": 840, "pos_y": 384},
@@ -57,6 +59,7 @@ class Menu:
         self.run_load = False
         self.run_guide = False
         self.run_credits = False
+        self.file_save_name = sv.saveLoad().takeNameFile()
         self.background_musics = [
             pygame.mixer.Sound("audio/music1.wav"),
             pygame.mixer.Sound("audio/music2.wav"),
@@ -98,6 +101,7 @@ class Menu:
         elif index == 1:
             mg.Initialization().draw_to_delete("LOAD")
             self.run_load = True
+            mg.Initialization().draw_load()
             while self.run_load:
                 self.handle_menu_events_load()
                 self.draw_menu_load()
@@ -137,7 +141,7 @@ class Menu:
                 self.handle_key_events(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events()
-    
+
     # Start
     def draw_menu_start(self):
         # Vẽ nút
@@ -160,9 +164,13 @@ class Menu:
                 self.handle_button_click_start(i)
     def handle_button_click_start(self, index):
         if index == 0:
-            print("MANUAL")
+            play = gameManually()
+            play.creatingMaze()
+            mg.Initialization().draw_floor()
         elif index == 1:
-            print("AUTOMATIC")
+            play = gameAutomatically()
+            play.creatingMaze()
+            mg.Initialization().draw_floor()
         elif index == 2:
             self.run_start = False
     def handle_menu_events_start(self):
@@ -176,6 +184,8 @@ class Menu:
                 self.handle_mouse_events_start()
 
     # Load
+    ###Cac bien duoc dat o day khi nao lam xong se sua
+    #self.file_save_name = sv.saveLoad().takeNameFile()
     def draw_menu_load(self):
         # Vẽ nút
         for i, button in enumerate(self.buttons_menu_load ):
@@ -184,15 +194,24 @@ class Menu:
         pygame.display.flip()
     def handle_key_events_load(self, event):
         if event.key == pygame.K_RETURN:
-            self.run_load = False
+            self.handle_button_click_load(self.selected_button_load_guide_credits)
+        elif event.key == pygame.K_UP:
+            self.selected_button_load_guide_credits = (self.selected_button_load_guide_credits - 1) % len(self.buttons_menu_load)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_load_guide_credits = (self.selected_button_load_guide_credits + 1) % len(self.buttons_menu_load)
+       
     def handle_mouse_events_load(self):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.buttons_menu_load):
             text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
-                self.run_load = False
+                self.handle_button_click_load(i)
     def handle_button_click_load(self, index):
-        name = 1
+        if(index == 0):
+            self.run_load = False
+        if(index == 1):
+            self.file_save_name = sv.saveLoad().takeNameFile()
+            print(self.file_save_name)
     def handle_menu_events_load(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -256,7 +275,7 @@ class Menu:
                 self.handle_key_events_setting(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_setting()
-    
+
     # Guide
     def draw_menu_guide(self):
         # Vẽ nút
@@ -312,5 +331,3 @@ class Menu:
                 self.handle_key_events_credits(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_credits()
-
-

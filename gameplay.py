@@ -5,13 +5,12 @@ import playManually as pM
 import numpy as np
 
 # Các hằng số
-white = mG.white
-black = mG.black
+white, black = (255, 255, 255), (0, 0, 0)
 cell_size = mG.cell_size
 WINDOW_WIDTH = mG.WINDOW_WIDTH
 WINDOW_HEIGHT = mG.WINDOW_HEIGHT
-screen = mG.screen
-Walls = mG.Walls
+screen = mG.Initialization().screen
+Walls = mG.mazeGeneration().createMaze()
 
 # Lớp Gameplay
 class Gameplay:
@@ -20,11 +19,11 @@ class Gameplay:
         self.player_pos = (0, 0) #Vi tri co the thay doi
         self.player_aimbitation = (5, 0) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
         self.player_past = None
-        self.buttons_gameplay = [
-            {"text": "Người chơi", "rect": pygame.Rect(200, 720, 220, 70)},
-            {"text": "Máy chơi", "rect": pygame.Rect(500, 720, 220, 70)},
-            {"text": "Quay lại", "rect": pygame.Rect(800, 720, 220, 70)},
-        ]
+        # self.buttons_gameplay = [
+        #     {"text": "Người chơi", "rect": pygame.Rect(200, 720, 220, 70)},
+        #     {"text": "Máy chơi", "rect": pygame.Rect(500, 720, 220, 70)},
+        #     {"text": "Quay lại", "rect": pygame.Rect(800, 720, 220, 70)},
+        # ]
         self.selected_button_gameplay = 0
         self.choose_algorithm = [
             {"text": "BFS", "rect": pygame.Rect(200, 720, 220, 70)},
@@ -63,35 +62,35 @@ class Gameplay:
         pygame.draw.rect(screen, (0, 255, 0), (aim_x, aim_y, cell_size - 5, cell_size - 5))
         pygame.display.flip()
 
-    def selectMode(self):
-        while not self.game_active:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()   
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_LEFT:
-                        self.selected_button_gameplay = (self.selected_button_gameplay - 1) % len(self.buttons_gameplay)
-                    elif event.key == pygame.K_RIGHT:
-                        self.selected_button_gameplay = (self.selected_button_gameplay + 1) % len(self.buttons_gameplay)
-                    elif event.key == pygame.K_RETURN:
-                        if self.selected_button_gameplay == 0:  # Chế độ người chơi
-                            self.game_active = True
-                            self.creatingMaze()
-                            play = pM.playManually()
-                            play.run()
-                            self.game_active = False
-                        elif self.selected_button_gameplay == 1:  # Chế độ máy chơi 
-                            self.game_active = True
-                            self.selectAlgorithm()                            
-                        elif self.selected_button_gameplay == 2:  # Quay lại
-                            self.game_active = True
-            for i, button in enumerate(self.buttons_gameplay):
-                color = (200, 200, 200) if i == self.selected_button_gameplay else (111, 196, 169)
-                pygame.draw.rect(screen, color, button["rect"])
-                text = pygame.font.Font('font/Pixeltype.TTF', 50).render(button["text"], True, (0, 0, 0))
-                screen.blit(text, (button["rect"].x + 50, button["rect"].y + 10))
-            pygame.display.flip()
+    # def selectMode(self):
+    #     while not self.game_active:
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 pygame.quit()
+    #                 exit()   
+    #             elif event.type == pygame.KEYDOWN:
+    #                 if event.key == pygame.K_LEFT:
+    #                     self.selected_button_gameplay = (self.selected_button_gameplay - 1) % len(self.buttons_gameplay)
+    #                 elif event.key == pygame.K_RIGHT:
+    #                     self.selected_button_gameplay = (self.selected_button_gameplay + 1) % len(self.buttons_gameplay)
+    #                 elif event.key == pygame.K_RETURN:
+    #                     if self.selected_button_gameplay == 0:  # Chế độ người chơi
+    #                         self.game_active = True
+    #                         self.creatingMaze()
+    #                         play = pM.playManually()
+    #                         play.run()
+    #                         self.game_active = False
+    #                     elif self.selected_button_gameplay == 1:  # Chế độ máy chơi 
+    #                         self.game_active = True
+    #                         self.selectAlgorithm()                            
+    #                     elif self.selected_button_gameplay == 2:  # Quay lại
+    #                         self.game_active = True
+    #         for i, button in enumerate(self.buttons_gameplay):
+    #             color = (200, 200, 200) if i == self.selected_button_gameplay else (111, 196, 169)
+    #             pygame.draw.rect(screen, color, button["rect"])
+    #             text = pygame.font.Font('font/Pixeltype.TTF', 50).render(button["text"], True, (0, 0, 0))
+    #             screen.blit(text, (button["rect"].x + 50, button["rect"].y + 10))
+    #         pygame.display.flip()
 
     def selectAlgorithm(self):
         while self.game_active:

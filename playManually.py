@@ -4,7 +4,7 @@ import pygame
 import saveLoad as sv
 
 screen = mG.screen
-Walls = mG.Walls
+Walls = mG.mazeGeneration().createMaze()
 WINDOW_WIDTH = mG.WINDOW_WIDTH
 WINDOW_HEIGHT = mG.WINDOW_HEIGHT
 cell_size = mG.cell_size

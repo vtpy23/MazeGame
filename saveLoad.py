@@ -3,15 +3,9 @@ import mazeGeneration as mg
 import json as js
 import time
 
-
-matrix = mg.mazeGeneration().createMaze()
-startpoint = (1, 1)  # Can change the start and end points as needed
-endpoint = (len(matrix) - 3, len(matrix) - 3)  # Can change
-
-
 class saveLoad:
     count = None
-    maxFile = 20
+    maxFile = 10
     def __init__(self):
         self.dataGame = None
         self.name = None
@@ -24,7 +18,7 @@ class saveLoad:
             self.dataGame = [{'count' : 1}]
         order = self.dataGame[0]
         saveLoad.count = order['count']
-    def saveGame(self, board_matrix, start_point, end_point):
+    def saveGame(self, board_matrix, start_point, end_point, player_step):
         self.takeNumericalOrder()
         self.local_time = time.localtime()
         self.matrix = board_matrix  # Corrected variable name
@@ -33,7 +27,7 @@ class saveLoad:
         time_saving = {'Date': str(self.local_time.tm_mday) + '/' + str(self.local_time.tm_mon) + '/' + str(self.local_time.tm_year), 
                        'Time' : str(self.local_time.tm_hour) + ':' + str(self.local_time.tm_min) + ':' + str(self.local_time.tm_sec)}
 
-        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'time': time_saving}
+        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'player_step': player_step, 'time': time_saving}
         try:
             del self.dataGame[self.count]
         except:
@@ -52,7 +46,7 @@ class saveLoad:
         gameLoader = self.dataGame[num]
         matrix = gameLoader['board']
         gameInfo = []
-        gameInfo.extend([gameLoader['player_pos'], gameLoader['ambitation_pos']])
+        gameInfo.extend([gameLoader['player_pos'], gameLoader['ambitation_pos'], gameLoader['player_step']])
         return matrix, gameInfo
     
     def takeNameFile(self):
