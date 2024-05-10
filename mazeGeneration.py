@@ -6,7 +6,7 @@ import numpy as np
 pygame.init()
 
 size = 25
-cell_size = 25  # Kích thước của mỗi ô trong mê cung
+cell_size = 25 # Kích thước của mỗi ô trong mê cung
 WINDOW_WIDTH = 1024
 WINDOW_HEIGHT = 768 
 white, black = (255, 255, 255), (0, 0, 0)
@@ -76,13 +76,13 @@ class mazeGeneration:
             if r != 0:
                 if visited[r - 1][c] == 0:
                     option[2] = 1 # co the remove up
-            if r != size - 1:
+            if r != self.size - 1:
                 if visited[r + 1][c] == 0:
                     option[0] = 1 # co the remove down
             if c != 0:
                 if visited[r][c - 1] == 0:
                     option[3] = 1 # co the remove left
-            if c != size - 1:
+            if c != self.size - 1:
                 if visited[r][c + 1] == 0:
                     option[1] = 1 # co the remove right
             if option == [0, 0, 0, 0]: # khong the remove bat ki huong nao
@@ -98,21 +98,21 @@ class mazeGeneration:
                     remove_wall = random.randint(0,3) # chon ngau nhien 1 phia tuong de xem dieu kien (xoa/ khong xoa)
                     if option[remove_wall] == 1: # buc tuong da chon co the xoa
                         if remove_wall == 0: # down
-                            maze[cur[0]][cur[1]][0] = 0 # xoa tuong phia tren
-                            opposite_node = [cur[0] + 1, cur[1]] # di chuyen den o ben tren
-                            maze[opposite_node[0]][opposite_node[1]][3] = 0 # xoa tuong phia duoi cua o moi = tuong phia tren cua o cu
+                            maze[cur[0]][cur[1]][0] = 0 # xoa tuong phia duoi
+                            opposite_node = [cur[0] + 1, cur[1]] # di chuyen den o ben duoi
+                            maze[opposite_node[0]][opposite_node[1]][2] = 0
                         elif remove_wall == 1: # right
-                            maze[cur[0]][cur[1]][1] = 0 # xoa tuong ben trai
-                            opposite_node = [cur[0], cur[1] + 1] # di chuyen den o ben trai
-                            maze[opposite_node[0]][opposite_node[1]][2] = 0 # xoa tuong ben phai cua o moi = tuong phia trai cua o cu
+                            maze[cur[0]][cur[1]][1] = 0 # xoa tuong ben phai
+                            opposite_node = [cur[0], cur[1] + 1] # di chuyen den o ben phai
+                            maze[opposite_node[0]][opposite_node[1]][3] = 0
                         elif remove_wall == 2: # up
-                            maze[cur[0]][cur[1]][2] = 0 # xoa tuong ben phai
-                            opposite_node = [cur[0] - 1, cur[1]] # di chuyen den o ben trai
-                            maze[opposite_node[0]][opposite_node[1]][1] = 0 # xoa tuong ben trai cua o moi = tuong phia phai cua o cu
+                            maze[cur[0]][cur[1]][2] = 0 # xoa tuong ben duoi
+                            opposite_node = [cur[0] - 1, cur[1]] # di chuyen den o ben duoi
+                            maze[opposite_node[0]][opposite_node[1]][0] = 0 # 
                         elif remove_wall == 3: # left
-                            maze[cur[0]][cur[1]][3] = 0 # xoa tuong phia duoi
-                            opposite_node = [cur[0], cur[1] - 1] # di chuyen den o phia duoi
-                            maze[opposite_node[0]][opposite_node[1]][0] = 0 # xoa tuong phia tren cua o moi = tuong phia duoi cua o cu
+                            maze[cur[0]][cur[1]][3] = 0 # xoa tuong phia trai
+                            opposite_node = [cur[0], cur[1] - 1] # di chuyen den o phia trai
+                            maze[opposite_node[0]][opposite_node[1]][1] = 0
                         n += 1
                         visit_log.append(opposite_node) # them vao danh sach o da di qua -> xac dinh de tro ve
                         cur = opposite_node # di chuyen den o da di chuyen o phia tren
@@ -122,13 +122,14 @@ class mazeGeneration:
                         nodefound = True
             count_visit = visited.sum()
         return maze
-    
+
     def draw_maze(self, Walls):
         # Tính toán tọa độ bắt đầu vẽ mê cung để canh chỉnh vào giữa màn hình
         maze_width = size * cell_size
         maze_height = size * cell_size
         start_x = (WINDOW_WIDTH - maze_width) // 2
         start_y = (WINDOW_HEIGHT - maze_height) // 2
+
         for x in range(size):
             for y in range(size):
                 if Walls[y][x][3] == 1:  # Tường bên trái
@@ -143,7 +144,8 @@ class mazeGeneration:
                 if Walls[y][x][0] == 1:  # Tường phía dưới
                     pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + (y + 1) * cell_size),
                                     (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
-                    
+
+
     def mazeApplication(self, Walls, path, color):
         maze_width = size * cell_size
         maze_height = size * cell_size
