@@ -44,8 +44,8 @@ class Menu:
         {"text": "BACK", "pos_x": 840, "pos_y": 504},
         ]
         self.buttons_menu_load = [
-        {"text": "BACK", "pos_x": 840, "pos_y": 384},
-        {"text": "FILE_SAVE", "pos_x": 840, "pos_y": 464}
+        {"text": "BACK", "pos_x": 840, "pos_y": 124},
+        {"text": "FILE_SAVE", "pos_x": 840, "pos_y": 204}
         ]
         self.buttons_menu_guide_credits = [
         {"text": "BACK", "pos_x": 840, "pos_y": 384}
@@ -230,6 +230,10 @@ class Menu:
             text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_load_right(i)
+        for i, button in enumerate(self.buttons_file_load):
+            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_load_left(i)
     def handle_button_click_load_right(self, index):
         if(index == 0):
             self.run_load = False
