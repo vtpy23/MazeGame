@@ -493,36 +493,50 @@ class UserInterface():
         self.show_image = ImageTk.PhotoImage(file='Photos\\show.png')
         self.hide_image = ImageTk.PhotoImage(file='Photos\\hide1.png')
 
+
     
     def setup_ui(self):
         self.window.config(bg= self.bg_color)
         self.greet_label = Label(self.window, text=f'Welcome!', font=('yu gothuic ui', 24, 'bold'), bg=self.bg_color, fg=self.text_color)
-        self.greet_label.place(x= 140+440, y=60)
+        self.greet_label.place(x= 140+410, y=60)
         self.label = Label(self.window, text=f'What do you want to do today?', font=('yu gothuic ui', 13), bg=self.bg_color, fg=self.text_color)
-        self.label.place(x=90+450, y=120+60)
+        self.label.place(x=90+420, y=120+60)
         # =============== Play Game ================
         self.Play = Button(self.window, text = "Play", font=('yu gothic ui', 13, 'bold'), width=25, height=3, bd=2, bg=self.bg_color, cursor='hand2', activebackground=self.btn_active_bg, fg=self.text_color, command=self.run)
-        self.Play.place(x=75+450, y=180+60)
+        self.Play.place(x=75+420, y=180+60)
         # =============== Change Password ================
         self.chpass_but = Button(self.window, text = "Change Password", font=('yu gothic ui', 13, 'bold'), width=25, height=3, bd=2, bg=self.bg_color, cursor='hand2', activebackground=self.btn_active_bg, fg=self.text_color, command=self.setup_passchange)
-        self.chpass_but.place(x=75+450, y=260+60)
+        self.chpass_but.place(x=75+420, y=260+60)
         # =============== Sign out ================
         self.signout_ = Button(self.window, text = "Sign Out", font=('yu gothic ui', 13, 'bold'), width=25, height=3, bd=2, bg=self.bg_color, cursor='hand2', activebackground=self.btn_active_bg, fg=self.text_color, command=self.signout)
-        self.signout_.place(x=75+450, y=340+60)
+        self.signout_.place(x=75+420, y=340+60)
         # =============== Exit ================
         self.exit_ = Button(self.window, text = "Exit", font=('yu gothic ui', 13, 'bold'), width=25, height=3, bd=2, bg=self.bg_color, cursor='hand2', activebackground=self.btn_active_bg, fg=self.text_color, command=self.exit)
-        self.exit_.place(x=75+450, y=420+60)
+        self.exit_.place(x=75+420, y=420+60)
+        # =============== Right Side Image ================
+        self.side_image = Image.open("Photos//Tom.png")
+        photo = ImageTk.PhotoImage(self.side_image)
+        self.side_image_label = Label(self.window, image=photo, bg= self.bg_color)
+        self.side_image_label.image = photo
+        self.side_image_label.place(x=800, y= 80)  
+        # =============== Left Side Image ================
+        self.side_image = Image.open("Photos//Jerry.png")
+        photo = ImageTk.PhotoImage(self.side_image)
+        self.side_image_label = Label(self.window, image=photo, bg= self.bg_color)
+        self.side_image_label.image = photo
+        self.side_image_label.place(x=150, y= 310) 
         #================ Theme ================
         self.theme = Label(self.window, text="Theme:", font=('yu gothic ui', 13, 'bold'), fg=self.text_color, bg=self.bg_color)
-        self.theme.place(x=40+450, y=532+60)
+        self.theme.place(x=40+420, y=532+60)
         self.option1 = Button(self.window, text="Yellow", bg=self.bg_color, font=('yu gothic ui', 13, 'bold'), activebackground=self.btn_active_bg, bd=0, fg=self.text_color, command=lambda: self.change_theme('#F2E9C5', '#FFECA1','#F8D755','#9C7E06'))
-        self.option1.place(x=110+450, y=530+60)
+        self.option1.place(x=110+420, y=530+60)
         self.option2 = Button(self.window, text="Blue", bg=self.bg_color, font=('yu gothic ui', 13, 'bold'), activebackground=self.btn_active_bg, bd=0, fg=self.text_color, command=lambda: self.change_theme('#BCBAFF', '#8884FD', '#453EFD', '#060194'))
-        self.option2.place(x=175+450, y=530+60)
+        self.option2.place(x=175+420, y=530+60)
         self.option3 = Button(self.window, text="Lavender", bg=self.bg_color, font=('yu gothic ui', 13, 'bold'), activebackground=self.btn_active_bg, bd=0, fg=self.text_color, command=lambda: self.change_theme('#F1EDFC', '#DACCFB', '#BA9FFB', '#9C73FF'))
-        self.option3.place(x=220+450, y=530+60)
+        self.option3.place(x=220+420, y=530+60)
         self.option4 = Button(self.window, text="Original", bg=self.bg_color, font=('yu gothic ui', 13, 'bold'), activebackground=self.btn_active_bg, bd=0, fg=self.text_color, command=lambda: self.change_theme('white', 'white', 'white', 'black'))
-        self.option4.place(x=300+450, y=530+60)
+        self.option4.place(x=300+420, y=530+60)
+        
         
     def change_theme(self, bg_color, btn_bg, btn_active_bg, text_color):
         self.bg_color = bg_color
@@ -569,7 +583,7 @@ class UserInterface():
     
     def setup_passchange(self):
         self.chpass_frame = Frame(self.window, width=1280, height=720, bg=self.bg_color)
-        self.chpass_frame.place(x=450, y=40)
+        self.chpass_frame.place(x=420, y=40)
         # =============== Back to main page ============
         generate_password_button = Button(self.chpass_frame, text = "⭠ Back to main page", font=('yu gothic ui', 13, 'bold'), width=25, bd=0, cursor='hand2', fg=self.text_color, bg= self.bg_color, activebackground=self.bg_color, command=self.back)
         generate_password_button.place(x=170, y=40)
@@ -628,6 +642,19 @@ class UserInterface():
         # =============== Update Button ================
         self.updatep = Button(self.chpass_frame, text = "Update", font=('yu gothic ui', 13, 'bold'), width=25, bd=2, bg=self.btn_bg, cursor='hand2', activebackground=self.btn_active_bg, fg=self.text_color, command=self.pass_change)
         self.updatep.place(x=80, y=520)
+        
+        # =============== Right Side Image ================
+        self.side_image = Image.open("Photos//Tom.png")
+        photo = ImageTk.PhotoImage(self.side_image)
+        self.side_image_label = Label(self.window, image=photo, bg= self.bg_color)
+        self.side_image_label.image = photo
+        self.side_image_label.place(x=800, y= 80)  
+        # =============== Left Side Image ================
+        self.side_image = Image.open("Photos//Jerry.png")
+        photo = ImageTk.PhotoImage(self.side_image)
+        self.side_image_label = Label(self.window, image=photo, bg= self.bg_color)
+        self.side_image_label.image = photo
+        self.side_image_label.place(x=150, y= 310) 
     
     def exit(self):
         if messagebox.askyesnocancel(title='Wanna leave? =(',message='Exit this screen?'):
