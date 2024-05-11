@@ -60,4 +60,3 @@ class saveLoad:
             except:
                 print()
         return dataFile
-    
