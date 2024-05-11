@@ -122,7 +122,8 @@ class mazeGeneration:
                         c = cur[1]
                         nodefound = True
             count_visit = visited.sum()
-        return maze
+        maze_list = maze.tolist()
+        return maze_list
 
     def draw_maze(self, Walls):
         # Tính toán tọa độ bắt đầu vẽ mê cung để canh chỉnh vào giữa màn hình
