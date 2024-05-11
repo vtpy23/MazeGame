@@ -4,7 +4,12 @@ import heapq as pq
 import pygame as pg
 from queue import PriorityQueue
 
-pg.init()
+
+screen = mG.screen
+screen_width = mG.WINDOW_WIDTH
+screen_height = mG.WINDOW_HEIGHT
+cell_size = mG.cell_size
+white, black = (255, 255, 255), (0, 0, 0)
 
 class playAutomatically:
     class Maze_bfs_solving:
@@ -128,6 +133,7 @@ class playAutomatically:
     class A_solving: 
         def __init__(self, matrix) -> None:
             self.maze = matrix.copy()
+            self.searching_area = []
 
         def heuristic(self, cell1, cell2): # heuristic : manhattan distance
             x1, y1 = cell1
@@ -143,9 +149,9 @@ class playAutomatically:
             f_scores[start] = self.heuristic(start, end)
             open_set = PriorityQueue()
             open_set.put((f_scores[start], self.heuristic(start, end), start))
-            
             while not open_set.empty():
                 curCell = open_set.get()[2]
+                self.searching_area.append(curCell)
                 if curCell == end:
                     break
                 for m in range(4): # down right up left
@@ -177,5 +183,26 @@ class playAutomatically:
             return final_path
 
 class showPath:
-    def 
+    pg.init()
+    def draw_cell(coo : tuple):
+        start_x = (screen_width - mG.size * cell_size) // 2 + 3
+        start_y = (screen_height - mG.size * cell_size) // 2 + 3
+        player_x = start_x + coo[1] * cell_size 
+        player_y = start_y + coo[0] * cell_size
+        pg.draw.rect(screen, (0, 255, 125), (player_x, player_y, cell_size - 5, cell_size - 5))
+        pg.display.flip()
+
+    def show_searching_area(area : list):
+        sleep = 0.1
+        drawed = [area[0]]
+        for i in area:
+            if i not in drawed: 
+                pg.time.wait(100)
+                showPath.draw_cell(i)
+                drawed.append(i)
+
+    # def show_final_path(path: list):
+    #     sleep = 0.1
+    #     for i in path:
+    #         #ve tung o lan luot voi thoi gian sleep
         

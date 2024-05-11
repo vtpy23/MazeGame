@@ -62,6 +62,7 @@ class gameAutomatically:
                         ### bfs
                         play = pA.playAutomatically().Maze_bfs_solving(Walls)
                         self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
+                        pA.showPath.show_searching_area(play.searching_area)
                         path = play.Truyvet()
                         print(path)
                         mg.mazeGeneration().mazeApplication(self.matrix, path, (255,0,0))
@@ -69,6 +70,7 @@ class gameAutomatically:
                         ### dijkstra
                         play = pA.playAutomatically().maze_dijkstra_solving(Walls)
                         self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
+                        pA.showPath.show_searching_area(play.searching_area)
                         path = play.Truyvet()
                         print(path)
                         mg.mazeGeneration().mazeApplication(self.matrix, path, (0,255,0))
@@ -76,6 +78,7 @@ class gameAutomatically:
                         ### A_star
                         play = pA.playAutomatically().A_solving(Walls)
                         path = play.A_star(self.player_pos, self.player_aimbitation)
+                        pA.showPath.show_searching_area(play.searching_area)
                         print(path)
                         mg.mazeGeneration().mazeApplication(self.matrix, path, (0,0,255))
                     elif event.key == pygame.K_d:
