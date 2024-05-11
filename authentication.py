@@ -714,4 +714,3 @@ def login_success(username):
     UserInterface(new_window, username)
     new_window.mainloop()
     
-page()
