@@ -52,7 +52,15 @@ class Initialization:
         self.draw_rectangle(716, (self.screen_height - 618) // 2, 248, 618, (255, 215, 0))
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
         self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
+    def draw_rectangle_with_text(self,x, y,width,text):
         
+        font = pygame.font.Font(None, 36)
+        rect = pygame.Rect(x, y, width,40)
+        pygame.draw.rect(screen, white, rect)
+        text_surface = font.render(text, True, black)
+        text_rect = text_surface.get_rect(center=(x + width // 2, y + 20))
+        screen.blit(text_surface, text_rect)
+    
     def draw_to_delete(self, title):
         self.draw_rectangle(740, (self.screen_height - 600) // 2, 200, 600, self.screen_color)
         self.draw_rectangle(84, 0, 600, 70, self.screen_color)
@@ -122,6 +130,8 @@ class mazeGeneration:
                         c = cur[1]
                         nodefound = True
             count_visit = visited.sum()
+        maze_list = maze.tolist()
+        return maze_list
         maze_list = maze.tolist()
         return maze_list
 

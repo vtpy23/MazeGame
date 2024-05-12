@@ -4,6 +4,7 @@ import mazeGeneration as mg
 from pygame.locals import *
 import playAutomatically as pA
 import saveLoad as sv
+import sys
 
 screen = mg.screen
 Walls = mg.mazeGeneration().createMaze()
@@ -51,8 +52,16 @@ class gameManually:
         pygame.display.flip()
     def creatingMaze(self):
         self.drawMaze()
+        ###Thoi gian choi
+        clock = pygame.time.Clock()
+        start_ticks = pygame.time.get_ticks() 
+        font = pygame.font.Font(None, 36) 
+        ###
         running = True
         while running:
+            seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # milisec --> sec
+            mg.Initialization().draw_rectangle_with_text(20,20,140,f"time: {seconds: .2f}")
+            pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
