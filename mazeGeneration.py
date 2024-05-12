@@ -148,14 +148,19 @@ class mazeGeneration:
                                     (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
 
 
-    def mazeApplication(self, Walls, path, color):
+    def mazeApplication(self, Walls, path, color, drew):
         maze_width = size * cell_size
         maze_height = size * cell_size
         start_x = (WINDOW_WIDTH - maze_width) // 2
         start_y = (WINDOW_HEIGHT - maze_height) // 2
         # Vòng lặp chính
-        for i in range(len(path) - 1):
-                start = (start_x + path[i][1] * cell_size + cell_size // 2,start_y + path[i][0] * cell_size + cell_size // 2)
-                end = (start_x + path[i + 1][1] * cell_size + cell_size // 2,start_y + path[i + 1][0] * cell_size + cell_size // 2)
-                pygame.draw.line(screen, color, start, end, 3)
+        path_drew = [path[0]]
+        for i, cell in enumerate(path):
+                if i == 0: continue
+                if cell in drew:
+                    path_drew.append(cell)
+                    start = (start_x + path[i - 1][1] * cell_size + cell_size // 2, start_y + path[i - 1][0] * cell_size + cell_size // 2)
+                    end = (start_x + path[i][1] * cell_size + cell_size // 2, start_y + path[i][0] * cell_size + cell_size // 2)
+                    pygame.draw.line(screen, color, start, end, 3)
         pygame.display.flip()
+        return path_drew
