@@ -7,7 +7,7 @@ from database import *
 import menu
 from sys import exit
 
-USERNAME = ""
+USERNAME = None
 
 class LoginForm():
     def __init__(self, window):
@@ -372,6 +372,8 @@ class LoginForm():
         username = self.username_entry.get()
         password = self.password_entry.get()
         if check_user(username, password):
+            global USERNAME 
+            USERNAME = username
             messagebox.showinfo(title="Message", message="Login Successfully")
             self.window.destroy()
             login_success(username)
@@ -480,7 +482,6 @@ class UserInterface():
     def __init__(self, window, username):
         self.window = window
         self.username = username
-        USERNAME = self.username
         self.window.geometry('1280x720')
         self.window.title(f'Group4 Maze Game UI - 23TNT - FIT - HCMUS')
         self.window.resizable(False, False)
@@ -492,7 +493,7 @@ class UserInterface():
         self.setup_ui()
         self.show_image = ImageTk.PhotoImage(file='Photos\\show.png')
         self.hide_image = ImageTk.PhotoImage(file='Photos\\hide1.png')
-
+        
 
     
     def setup_ui(self):

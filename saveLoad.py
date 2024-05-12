@@ -2,7 +2,7 @@ import numpy as np
 import mazeGeneration as mg
 import json as js
 import time
-
+import authentication 
 class saveLoad:
     count = None
     maxFile = 10
@@ -27,7 +27,7 @@ class saveLoad:
         time_saving = {'Date': str(self.local_time.tm_mday) + '/' + str(self.local_time.tm_mon) + '/' + str(self.local_time.tm_year), 
                        'Time' : str(self.local_time.tm_hour) + ':' + str(self.local_time.tm_min) + ':' + str(self.local_time.tm_sec)}
 
-        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'player_step': player_step, 'time': time_saving}
+        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'player_step': player_step, 'time': time_saving, 'username': authentication.USERNAME}
         try:
             del self.dataGame[self.count]
         except:
@@ -56,7 +56,7 @@ class saveLoad:
             return []
         for i in range(len(self.dataGame)):
             try:
-                dataFile.append(self.dataGame[i]['time']['Time'])
+                dataFile.append(self.dataGame[i]['username'])
             except:
                 print()
         return dataFile
