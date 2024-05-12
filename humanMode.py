@@ -84,7 +84,7 @@ class gameManually:
                         play.Bfs(self.player_pos, self.player_aimbitation)
                         path = play.Truyvet()
                         print(path)
-                        mg.mazeGeneration().mazeApplication(self.matrix, path, (255,0,0))
+                        mg.mazeGeneration().mazeApplicationManual(self.matrix, path, (255,0,0))
                     elif event.key == pygame.K_c:
                         ### Tat nuoc di goi y
                         self.drawMaze()

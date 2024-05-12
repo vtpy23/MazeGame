@@ -81,11 +81,13 @@ class playAutomatically:
             self.maxn = 100001
             self.INF = 1e9
             self.searching_area = []
+
         def creatingInfo(self, start_point, end_point):
             self.parent = np.array([[None for i in range(self.size)] for j in range(self.size)])
             self.step = np.array([[self.INF for i in range(self.size)] for j in range(self.size)])
             self.A_x, self.A_y = map(int, start_point)
             self.B_x, self.B_y = map(int, end_point)
+
         def Dijkstra(self, start_point, end_point):
             dx = [1, 0, -1, 0]
             dy = [0, 1, 0, -1]
@@ -109,7 +111,7 @@ class playAutomatically:
                         if(self.maze[i][j][k] == 1):
                             w = self.INF
                         else: w = 1
-                        if(self.step[newi, newj] > self.step[u] + w):
+                        if(self.step[newi, newj] > self.step[u] + w): #??
                             self.step[newi, newj] = self.step[u] + w
                             self.parent[newi, newj] = u
                             pq.heappush(Q, (self.step[newi, newj], (newi, newj)))
@@ -189,20 +191,46 @@ class showPath:
         start_y = (screen_height - mG.size * cell_size) // 2 + 3
         player_x = start_x + coo[1] * cell_size 
         player_y = start_y + coo[0] * cell_size
-        pg.draw.rect(screen, (0, 255, 125), (player_x, player_y, cell_size - 5, cell_size - 5))
+        pg.draw.rect(screen, (120, 205, 155), (player_x, player_y, cell_size - 5, cell_size - 5))
         pg.display.flip()
 
     def show_searching_area(area : list):
-        sleep = 0.1
-        drawed = [area[0]]
+        sleep = 50
+        drew = [area[0]]
         for i in area:
-            if i not in drawed: 
-                pg.time.wait(100)
+            if i not in drew: 
+                pg.time.wait(sleep)
                 showPath.draw_cell(i)
-                drawed.append(i)
+                drew.append(i)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_p or event.key == pg.K_ESCAPE:
+                        return drew
+        return drew
 
-    # def show_final_path(path: list):
-    #     sleep = 0.1
-    #     for i in path:
-    #         #ve tung o lan luot voi thoi gian sleep
+    def go_to_final_cell(path: list):
+        sleep = 100
+        start_x = (screen_width - mG.size * cell_size) // 2 + 3
+        start_y = (screen_height - mG.size * cell_size) // 2 + 3
+        for i, cell in enumerate(path):
+            if i == 0: 
+                cell_x_past = start_x
+                cell_y_past = start_y
+                continue
+            cell_x = start_x + cell[1] * cell_size #Hoanh do
+            cell_y = start_y + cell[0] * cell_size
+            pg.time.wait(sleep)
+            pg.draw.rect(screen, (255, 255, 255), (cell_x_past, cell_y_past, cell_size - 5, cell_size - 5))
+            pg.draw.rect(screen, (255, 0, 0), (cell_x, cell_y, cell_size - 5, cell_size - 5))
+            cell_x_past = cell_x
+            cell_y_past = cell_y
+            pg.display.flip()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    pg.quit()
+                elif event.type == pg.KEYDOWN:
+                    if event.key == pg.K_ESCAPE:
+                        return
         
