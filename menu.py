@@ -56,11 +56,17 @@ class Menu:
         {"text": "MAP 100x100", "pos_x": 840, "pos_y": 424},
         {"text": "BACK", "pos_x": 840, "pos_y": 504},
         ]
+        self.buttons_menu_random_custom = [
+        {"text": "RANDOM", "pos_x": 840, "pos_y": 304},
+        {"text": "CUSTOM", "pos_x": 840, "pos_y": 384},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464}    
+        ]
         self.file_save_name = sv.saveLoad().takeNameFile()
         self.buttons_file_load = [
             {"text": name, "pos_x": 250, "pos_y": 124 + 40 * i}
             for i, name in enumerate(self.file_save_name)
         ]
+        self.selected_button_random_custom = 0
         self.selected_button_menu = 0
         self.selected_button_setting = 0
         self.selected_button_load_guide_credits = 0
@@ -69,6 +75,7 @@ class Menu:
         self.selected_button_sizemap = 0
         self.selected_music = 0
         self.selected_load = False # chon giua load ben trai va ben phai
+        self.run_random_custom = False
         self.run_start = False
         self.run_setting = False
         self.run_load = False
@@ -94,6 +101,7 @@ class Menu:
             else:   
                 self.background_musics[self.selected_music].stop()
                 mg.Initialization().draw_text("SOUND OFF", 36, text_color, text_x, text_y)
+    
     # CHANGE SOUND
     def change_sound(self):
         if self.sound_on:
@@ -102,6 +110,92 @@ class Menu:
                 if self.selected_music > 4:
                     self.selected_music = 0
                 self.background_musics[self.selected_music].play(-1)
+                
+    # RANDOM / CUSTOM
+    def draw_menu_random_custom(self):
+        for i, button in enumerate(self.buttons_menu_random_custom):
+            color = (255, 255, 255) if i == self.selected_button_random_custom else (255, 255, 0)
+            mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        pygame.display.flip()
+    def handle_key_events_random_custom(self, event, sizemap, mode):
+        if event.key == pygame.K_UP:
+            self.selected_button_random_custom = (self.selected_button_random_custom - 1) % len(self.buttons_menu_random_custom)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_random_custom = (self.selected_button_random_custom + 1) % len(self.buttons_menu_random_custom)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_random_custom(self.selected_button_random_custom, sizemap, mode)
+    def handle_mouse_events_random_custom(self, sizemap, mode):
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(self.buttons_menu_random_custom):
+            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_random_custom(i, sizemap, mode)
+    def handle_button_click_random_custom(self, index, sizemap, mode):
+        if index == 0:
+            if mode == 0:
+                if sizemap == 0: # map: 20x20, mode: manual, start point - end point: random
+                    play = gameManually()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 1: # map: 20x20, mode: manual, start point - end point: random
+                    play = gameManually()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 2: # map: 20x20, mode: manual, start point - end point: random
+                    play = gameManually()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+            elif mode == 1:
+                if sizemap == 0: # map: 40x40, mode: auto, start point - end point: random
+                    play = gameAutomatically()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 1: # map: 40x40, mode: auto, start point - end point: random
+                    play = gameAutomatically()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
+                    play = gameAutomatically()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+        elif index == 1:
+            if mode == 0:
+                if sizemap == 0: # map: 100x100, mode: manual, start point - end point: custom
+                    play = gameManually()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 1: # map: 100x100, mode: manual, start point - end point: custom
+                    play = gameManually()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: custom
+                    play = gameManually()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+            elif mode == 1:
+                if sizemap == 0: # map: 20x20, mode: auto, start point - end point: custom
+                    play = gameAutomatically()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 1: # map: 20x20, mode: auto, start point - end point: custom
+                    play = gameAutomatically()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+                elif sizemap == 2: # map: 20x20, mode: auto, start point - end point: custom
+                    play = gameAutomatically()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor()
+        elif index == 2:
+            self.run_random_custom = False
+    def handle_menu_events_random_custom(self, sizemap, mode):     
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                self.handle_key_events_random_custom(event, sizemap, mode)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_events_random_custom(sizemap, mode)       
     # Choose size maze
     def draw_menu_sizemaze(self):
         # Vẽ nút
@@ -124,35 +218,29 @@ class Menu:
                 self.handle_button_click_sizemap(i, mode)
     def handle_button_click_sizemap(self, index, mode):
         if index == 0: # 20 x 20
-            if mode == 0: 
-                play = gameManually()
-                play.creatingMaze()
-                mg.Initialization().draw_floor()
-            else:
-                play = gameAutomatically()
-                play.creatingMaze()
-                mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("START POINT - END POINT")
+            self.run_random_custom = True
+            while self.run_random_custom:
+                self.handle_menu_events_random_custom(index, mode)
+                self.draw_menu_random_custom()
+            mg.Initialization().draw_floor()
         elif index == 1: # 40 x 40
-            if mode == 0:
-                play = gameManually()
-                play.creatingMaze()
-                mg.Initialization().draw_floor()
-            else:
-                play = gameAutomatically()
-                play.creatingMaze()
-                mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("START POINT - END POINT")
+            self.run_random_custom = True
+            while self.run_random_custom:
+                self.handle_menu_events_random_custom(index, mode)
+                self.draw_menu_random_custom()
+            mg.Initialization().draw_floor()
         elif index == 2: # 100 x 100
-            if mode == 0:
-                play = gameManually()
-                play.creatingMaze()
-                mg.Initialization().draw_floor()
-            else:
-                play = gameAutomatically()
-                play.creatingMaze()
-                mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("START POINT - END POINT")
+            self.run_random_custom = True
+            while self.run_random_custom:
+                self.handle_menu_events_random_custom(index, mode)
+                self.draw_menu_random_custom()
+            mg.Initialization().draw_floor()
         elif index == 3:
             self.run_sizemap = False
-    def handle_sizemap_events(self, mode):
+    def handle_menu_events_sizemap(self, mode):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -237,7 +325,7 @@ class Menu:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events()
 
-    # Start
+    # Start - CHOOSE MODE
     def draw_menu_start(self):
         # Vẽ nút
         for i, button in enumerate(self.buttons_menu_start):
@@ -258,11 +346,18 @@ class Menu:
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_start(i)
     def handle_button_click_start(self, index):
-        if index == 0 or index == 1:
+        if index == 0:
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
             self.run_sizemap = True
             while self.run_sizemap:
-                self.handle_sizemap_events(index)
+                self.handle_menu_events_sizemap(index)
+                self.draw_menu_sizemaze()
+            mg.Initialization().draw_floor()
+        elif index == 1:
+            mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
+            self.run_sizemap = True
+            while self.run_sizemap:
+                self.handle_menu_events_sizemap(index)
                 self.draw_menu_sizemaze()
             mg.Initialization().draw_floor()
         elif index == 2:
