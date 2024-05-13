@@ -34,6 +34,10 @@ class Initialization:
         pygame.display.flip()
         return text_rect
 
+    def input_image_background(self, image_path):
+        image = pygame.image.load(image_path).convert()
+        self.screen.blit(image, (84, 84))
+        
     def draw_floor(self):
         self.screen.fill(self.screen_color)
         # Vẽ hình
@@ -42,8 +46,8 @@ class Initialization:
         self.draw_rectangle(716, (self.screen_height - 618) // 2, 248, 618, (255, 215, 0))
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
         self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
-        image = pygame.image.load("image/Tam and gia huy.png").convert()
-        self.screen.blit(image, (84, 84))
+        self.input_image_background("image/Tam and gia huy.png")
+
     def draw_load(self):
         self.screen.fill(self.screen_color)
         # Vẽ hình
@@ -52,8 +56,8 @@ class Initialization:
         self.draw_rectangle(716, (self.screen_height - 618) // 2, 248, 618, (255, 215, 0))
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
         self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
+
     def draw_rectangle_with_text(self,x, y,width,text):
-        
         font = pygame.font.Font(None, 36)
         rect = pygame.Rect(x, y, width,40)
         pygame.draw.rect(screen, white, rect)
