@@ -2,7 +2,6 @@ import pygame
 import mazeGeneration as mg 
 import saveLoad as sv
 from sys import exit
-from gameplay import Gameplay
 from humanMode import gameManually
 from autoMode import gameAutomatically
 from humanMode import gameLoadManually
@@ -134,55 +133,55 @@ class Menu:
         if index == 0:
             if mode == 0:
                 if sizemap == 0: # map: 20x20, mode: manual, start point - end point: random
-                    play = gameManually()
+                    play = gameManually(20)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 1: # map: 20x20, mode: manual, start point - end point: random
-                    play = gameManually()
+                    play = gameManually(40)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 2: # map: 20x20, mode: manual, start point - end point: random
-                    play = gameManually()
+                    play = gameManually(100)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
             elif mode == 1:
                 if sizemap == 0: # map: 40x40, mode: auto, start point - end point: random
-                    play = gameAutomatically()
+                    play = gameAutomatically(20)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 1: # map: 40x40, mode: auto, start point - end point: random
-                    play = gameAutomatically()
+                    play = gameAutomatically(40)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
-                    play = gameAutomatically()
+                    play = gameAutomatically(100)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
         elif index == 1:
             if mode == 0:
                 if sizemap == 0: # map: 100x100, mode: manual, start point - end point: custom
-                    play = gameManually()
+                    play = gameManually(20)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 1: # map: 100x100, mode: manual, start point - end point: custom
-                    play = gameManually()
+                    play = gameManually(40)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: custom
-                    play = gameManually()
+                    play = gameManually(100)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
             elif mode == 1:
                 if sizemap == 0: # map: 20x20, mode: auto, start point - end point: custom
-                    play = gameAutomatically()
+                    play = gameAutomatically(20)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 1: # map: 20x20, mode: auto, start point - end point: custom
-                    play = gameAutomatically()
+                    play = gameAutomatically(40)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 2: # map: 20x20, mode: auto, start point - end point: custom
-                    play = gameAutomatically()
+                    play = gameAutomatically(100)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
         elif index == 2:

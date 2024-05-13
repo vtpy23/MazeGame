@@ -5,8 +5,8 @@ import numpy as np
 # Khởi tạo Pygame
 pygame.init()
 
-size = 25
-cell_size = 25 # Kích thước của mỗi ô trong mê cung
+#size = 25
+cell_size = 15 # Kích thước của mỗi ô trong mê cung
 WINDOW_WIDTH = 1024
 WINDOW_HEIGHT = 768 
 white, black = (255, 255, 255), (0, 0, 0)
@@ -71,9 +71,11 @@ class Initialization:
         self.draw_text(title, 64, (255, 255, 0), 384, 42)
 class mazeGeneration:
     def __init__(self) -> None:
+        self.size = None
+        return 
+    
+    def createMaze(self, size):
         self.size = size
-
-    def createMaze(self):
         maze = np.ones((self.size, self.size, 4), dtype= 'int32') # wall(up, left, right, down)
         r = 0 # row
         c = 0 # col
@@ -135,19 +137,18 @@ class mazeGeneration:
                         nodefound = True
             count_visit = visited.sum()
         maze_list = maze.tolist()
-        return maze_list
-        maze_list = maze.tolist()
+        #maze co size nhu da khoi tao
         return maze_list
 
     def draw_maze(self, Walls):
         # Tính toán tọa độ bắt đầu vẽ mê cung để canh chỉnh vào giữa màn hình
-        maze_width = size * cell_size
-        maze_height = size * cell_size
+        maze_width = self.size * cell_size
+        maze_height = self.size * cell_size
         start_x = (WINDOW_WIDTH - maze_width) // 2
         start_y = (WINDOW_HEIGHT - maze_height) // 2
 
-        for x in range(size):
-            for y in range(size):
+        for x in range(self.size):
+            for y in range(self.size):
                 if Walls[y][x][3] == 1:  # Tường bên trái
                     pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
                                     (start_x + x * cell_size, start_y + (y + 1) * cell_size))
@@ -163,8 +164,9 @@ class mazeGeneration:
 
 
     def mazeApplication(self, Walls, path, color, drew):
-        maze_width = size * cell_size
-        maze_height = size * cell_size
+        #dua vao matran, duong di
+        maze_width = len(Walls) * cell_size
+        maze_height = len(Walls) * cell_size
         start_x = (WINDOW_WIDTH - maze_width) // 2
         start_y = (WINDOW_HEIGHT - maze_height) // 2
         # Vòng lặp chính
@@ -179,8 +181,8 @@ class mazeGeneration:
         pygame.display.flip()
         return path_drew
     def mazeApplicationManual(self, Walls, path, color):
-        maze_width = size * cell_size
-        maze_height = size * cell_size
+        maze_width = len(Walls) * cell_size
+        maze_height = len(Walls) * cell_size
         start_x = (WINDOW_WIDTH - maze_width) // 2
         start_y = (WINDOW_HEIGHT - maze_height) // 2
         # Vòng lặp chính

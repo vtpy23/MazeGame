@@ -6,7 +6,6 @@ import playAutomatically as pA
 import saveLoad as sv
 
 screen = mg.screen
-Walls = mg.mazeGeneration().createMaze()
 screen_width = mg.WINDOW_WIDTH
 screen_height = mg.WINDOW_HEIGHT
 cell_size = mg.cell_size
@@ -15,12 +14,13 @@ white, black = (255, 255, 255), (0, 0, 0)
 
 class gameAutomatically:
    
-    def __init__(self) -> None:
+    def __init__(self, size) -> None:
         self.screen = None
-        self.size = mg.size
-        self.matrix = Walls
+        self.size = size
+        self.matrix = mg.mazeGeneration().createMaze(size)
         self.player_pos = (0,0) #Vi tri co the thay doi
-        self.player_aimbitation = (self.size - 1, self.size - 1) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
+        self.player_aimbitation = (10, 10) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
+        self.size = len(self.matrix)
         self.player_past = None
         self.searching_area = None
     def drawMaze(self):
@@ -60,30 +60,30 @@ class gameAutomatically:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
                         ### bfs
-                        play = pA.playAutomatically().Maze_bfs_solving(Walls)
+                        play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
                         self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
-                        drew = pA.showPath.show_searching_area(play.searching_area)
+                        drew = pA.showPath(self.size).show_searching_area(play.searching_area)
                         path = play.Truyvet()
                         print(path)
                         path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath.go_to_final_cell(path_drew)
+                        pA.showPath(self.size).go_to_final_cell(path_drew)
                     elif event.key == pygame.K_2:
                         ### dijkstra
-                        play = pA.playAutomatically().maze_dijkstra_solving(Walls)
+                        play = pA.playAutomatically().maze_dijkstra_solving(self.matrix)
                         self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
-                        drew = pA.showPath.show_searching_area(play.searching_area)
+                        drew = pA.showPath(self.size).show_searching_area(play.searching_area)
                         path = play.Truyvet()
                         print(path)
                         path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath.go_to_final_cell(path_drew)
+                        pA.showPath(self.size).go_to_final_cell(path_drew)
                     elif event.key == pygame.K_3:
                         ### A_star
-                        play = pA.playAutomatically().A_solving(Walls)
+                        play = pA.playAutomatically().A_solving(self.matrix)
                         path = play.A_star(self.player_pos, self.player_aimbitation)
-                        drew = pA.showPath.show_searching_area(play.searching_area)
+                        drew = pA.showPath(self.size).show_searching_area(play.searching_area)
                         print(path)
                         path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath.go_to_final_cell(path_drew)
+                        pA.showPath(self.size).go_to_final_cell(path_drew)
                     elif event.key == pygame.K_d:
                         self.drawMaze()
                     elif event.key == pygame.K_ESCAPE:

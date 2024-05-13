@@ -1,4 +1,3 @@
-import random
 import pygame
 import mazeGeneration as mg
 from pygame.locals import *
@@ -8,7 +7,6 @@ from sys import exit
 import gamepause
 
 screen = mg.screen
-Walls = mg.mazeGeneration().createMaze()
 screen_width = mg.WINDOW_WIDTH
 screen_height = mg.WINDOW_HEIGHT
 cell_size = mg.cell_size
@@ -16,10 +14,10 @@ white, black = (255, 255, 255), (0, 0, 0)
 
 
 class gameManually:
-    def __init__(self) -> None:
+    def __init__(self, size) -> None:
         self.screen = None
-        self.size = mg.size
-        self.matrix = mg.mazeGeneration().createMaze()
+        self.size = size
+        self.matrix = mg.mazeGeneration().createMaze(self.size)
         self.player_pos = (0,0) #Vi tri co the thay doi
         self.player_aimbitation = (3, 3) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
         self.player_past = None
@@ -89,7 +87,6 @@ class gameManually:
                         play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
                         play.Bfs(self.player_pos, self.player_aimbitation)
                         path = play.Truyvet()
-                        print(path)
                         mg.mazeGeneration().mazeApplicationManual(self.matrix, path, (255,0,0))
                     elif event.key == pygame.K_c:
                         ### Tat nuoc di goi y
@@ -133,7 +130,7 @@ class gameManually:
 class gameLoadManually:
     def __init__(self, save_matrix, gameInfo) -> None:
         self.screen = None
-        self.size = mg.size
+        self.size = len(save_matrix)
         self.matrix = save_matrix
         self.player_pos = tuple(gameInfo[0]) #Vi tri co the thay doi
         self.player_aimbitation = tuple(gameInfo[1]) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
@@ -194,7 +191,7 @@ class gameLoadManually:
                         play.Bfs(self.player_pos, self.player_aimbitation)
                         path = play.Truyvet()
                         print(path)
-                        mg.mazeGeneration().mazeApplication(self.matrix, path, (255,0,0))
+                        mg.mazeGeneration().mazeApplicationManual(self.matrix, path, (255,0,0))
                     elif event.key == pygame.K_c:
                         ### Tat nuoc di goi y
                         self.drawMaze()

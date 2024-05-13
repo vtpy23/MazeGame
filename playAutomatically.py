@@ -19,7 +19,7 @@ class playAutomatically:
             self.A_y = None
             self.B_x = None
             self.B_y = None
-            self.size = mG.size
+            self.size = len(matrix)
             self.visited = None
             self.parent = None
             self.step = None
@@ -74,7 +74,7 @@ class playAutomatically:
             self.A_y = None
             self.B_x = None
             self.B_y = None
-            self.size = mG.size
+            self.size = len(matrix)
             self.visited = None
             self.parent = None
             self.step = None
@@ -185,16 +185,18 @@ class playAutomatically:
             return final_path
 
 class showPath:
+    def __init__(self, size) -> None:
+        showPath.size = size
     pg.init()
     def draw_cell(coo : tuple):
-        start_x = (screen_width - mG.size * cell_size) // 2 + 3
-        start_y = (screen_height - mG.size * cell_size) // 2 + 3
+        start_x = (screen_width - showPath.size * cell_size) // 2 + 3
+        start_y = (screen_height - showPath.size * cell_size) // 2 + 3
         player_x = start_x + coo[1] * cell_size 
         player_y = start_y + coo[0] * cell_size
         pg.draw.rect(screen, (120, 205, 155), (player_x, player_y, cell_size - 5, cell_size - 5))
         pg.display.flip()
 
-    def show_searching_area(area : list):
+    def show_searching_area(self,area : list):
         sleep = 50
         drew = [area[0]]
         for i in area:
@@ -210,10 +212,10 @@ class showPath:
                         return drew
         return drew
 
-    def go_to_final_cell(path: list):
+    def go_to_final_cell(self,path: list):
         sleep = 100
-        start_x = (screen_width - mG.size * cell_size) // 2 + 3
-        start_y = (screen_height - mG.size * cell_size) // 2 + 3
+        start_x = (screen_width - showPath.size * cell_size) // 2 + 3
+        start_y = (screen_height - showPath.size * cell_size) // 2 + 3
         for i, cell in enumerate(path):
             if i == 0: 
                 cell_x_past = start_x
