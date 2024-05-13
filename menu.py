@@ -50,6 +50,12 @@ class Menu:
         self.buttons_menu_guide_credits = [
         {"text": "BACK", "pos_x": 840, "pos_y": 384}
         ]
+        self.buttons_menu_sizemap = [
+        {"text": "MAP 20x20", "pos_x": 840, "pos_y": 264},
+        {"text": "MAP 40x40", "pos_x": 840, "pos_y": 344},
+        {"text": "MAP 100x100", "pos_x": 840, "pos_y": 424},
+        {"text": "BACK", "pos_x": 840, "pos_y": 504},
+        ]
         self.file_save_name = sv.saveLoad().takeNameFile()
         self.buttons_file_load = [
             {"text": name, "pos_x": 250, "pos_y": 124 + 40 * i}
@@ -60,6 +66,7 @@ class Menu:
         self.selected_button_load_guide_credits = 0
         self.selected_button_load_file = 0
         self.selected_button_start = 0
+        self.selected_button_sizemap = 0
         self.selected_music = 0
         self.selected_load = False # chon giua load ben trai va ben phai
         self.run_start = False
@@ -67,6 +74,7 @@ class Menu:
         self.run_load = False
         self.run_guide = False
         self.run_credits = False
+        self.run_sizemap = False
         self.background_musics = [
             pygame.mixer.Sound("audio/music1.wav"),
             pygame.mixer.Sound("audio/music2.wav"),
@@ -77,6 +85,82 @@ class Menu:
         self.background_musics[self.selected_music].play(-1)
         self.sound_on = True
 
+    # SOUND ON/OFF
+    def turn_sound_on_off(self, text_color, text_x, text_y):
+            self.sound_on = not self.sound_on
+            if self.sound_on == True:
+                self.background_musics[self.selected_music].play(-1)
+                mg.Initialization().draw_text("SOUND ON", 36, text_color, text_x, text_y)
+            else:   
+                self.background_musics[self.selected_music].stop()
+                mg.Initialization().draw_text("SOUND OFF", 36, text_color, text_x, text_y)
+    # CHANGE SOUND
+    def change_sound(self):
+        if self.sound_on:
+                self.background_musics[self.selected_music].stop()
+                self.selected_music += 1
+                if self.selected_music > 4:
+                    self.selected_music = 0
+                self.background_musics[self.selected_music].play(-1)
+    # Choose size maze
+    def draw_menu_sizemaze(self):
+        # Vẽ nút
+        for i, button in enumerate(self.buttons_menu_sizemap):
+            color = (255, 255, 255) if i == self.selected_button_sizemap else (255, 255, 0)
+            mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        pygame.display.flip()
+    def handle_key_events_sizemap(self, event, mode):
+        if event.key == pygame.K_UP:
+            self.selected_button_sizemap = (self.selected_button_sizemap - 1) % len(self.buttons_menu_sizemap)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_sizemap = (self.selected_button_sizemap + 1) % len(self.buttons_menu_sizemap)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_sizemap(self.selected_button_sizemap, mode)
+    def handle_mouse_events_sizemap(self, mode):
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(self.buttons_menu_sizemap):
+            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_sizemap(i, mode)
+    def handle_button_click_sizemap(self, index, mode):
+        if index == 0: # 20 x 20
+            if mode == 0: 
+                play = gameManually()
+                play.creatingMaze()
+                mg.Initialization().draw_floor()
+            else:
+                play = gameAutomatically()
+                play.creatingMaze()
+                mg.Initialization().draw_floor()
+        elif index == 1: # 40 x 40
+            if mode == 0:
+                play = gameManually()
+                play.creatingMaze()
+                mg.Initialization().draw_floor()
+            else:
+                play = gameAutomatically()
+                play.creatingMaze()
+                mg.Initialization().draw_floor()
+        elif index == 2: # 100 x 100
+            if mode == 0:
+                play = gameManually()
+                play.creatingMaze()
+                mg.Initialization().draw_floor()
+            else:
+                play = gameAutomatically()
+                play.creatingMaze()
+                mg.Initialization().draw_floor()
+        elif index == 3:
+            self.run_sizemap = False
+    def handle_sizemap_events(self, mode):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                self.handle_key_events_sizemap(event, mode)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_events_sizemap(mode)
     # Main menu
     def draw_menu(self):
         # Vẽ nút
@@ -133,8 +217,7 @@ class Menu:
                 self.draw_menu_guide()
             mg.Initialization().draw_floor()
         elif index == 4:
-            image = pygame.image.load("image/credit.png").convert()
-            screen.blit(image, (84, 84))
+            mg.Initialization().input_image_background("image/credit.png")
             mg.Initialization().draw_to_delete("Credits")
             self.run_credits = True
             while self.run_credits:
@@ -175,13 +258,12 @@ class Menu:
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_start(i)
     def handle_button_click_start(self, index):
-        if index == 0:
-            play = gameManually()
-            play.creatingMaze()
-            mg.Initialization().draw_floor()
-        elif index == 1:
-            play = gameAutomatically()
-            play.creatingMaze()
+        if index == 0 or index == 1:
+            mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
+            self.run_sizemap = True
+            while self.run_sizemap:
+                self.handle_sizemap_events(index)
+                self.draw_menu_sizemaze()
             mg.Initialization().draw_floor()
         elif index == 2:
             self.run_start = False
@@ -285,20 +367,9 @@ class Menu:
                 self.handle_button_click_setting(i)
     def handle_button_click_setting(self, index):
         if index == 0:
-            self.sound_on = not self.sound_on
-            if self.sound_on == True:
-                self.background_musics[self.selected_music].play(-1)
-                mg.Initialization().draw_text("SOUND ON", 36, screen_color, 840, 264)
-            else:   
-                self.background_musics[self.selected_music].stop()
-                mg.Initialization().draw_text("SOUND OFF", 36, screen_color, 840, 264)
+            self.turn_sound_on_off(screen_color, 840, 264)
         elif index == 1:
-            if self.sound_on:
-                self.background_musics[self.selected_music].stop()
-                self.selected_music += 1
-                if self.selected_music > 4:
-                    self.selected_music = 0
-                self.background_musics[self.selected_music].play(-1)
+            self.change_sound()
         elif index == 2:
             print("change theme")
         elif index == 3:

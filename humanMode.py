@@ -4,7 +4,8 @@ import mazeGeneration as mg
 from pygame.locals import *
 import playAutomatically as pA
 import saveLoad as sv
-import sys
+from sys import exit
+import gamepause
 
 screen = mg.screen
 Walls = mg.mazeGeneration().createMaze()
@@ -64,7 +65,8 @@ class gameManually:
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False
+                    pygame.quit()
+                    exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.player_step += 1
@@ -78,6 +80,10 @@ class gameManually:
                     elif event.key == pygame.K_RIGHT:
                         self.player_step += 1
                         self.Move(0, 1)
+                    elif event.key == pygame.K_p:
+                        pause = gamepause.Pause(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
+                        pause.run_pause_manual()
+                        self.drawMaze()
                     elif event.key == pygame.K_o:
                         ### Goi y nuoc di
                         play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
