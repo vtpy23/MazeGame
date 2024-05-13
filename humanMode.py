@@ -79,7 +79,7 @@ class gameManually:
                         self.player_step += 1
                         self.Move(0, 1)
                     elif event.key == pygame.K_p:
-                        pause = gamepause.Pause(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
+                        pause = gamepause.Pause(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, -seconds * 1000)
                         pause.run_pause_manual()
                         self.drawMaze()
                     elif event.key == pygame.K_o:
@@ -91,10 +91,10 @@ class gameManually:
                     elif event.key == pygame.K_c:
                         ### Tat nuoc di goi y
                         self.drawMaze()
-                    elif event.key == pygame.K_s:
-                        ### Luu game
-                        save = sv.saveLoad()
-                        save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
+                    # elif event.key == pygame.K_s:
+                    #     ### Luu game
+                    #     save = sv.saveLoad()
+                    #     save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
                     elif event.key == pygame.K_ESCAPE:
                         ###pause game
                         running = False
@@ -130,6 +130,7 @@ class gameManually:
 class gameLoadManually:
     def __init__(self, save_matrix, gameInfo) -> None:
         self.screen = None
+        self.gameInfo = gameInfo
         self.size = len(save_matrix)
         self.matrix = save_matrix
         self.player_pos = tuple(gameInfo[0]) #Vi tri co the thay doi
@@ -165,8 +166,13 @@ class gameLoadManually:
         pygame.display.flip()
     def creatingMaze(self):
         self.drawMaze()
+        start_ticks = self.gameInfo[3]
+        print(start_ticks)
         running = True
         while running:
+            seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # milisec --> sec
+            mg.Initialization().draw_rectangle_with_text(20,20,140,f"time: {seconds: .2f}")
+            pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False

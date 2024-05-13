@@ -18,7 +18,7 @@ class saveLoad:
             self.dataGame = [{'count' : 1}]
         order = self.dataGame[0]
         saveLoad.count = order['count']
-    def saveGame(self, board_matrix, start_point, end_point, player_step):
+    def saveGame(self, board_matrix, start_point, end_point, player_step, timer_count):
         self.takeNumericalOrder()
         self.local_time = time.localtime()
         self.matrix = board_matrix  # Corrected variable name
@@ -27,7 +27,7 @@ class saveLoad:
         time_saving = {'Date': str(self.local_time.tm_mday) + '/' + str(self.local_time.tm_mon) + '/' + str(self.local_time.tm_year), 
                        'Time' : str(self.local_time.tm_hour) + ':' + str(self.local_time.tm_min) + ':' + str(self.local_time.tm_sec)}
 
-        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'player_step': player_step, 'time': time_saving, 'username': authentication.USERNAME}
+        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'player_step': player_step, 'time': time_saving, 'username': authentication.USERNAME, 'counting_sec': timer_count}
         try:
             del self.dataGame[self.count]
         except:
@@ -46,7 +46,7 @@ class saveLoad:
         gameLoader = self.dataGame[num]
         matrix = gameLoader['board']
         gameInfo = []
-        gameInfo.extend([gameLoader['player_pos'], gameLoader['ambitation_pos'], gameLoader['player_step']])
+        gameInfo.extend([gameLoader['player_pos'], gameLoader['ambitation_pos'], gameLoader['player_step'], gameLoader['counting_sec']])
         return matrix, gameInfo
     
     def takeNameFile(self):

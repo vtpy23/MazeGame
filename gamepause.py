@@ -4,8 +4,9 @@ import pygame
 import saveLoad as sv
 
 class Pause:
-    def __init__(self, matrix, player_pos, player_aimbitation, player_step):
+    def __init__(self, matrix, player_pos, player_aimbitation, player_step, time):
         self.matrix = matrix
+        self.time = time
         self.player_pos = player_pos
         self.player_aimbitation = player_aimbitation
         self.player_step = player_step
@@ -53,7 +54,7 @@ class Pause:
     def handle_button_click_pause_manual(self, index):
         if index == 0:
             save = sv.saveLoad()
-            save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
+            save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, self.time)
         elif index == 1:
             print("SOUND")
             # menu.Menu().turn_sound_on_off()
