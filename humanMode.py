@@ -96,7 +96,10 @@ class gameManually:
                     elif event.key == pygame.K_ESCAPE:
                         ###pause game
                         running = False
-            if(self.player_pos == self.player_aimbitation): running = False
+            if(self.player_pos == self.player_aimbitation): 
+                save = sv.LeaderBoard()
+                save.saveWin(self.player_step, seconds)
+                running = False
 
     def Move(self, dx, dy):
         # Kiểm tra xem người chơi có thể di chuyển đến ô mới không
@@ -209,7 +212,10 @@ class gameLoadManually:
                     elif event.key == pygame.K_ESCAPE:
                         ###pause game
                         running = False
-            if(self.player_pos == self.player_aimbitation): running = False
+            if(self.player_pos == self.player_aimbitation): 
+                save = sv.LeaderBoard()
+                save.saveWin(self.player_step, seconds)
+                running = False
 
     def Move(self, dx, dy):
         # Kiểm tra xem người chơi có thể di chuyển đến ô mới không
