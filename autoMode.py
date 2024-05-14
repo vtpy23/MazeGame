@@ -8,7 +8,6 @@ import saveLoad as sv
 screen = mg.screen
 screen_width = mg.WINDOW_WIDTH
 screen_height = mg.WINDOW_HEIGHT
-cell_size = mg.cell_size
 white, black = (255, 255, 255), (0, 0, 0)
 
 
@@ -18,6 +17,7 @@ class gameAutomatically:
         self.screen = None
         self.size = size
         self.matrix = mg.mazeGeneration().createMaze(size)
+        self.cell_size = ((768)**2 / (self.size) ** 2) ** 0.5
         self.player_pos = (0,0) #Vi tri co the thay doi
         self.player_aimbitation = (10, 10) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
         self.size = len(self.matrix)
@@ -28,27 +28,27 @@ class gameAutomatically:
         # Khởi tạo Pygame
         pygame.init()
         screen.fill(white)
-        maze_width = size * cell_size
-        maze_height = size * cell_size
-        start_x = (screen_width - maze_width) // 2
-        start_y = (screen_height - maze_height) // 2
+        maze_width = size * self.cell_size
+        maze_height = size * self.cell_size
+        start_x = 0
+        start_y = 0
 
         for x in range(size):
             for y in range(size):
                 if self.matrix[y][x][3] == 1:  # Tường bên trái
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
-                                    (start_x + x * cell_size, start_y + (y + 1) * cell_size))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size))
                 if self.matrix[y][x][2] == 1:  # Tường phía trên
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + y * cell_size))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + y * self.cell_size))
                 if self.matrix[y][x][1] == 1:  # Tường bên phải
-                    pygame.draw.line(screen, black, (start_x + (x + 1) * cell_size, start_y + y * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
+                    pygame.draw.line(screen, black, (start_x + (x + 1) * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
                 if self.matrix[y][x][0] == 1:  # Tường phía dưới
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + (y + 1) * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
-        pygame.draw.rect(screen, (255, 0, 0), ((screen_width - self.size * cell_size) // 2 + 3 + self.player_pos[1] * cell_size 
-                                               , (screen_height - self.size * cell_size) // 2 + 3 + self.player_pos[0] * cell_size, cell_size - 5, cell_size - 5))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
+        pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                               ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
     def creatingMaze(self):
         self.drawMaze()
@@ -92,13 +92,13 @@ class gameAutomatically:
             if(self.player_pos == self.player_aimbitation): running = False
     def draw_player(self):
         # Vẽ hình vuông đại diện cho người chơi
-        start_x = (screen_width - self.size * cell_size) // 2 + 3
-        start_y = (screen_height - self.size * cell_size) // 2 + 3
-        player_x = start_x + self.player_pos[1] * cell_size #Hoanh do
-        player_y = start_y + self.player_pos[0] * cell_size
-        player_x_past = start_x + self.player_past[1] * cell_size
-        player_y_past = start_y + self.player_past[0] * cell_size
-        pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, cell_size - 5, cell_size - 5))
-        pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, cell_size - 5, cell_size - 5))
+        start_x = 0
+        start_y = 0
+        player_x = start_x + self.player_pos[1] * self.cell_size #Hoanh do
+        player_y = start_y + self.player_pos[0] * self.cell_size
+        player_x_past = start_x + self.player_past[1] * self.cell_size
+        player_y_past = start_y + self.player_past[0] * self.cell_size
+        pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, self.cell_size - 5, self.cell_size - 5))
+        pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
         

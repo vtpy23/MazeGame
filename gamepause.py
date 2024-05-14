@@ -77,10 +77,13 @@ class Pause:
                 self.handle_mouse_events_pause_manual()
     
     def run_pause_manual(self):
+        pause_time = pygame.time.get_ticks()
         while self.run_pause:
             self.handle_pause_manual_events()
             self.draw_pause_manual()
-
+            seconds = (pygame.time.get_ticks() - pause_time) / 1000
+            print(seconds)
+        return seconds
     def draw_pause_auto(self):
         for i, button in enumerate(self.button_pause_auto):
             color = (255, 255, 255) if i == self.selected_button_pause_auto else (255, 255, 0)

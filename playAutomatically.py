@@ -8,7 +8,6 @@ from queue import PriorityQueue
 screen = mG.screen
 screen_width = mG.WINDOW_WIDTH
 screen_height = mG.WINDOW_HEIGHT
-cell_size = mG.cell_size
 white, black = (255, 255, 255), (0, 0, 0)
 
 class playAutomatically:
@@ -187,13 +186,14 @@ class playAutomatically:
 class showPath:
     def __init__(self, size) -> None:
         showPath.size = size
+        showPath.cell_size = ((768)**2 / (showPath.size) ** 2) ** 0.5
     pg.init()
     def draw_cell(coo : tuple):
-        start_x = (screen_width - showPath.size * cell_size) // 2 + 3
-        start_y = (screen_height - showPath.size * cell_size) // 2 + 3
-        player_x = start_x + coo[1] * cell_size 
-        player_y = start_y + coo[0] * cell_size
-        pg.draw.rect(screen, (120, 205, 155), (player_x, player_y, cell_size - 5, cell_size - 5))
+        start_x = 0 + 3
+        start_y = 0 + 3
+        player_x = start_x + coo[1] * showPath.cell_size 
+        player_y = start_y + coo[0] * showPath.cell_size
+        pg.draw.rect(screen, (120, 205, 155), (player_x, player_y, showPath.cell_size - 5, showPath.cell_size - 5))
         pg.display.flip()
 
     def show_searching_area(self,area : list):
@@ -214,18 +214,18 @@ class showPath:
 
     def go_to_final_cell(self,path: list):
         sleep = 100
-        start_x = (screen_width - showPath.size * cell_size) // 2 + 3
-        start_y = (screen_height - showPath.size * cell_size) // 2 + 3
+        start_x = 0 + 3
+        start_y = 0 + 3
         for i, cell in enumerate(path):
             if i == 0: 
                 cell_x_past = start_x
                 cell_y_past = start_y
                 continue
-            cell_x = start_x + cell[1] * cell_size #Hoanh do
-            cell_y = start_y + cell[0] * cell_size
+            cell_x = start_x + cell[1] * showPath.cell_size #Hoanh do
+            cell_y = start_y + cell[0] * showPath.cell_size
             pg.time.wait(sleep)
-            pg.draw.rect(screen, (255, 255, 255), (cell_x_past, cell_y_past, cell_size - 5, cell_size - 5))
-            pg.draw.rect(screen, (255, 0, 0), (cell_x, cell_y, cell_size - 5, cell_size - 5))
+            pg.draw.rect(screen, (255, 255, 255), (cell_x_past, cell_y_past, showPath.cell_size - 5, showPath.cell_size - 5))
+            pg.draw.rect(screen, (255, 0, 0), (cell_x, cell_y, showPath.cell_size - 5, showPath.cell_size - 5))
             cell_x_past = cell_x
             cell_y_past = cell_y
             pg.display.flip()

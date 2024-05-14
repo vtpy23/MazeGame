@@ -9,7 +9,6 @@ import gamepause
 screen = mg.screen
 screen_width = mg.WINDOW_WIDTH
 screen_height = mg.WINDOW_HEIGHT
-cell_size = mg.cell_size
 white, black = (255, 255, 255), (0, 0, 0)
 
 
@@ -18,6 +17,7 @@ class gameManually:
         self.screen = None
         self.size = size
         self.matrix = mg.mazeGeneration().createMaze(self.size)
+        self.cell_size = ((768)**2 / (self.size) ** 2) ** 0.5
         self.player_pos = (0,0) #Vi tri co the thay doi
         self.player_aimbitation = (3, 3) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
         self.player_past = None
@@ -27,39 +27,42 @@ class gameManually:
         # Khởi tạo Pygame
         pygame.init()
         screen.fill(white)
-        maze_width = size * cell_size
-        maze_height = size * cell_size
-        start_x = (screen_width - maze_width) // 2
-        start_y = (screen_height - maze_height) // 2
+        maze_width = size * self.cell_size
+        maze_height = size * self.cell_size
+        start_x = 0
+        start_y = 0
 
         for x in range(size):
             for y in range(size):
                 if self.matrix[y][x][3] == 1:  # Tường bên trái
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
-                                    (start_x + x * cell_size, start_y + (y + 1) * cell_size))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size))
                 if self.matrix[y][x][2] == 1:  # Tường phía trên
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + y * cell_size))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + y * self.cell_size))
                 if self.matrix[y][x][1] == 1:  # Tường bên phải
-                    pygame.draw.line(screen, black, (start_x + (x + 1) * cell_size, start_y + y * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
+                    pygame.draw.line(screen, black, (start_x + (x + 1) * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
                 if self.matrix[y][x][0] == 1:  # Tường phía dưới
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + (y + 1) * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
-        pygame.draw.rect(screen, (255, 0, 0), ((screen_width - self.size * cell_size) // 2 + 3 + self.player_pos[1] * cell_size 
-                                               , (screen_height - self.size * cell_size) // 2 + 3 + self.player_pos[0] * cell_size, cell_size - 5, cell_size - 5))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
+        pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                               ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
     def creatingMaze(self):
         self.drawMaze()
         ###Thoi gian choi
-        clock = pygame.time.Clock()
         start_ticks = pygame.time.get_ticks() 
-        font = pygame.font.Font(None, 36) 
         ###
         running = True
+        time_pause = None
         while running:
             seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # milisec --> sec
-            mg.Initialization().draw_rectangle_with_text(20,20,140,f"time: {seconds: .2f}")
+            try:
+                seconds = seconds - time_pause
+            except:
+                seconds = seconds
+            mg.Initialization().draw_rectangle_with_text(824,20,140,f"time: {seconds: .2f}")
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -80,7 +83,7 @@ class gameManually:
                         self.Move(0, 1)
                     elif event.key == pygame.K_p:
                         pause = gamepause.Pause(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, -seconds * 1000)
-                        pause.run_pause_manual()
+                        time_pause = pause.run_pause_manual()
                         self.drawMaze()
                     elif event.key == pygame.K_o:
                         ### Goi y nuoc di
@@ -91,10 +94,6 @@ class gameManually:
                     elif event.key == pygame.K_c:
                         ### Tat nuoc di goi y
                         self.drawMaze()
-                    # elif event.key == pygame.K_s:
-                    #     ### Luu game
-                    #     save = sv.saveLoad()
-                    #     save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
                     elif event.key == pygame.K_ESCAPE:
                         ###pause game
                         running = False
@@ -117,14 +116,14 @@ class gameManually:
 
     def draw_player(self):
         # Vẽ hình vuông đại diện cho người chơi
-        start_x = (screen_width - self.size * cell_size) // 2 + 3
-        start_y = (screen_height - self.size * cell_size) // 2 + 3
-        player_x = start_x + self.player_pos[1] * cell_size #Hoanh do
-        player_y = start_y + self.player_pos[0] * cell_size
-        player_x_past = start_x + self.player_past[1] * cell_size
-        player_y_past = start_y + self.player_past[0] * cell_size
-        pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, cell_size - 5, cell_size - 5))
-        pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, cell_size - 5, cell_size - 5))
+        start_x = 0
+        start_y = 0
+        player_x = start_x + self.player_pos[1] * self.cell_size + 3 #Hoanh do
+        player_y = start_y + self.player_pos[0] * self.cell_size + 3
+        player_x_past = start_x + self.player_past[1] * self.cell_size + 3
+        player_y_past = start_y + self.player_past[0] * self.cell_size + 3
+        pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, self.cell_size - 5, self.cell_size - 5))
+        pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
         
 class gameLoadManually:
@@ -132,6 +131,7 @@ class gameLoadManually:
         self.screen = None
         self.gameInfo = gameInfo
         self.size = len(save_matrix)
+        self.cell_size = ((768)**2 / (self.size) ** 2) ** 0.5
         self.matrix = save_matrix
         self.player_pos = tuple(gameInfo[0]) #Vi tri co the thay doi
         self.player_aimbitation = tuple(gameInfo[1]) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
@@ -142,36 +142,36 @@ class gameLoadManually:
         # Khởi tạo Pygame
         pygame.init()
         screen.fill(white)
-        maze_width = size * cell_size
-        maze_height = size * cell_size
-        start_x = (screen_width - maze_width) // 2
-        start_y = (screen_height - maze_height) // 2
+        maze_width = size * self.cell_size
+        maze_height = size * self.cell_size
+        start_x = 0
+        start_y = 0
 
         for x in range(size):
             for y in range(size):
                 if self.matrix[y][x][3] == 1:  # Tường bên trái
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
-                                    (start_x + x * cell_size, start_y + (y + 1) * cell_size))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size))
                 if self.matrix[y][x][2] == 1:  # Tường phía trên
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + y * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + y * cell_size))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + y * self.cell_size))
                 if self.matrix[y][x][1] == 1:  # Tường bên phải
-                    pygame.draw.line(screen, black, (start_x + (x + 1) * cell_size, start_y + y * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
+                    pygame.draw.line(screen, black, (start_x + (x + 1) * self.cell_size, start_y + y * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
                 if self.matrix[y][x][0] == 1:  # Tường phía dưới
-                    pygame.draw.line(screen, black, (start_x + x * cell_size, start_y + (y + 1) * cell_size),
-                                    (start_x + (x + 1) * cell_size, start_y + (y + 1) * cell_size))
-        pygame.draw.rect(screen, (255, 0, 0), ((screen_width - self.size * cell_size) // 2 + 3 + self.player_pos[1] * cell_size 
-                                               , (screen_height - self.size * cell_size) // 2 + 3 + self.player_pos[0] * cell_size, cell_size - 5, cell_size - 5))
+                    pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size),
+                                    (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
+        pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                               ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
     def creatingMaze(self):
         self.drawMaze()
-        start_ticks = self.gameInfo[3]
-        print(start_ticks)
+        save_ticks = self.gameInfo[3]
+        start_ticks = pygame.time.get_ticks() 
         running = True
         while running:
-            seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # milisec --> sec
-            mg.Initialization().draw_rectangle_with_text(20,20,140,f"time: {seconds: .2f}")
+            seconds = (pygame.time.get_ticks() - start_ticks - save_ticks) / 1000  # milisec --> sec
+            mg.Initialization().draw_rectangle_with_text(824,20,140,f"time: {seconds: .2f}")
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -227,12 +227,12 @@ class gameLoadManually:
 
     def draw_player(self):
         # Vẽ hình vuông đại diện cho người chơi
-        start_x = (screen_width - self.size * cell_size) // 2 + 3
-        start_y = (screen_height - self.size * cell_size) // 2 + 3
-        player_x = start_x + self.player_pos[1] * cell_size #Hoanh do
-        player_y = start_y + self.player_pos[0] * cell_size
-        player_x_past = start_x + self.player_past[1] * cell_size
-        player_y_past = start_y + self.player_past[0] * cell_size
-        pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, cell_size - 5, cell_size - 5))
-        pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, cell_size - 5, cell_size - 5))
+        start_x = 0
+        start_y = 0
+        player_x = start_x + self.player_pos[1] * self.cell_size + 3 #Hoanh do
+        player_y = start_y + self.player_pos[0] * self.cell_size + 3
+        player_x_past = start_x + self.player_past[1] * self.cell_size + 3
+        player_y_past = start_y + self.player_past[0] * self.cell_size + 3
+        pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, self.cell_size - 5, self.cell_size - 5))
+        pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
