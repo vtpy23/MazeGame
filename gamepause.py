@@ -1,3 +1,4 @@
+from typing import Any
 import mazeGeneration as mg
 import menu
 import pygame
@@ -17,15 +18,7 @@ class Pause:
         {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 384},
         {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 464},
         {"text": "RESUME", "pos_x": 840, "pos_y": 544}]
-        self.button_pause_auto = [
-        {"text": "SAVE", "pos_x": 840, "pos_y": 184},
-        {"text": "CHANGE ALGORITHM", "pos_x": 840, "pos_y": 264},
-        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 344},
-        {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 424},
-        {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 504},
-        {"text": "RESUME", "pos_x": 840, "pos_y": 584}]
         self.selected_button_pause_manual = 0
-        self.selected_button_pause_auto = 0
         # self.background_musics = menu.Menu().background_musics
         # self.sound_on = menu.Menu().sound_on
         # self.selected_music = menu.Menu().selected_music
@@ -84,9 +77,24 @@ class Pause:
             seconds = (pygame.time.get_ticks() - pause_time) / 1000
             print(seconds)
         return seconds
+    
+class Pause_auto:
+    def __init__(self, matrix, player_pos, player_aimbitation):
+        self.matrix = matrix
+        self.player_pos = player_pos
+        self.player_aimbitation = player_aimbitation
+        self.run_pause = True
+        self.button_pause_auto = [
+        {"text": "SAVE", "pos_x": 840, "pos_y": 184},
+        {"text": "CHANGE ALGORITHM", "pos_x": 840, "pos_y": 264},
+        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 344},
+        {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 424},
+        {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 504},
+        {"text": "RESUME", "pos_x": 840, "pos_y": 584}]
+        self.selected_button_pause_auto = 0
     def draw_pause_auto(self):
         for i, button in enumerate(self.button_pause_auto):
-            color = (255, 255, 255) if i == self.selected_button_pause_auto else (255, 255, 0)
+            color = (0, 0, 0) if i == self.selected_button_pause_auto else (0, 0, 255)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
 
@@ -141,4 +149,10 @@ class Pause:
                 self.handle_key_events_pause_auto(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_pause_auto()
+    def run_pause_auto(self):
+        pause_time = pygame.time.get_ticks()
+        while self.run_pause:
+            self.handle_pause_auto_events()
+            self.draw_pause_auto()
+
 
