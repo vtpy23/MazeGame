@@ -241,26 +241,29 @@ class Menu:
                 self.handle_button_click_sizemap(i, mode)
     def handle_button_click_sizemap(self, index, mode):
         if index == 0: # 20 x 20
-            mg.Initialization().draw_to_delete("START POINT - END POINT")
+            mg.Initialization().draw_to_delete("START POINT END POINT")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
                 self.draw_menu_random_custom()
             mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 1: # 40 x 40
-            mg.Initialization().draw_to_delete("START POINT - END POINT")
+            mg.Initialization().draw_to_delete("START POINT END POINT")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
                 self.draw_menu_random_custom()
             mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 2: # 100 x 100
-            mg.Initialization().draw_to_delete("START POINT - END POINT")
+            mg.Initialization().draw_to_delete("START POINT END POINT")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
                 self.draw_menu_random_custom()
             mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 3:
             self.run_sizemap = False
     def handle_menu_events_sizemap(self, mode):
@@ -376,6 +379,7 @@ class Menu:
                 self.handle_menu_events_sizemap(index)
                 self.draw_menu_sizemaze()
             mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("CHOOSE MODE")
         elif index == 1:
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
             self.run_sizemap = True
@@ -383,6 +387,7 @@ class Menu:
                 self.handle_menu_events_sizemap(index)
                 self.draw_menu_sizemaze()
             mg.Initialization().draw_floor()
+            mg.Initialization().draw_to_delete("CHOOSE MODE")
         elif index == 2:
             self.run_start = False
     def handle_menu_events_start(self):
