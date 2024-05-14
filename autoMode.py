@@ -4,6 +4,7 @@ import mazeGeneration as mg
 from pygame.locals import *
 import playAutomatically as pA
 import saveLoad as sv
+import gamepause
 
 screen = mg.screen
 screen_width = mg.WINDOW_WIDTH
@@ -87,6 +88,10 @@ class gameAutomatically:
                         path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
                         pA.showPath(self.size).go_to_final_cell(path_drew)
                     elif event.key == pygame.K_d:
+                        self.drawMaze()
+                    elif event.key == pygame.K_p:
+                        pause = gamepause.Pause_auto(self.matrix, self.player_pos, self.player_aimbitation)
+                        pause.run_pause_auto()
                         self.drawMaze()
                     elif event.key == pygame.K_ESCAPE:
                         #Pause game
