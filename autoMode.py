@@ -49,6 +49,8 @@ class gameAutomatically:
                                     (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
         pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
                                                ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+        pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
+                                               ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
     def creatingMaze(self):
         self.drawMaze()
