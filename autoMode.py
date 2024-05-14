@@ -23,6 +23,8 @@ class gameAutomatically:
         self.size = len(self.matrix)
         self.player_past = None
         self.searching_area = None
+        self.mode_play = 0
+
     def drawMaze(self):
         size = self.size
         # Khởi tạo Pygame
@@ -47,13 +49,15 @@ class gameAutomatically:
                 if self.matrix[y][x][0] == 1:  # Tường phía dưới
                     pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size),
                                     (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
-        pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
-                                               ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
-        pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
-                                               ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
+
     def creatingMaze(self):
-        self.drawMaze()
+        if self.mode_play == 0:
+            pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                                ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+            pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
+                                                ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+            pygame.display.flip()
         running = True
         while running:
             for event in pygame.event.get():
@@ -92,6 +96,7 @@ class gameAutomatically:
                         #Pause game
                         running = False
             if(self.player_pos == self.player_aimbitation): running = False
+
     def draw_player(self):
         # Vẽ hình vuông đại diện cho người chơi
         start_x = 0
@@ -103,4 +108,31 @@ class gameAutomatically:
         pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, self.cell_size - 5, self.cell_size - 5))
         pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
-        
+    
+    def get_area_rec(self):
+        running  = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    (x, y) = pygame.mouse.get_pos()
+                    running = False
+        return (int((y + 3) // self.cell_size), int((x + 3) // self.cell_size))
+    
+    def choose_start_end_point(self, size):
+        count_point = 0
+        while count_point < 2:
+            if count_point == 0: 
+                self.player_pos = self.get_area_rec()
+                cell = pA.showPath(size)
+                cell.draw_cell(self.player_pos, (255, 0, 0))
+                count_point += 1
+            if count_point == 1: 
+                self.player_aimbitation = self.get_area_rec()
+                cell = pA.showPath(size)
+                cell.draw_cell(self.player_aimbitation, (0, 0, 255))
+                count_point += 1
