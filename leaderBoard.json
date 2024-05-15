@@ -1,0 +1,34 @@
+[
+    {
+        "name": "quangminh",
+        "average_timer": 3.462,
+        "average_step": 11.0,
+        "count_win": 3,
+        "timer": [
+            3.924,
+            3.684,
+            2.778
+        ],
+        "step": [
+            16,
+            9,
+            8
+        ]
+    },
+    {
+        "name": "quangminh1",
+        "average_timer": 3.683666666666667,
+        "average_step": 17.666666666666668,
+        "count_win": 3,
+        "timer": [
+            7.386,
+            1.914,
+            1.751
+        ],
+        "step": [
+            40,
+            6,
+            7
+        ]
+    }
+]
