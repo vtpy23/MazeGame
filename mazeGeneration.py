@@ -67,6 +67,7 @@ class Initialization:
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
         self.draw_rectangle(84, 0, 600, 70, self.screen_color)
         self.draw_text(title, 64, (255, 255, 0), 384, 42)
+        
 class mazeGeneration:
     def __init__(self) -> None:
         self.size = None

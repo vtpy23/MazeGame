@@ -185,24 +185,26 @@ class playAutomatically:
 
 class showPath:
     def __init__(self, size) -> None:
-        showPath.size = size
-        showPath.cell_size = ((768)**2 / (showPath.size) ** 2) ** 0.5
+        self.size = size
+        self.cell_size = ((768)**2 / (self.size) ** 2) ** 0.5
+    
     pg.init()
-    def draw_cell(coo : tuple):
+
+    def draw_cell(self, coo : tuple, color):
         start_x = 0 + 3
         start_y = 0 + 3
-        player_x = start_x + coo[1] * showPath.cell_size 
-        player_y = start_y + coo[0] * showPath.cell_size
-        pg.draw.rect(screen, (120, 205, 155), (player_x, player_y, showPath.cell_size - 5, showPath.cell_size - 5))
+        player_x = start_x + coo[1] * self.cell_size 
+        player_y = start_y + coo[0] * self.cell_size
+        pg.draw.rect(screen, color, (player_x, player_y, self.cell_size - 5, self.cell_size - 5))
         pg.display.flip()
 
-    def show_searching_area(self,area : list):
+    def show_searching_area(self, area : list):
         sleep = 50
         drew = [area[0]]
         for i in area:
-            if i not in drew: 
+            if i not in drew and i != area[-1]: 
                 pg.time.wait(sleep)
-                showPath.draw_cell(i)
+                self.draw_cell(i, (135, 153, 95))
                 drew.append(i)
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -210,22 +212,23 @@ class showPath:
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_p or event.key == pg.K_ESCAPE:
                         return drew
+        drew.append(area[-1])
         return drew
 
-    def go_to_final_cell(self,path: list):
+    def go_to_final_cell(self, path: list):
         sleep = 100
         start_x = 0 + 3
         start_y = 0 + 3
         for i, cell in enumerate(path):
             if i == 0: 
-                cell_x_past = start_x
-                cell_y_past = start_y
+                cell_x_past = start_x + cell[1] * self.cell_size
+                cell_y_past = start_y + cell[0] * self.cell_size
                 continue
-            cell_x = start_x + cell[1] * showPath.cell_size #Hoanh do
-            cell_y = start_y + cell[0] * showPath.cell_size
+            cell_x = start_x + cell[1] * self.cell_size #Hoanh do
+            cell_y = start_y + cell[0] * self.cell_size
             pg.time.wait(sleep)
-            pg.draw.rect(screen, (255, 255, 255), (cell_x_past, cell_y_past, showPath.cell_size - 5, showPath.cell_size - 5))
-            pg.draw.rect(screen, (255, 0, 0), (cell_x, cell_y, showPath.cell_size - 5, showPath.cell_size - 5))
+            pg.draw.rect(screen, (255, 255, 255), (cell_x_past, cell_y_past, self.cell_size - 5, self.cell_size - 5))
+            pg.draw.rect(screen, (255, 0, 0), (cell_x, cell_y, self.cell_size - 5, self.cell_size - 5))
             cell_x_past = cell_x
             cell_y_past = cell_y
             pg.display.flip()
@@ -234,5 +237,5 @@ class showPath:
                     pg.quit()
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_ESCAPE:
-                        return
-        
+                        return cell
+        return path[-1]

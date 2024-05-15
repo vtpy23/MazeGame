@@ -372,9 +372,8 @@ class LoginForm():
         username = self.username_entry.get()
         password = self.password_entry.get()
         if check_user(username, password):
-            global USERNAME 
+            global USERNAME
             USERNAME = username
-            messagebox.showinfo(title="Message", message="Login Successfully")
             self.window.destroy()
             login_success(username)
         elif len(username) == 0 or len(password) == 0:
