@@ -46,13 +46,14 @@ class gameManually:
                 if self.matrix[y][x][0] == 1:  # Tường phía dưới
                     pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size),
                                     (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
+                pygame.display.flip()
+                
+    def creatingMaze(self):
         pygame.draw.rect(screen, (255, 0, 0), (0 + 1 + self.player_pos[1] * self.cell_size 
                                                ,0 + 1 + self.player_pos[0] * self.cell_size, self.cell_size - 2, self.cell_size - 2))
         pygame.draw.rect(screen, (0, 0, 255), (0 + 1 + self.player_aimbitation[1] * self.cell_size 
                                                ,0 + 1 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 2, self.cell_size - 2))
         pygame.display.flip()
-    def creatingMaze(self):
-        self.drawMaze()
         ###Thoi gian choi
         start_ticks = pygame.time.get_ticks() 
         ###
@@ -127,6 +128,35 @@ class gameManually:
         pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, self.cell_size - 2, self.cell_size - 2))
         pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, self.cell_size - 2, self.cell_size - 2))
         pygame.display.flip()
+
+    def get_area_rec(self):
+        running  = True
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    (x, y) = pygame.mouse.get_pos()
+                    running = False
+        return (int((y + 3) // self.cell_size), int((x + 3) // self.cell_size))
+    
+    def choose_start_end_point(self, size):
+        count_point = 0
+        while count_point < 2:
+            if count_point == 0: 
+                self.player_pos = self.get_area_rec()
+                cell = pA.showPath(size)
+                cell.draw_cell(self.player_pos, (255, 0, 0))
+                count_point += 1
+            if count_point == 1: 
+                self.player_aimbitation = self.get_area_rec()
+                cell = pA.showPath(size)
+                cell.draw_cell(self.player_aimbitation, (0, 0, 255))
+                count_point += 1
+
         
 class gameLoadManually:
     def __init__(self, save_matrix, gameInfo) -> None:

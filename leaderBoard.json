@@ -30,5 +30,17 @@
             6,
             7
         ]
+    },
+    {
+        "name": "cailonma",
+        "average_timer": 26.928,
+        "average_step": 112,
+        "count_win": 1,
+        "timer": [
+            26.928
+        ],
+        "step": [
+            112
+        ]
     }
 ]
