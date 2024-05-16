@@ -82,17 +82,18 @@ class Pause_auto:
     def __init__(self):
         self.run_pause = True
         self.button_pause_auto = [
-        {"text": "CHANGE", "pos_x": 896, "pos_y": 249},
-        {"text": "ALGORITHM", "pos_x": 896, "pos_y": 279},
-        {"text": "SOUND OFF", "pos_x": 896, "pos_y": 344},
-        {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 424},
-        {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 504},
-        {"text": "RESUME", "pos_x": 896, "pos_y": 584}]
+        {"text": "CHANGE", "pos_x": 896, "pos_y": 209},
+        {"text": "SOUND OFF", "pos_x": 896, "pos_y": 304},
+        {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 384},
+        {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 464},
+        {"text": "RESUME", "pos_x": 896, "pos_y": 544}]
         self.selected_button_pause_auto = 0
     def draw_pause_auto(self):
         for i, button in enumerate(self.button_pause_auto):
             color = (255, 255, 0) if i == self.selected_button_pause_auto else (0, 0, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+            if i == 0:
+                mg.Initialization().draw_text("ALGORITHM", 36, color, 896, 239)
         pygame.display.flip()
 
     def handle_key_events_pause_auto(self, event):
@@ -113,9 +114,7 @@ class Pause_auto:
     def handle_button_click_pause_auto(self, index):
         if index == 0 :
             print("CHANGE ALGORITHM")
-        elif index == 1 :
-            print("CHANGE ALGORITHM")
-        elif index == 2:
+        elif index == 1:
             print("SOUND")
             # self.sound_on = not self.sound_on
             # if self.sound_on == True:
@@ -124,7 +123,7 @@ class Pause_auto:
             # else:   
             #     self.background_musics[self.selected_music].stop()
             #     mg.Initialization().draw_text("SOUND OFF", 36, 'White', 840, 264)
-        elif index == 3:
+        elif index == 2:
             print("SOUND CHANGE")
             # if self.sound_on:
             #     self.background_musics[self.selected_music].stop()
@@ -132,9 +131,9 @@ class Pause_auto:
             #     if self.selected_music > 4:
             #         self.selected_music = 0
             #     self.background_musics[self.selected_music].play(-1)
-        elif index == 4:
+        elif index == 3:
             print("CHANGE THEME")
-        elif index == 5:
+        elif index == 4:
             self.run_pause = False
 
     def handle_pause_auto_events(self):
