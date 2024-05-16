@@ -68,6 +68,7 @@ class gameAutomatically:
             pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
                                                 ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
             pygame.display.flip()
+
         running = True
         while running:
             while self.run_algorithm:
@@ -141,6 +142,7 @@ class gameAutomatically:
             color = (0, 0, 255) if i == self.selected_button_algorithm else (0, 0, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
+
     def handle_key_events_algorithm(self, event):
         if event.key == pygame.K_UP:
             self.selected_button_algorithm = (self.selected_button_algorithm - 1) % len(self.buttons_menu_algorithm)
@@ -148,12 +150,17 @@ class gameAutomatically:
             self.selected_button_algorithm = (self.selected_button_algorithm + 1) % len(self.buttons_menu_algorithm)
         elif event.key == pygame.K_RETURN:
             self.handle_button_click_algorithm(self.selected_button_algorithm)
+        if event.key == pygame.K_ESCAPE:
+            return self.creatingMaze()
+
+
     def handle_mouse_events_algorithm(self):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.buttons_menu_algorithm):
             text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 255), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_algorithm(i)
+
     def handle_button_click_algorithm(self, index):
         if index == 0: # DFS
             self.run_algorithm = False
@@ -162,9 +169,12 @@ class gameAutomatically:
             self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
             drew = pA.showPath(self.size).show_searching_area(play.searching_area)
             path = play.Truyvet()
-            print(path)
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-            pA.showPath(self.size).go_to_final_cell(path_drew)
+            cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
+            if cell_end != self.player_aimbitation:
+                self.run_algorithm = True
+                self.player_pos = cell_end
+                self.creatingMaze()
         elif index == 1: # DIJKSTRA
             self.run_algorithm = False
             mg.Initialization().draw_pause()
@@ -172,18 +182,25 @@ class gameAutomatically:
             self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
             drew = pA.showPath(self.size).show_searching_area(play.searching_area)
             path = play.Truyvet()
-            print(path)
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-            pA.showPath(self.size).go_to_final_cell(path_drew)
+            cell_end != pA.showPath(self.size).go_to_final_cell(path_drew)
+            if cell_end != self.player_aimbitation:
+                self.run_algorithm = True
+                self.player_pos = cell_end
+                self.creatingMaze()
         elif index == 2: # A - STAR
             self.run_algorithm = False
             mg.Initialization().draw_pause()
             play = pA.playAutomatically().A_solving(self.matrix)
             path = play.A_star(self.player_pos, self.player_aimbitation)
             drew = pA.showPath(self.size).show_searching_area(play.searching_area)
-            print(path)
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-            pA.showPath(self.size).go_to_final_cell(path_drew)
+            cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
+            if cell_end != self.player_aimbitation:
+                self.run_algorithm = True
+                self.player_pos = cell_end
+                self.creatingMaze()
+
     def handle_menu_events_algorithm(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

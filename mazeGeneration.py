@@ -34,6 +34,11 @@ class Initialization:
         self.screen.blit(text, text_rect)
         pygame.display.flip()
         return text_rect
+    
+    def draw_text_2(self, text, text_size, color, x, y):
+        text = pygame.font.Font(self.font_path, text_size).render(text, True, color)
+        self.screen.blit(text, (x, y))
+        pygame.display.flip()
 
     def input_image_background(self, image_path):
         image = pygame.image.load(image_path).convert()
