@@ -116,21 +116,8 @@ class Pause_auto:
             print("CHANGE ALGORITHM")
         elif index == 1:
             print("SOUND")
-            # self.sound_on = not self.sound_on
-            # if self.sound_on == True:
-            #     self.background_musics[self.selected_music].play(-1)
-            #     mg.Initialization().draw_text("SOUND ON", 36, 'White', 840, 264)
-            # else:   
-            #     self.background_musics[self.selected_music].stop()
-            #     mg.Initialization().draw_text("SOUND OFF", 36, 'White', 840, 264)
         elif index == 2:
             print("SOUND CHANGE")
-            # if self.sound_on:
-            #     self.background_musics[self.selected_music].stop()
-            #     self.selected_music += 1
-            #     if self.selected_music > 4:
-            #         self.selected_music = 0
-            #     self.background_musics[self.selected_music].play(-1)
         elif index == 3:
             print("CHANGE THEME")
         elif index == 4:

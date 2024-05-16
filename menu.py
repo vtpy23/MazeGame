@@ -43,6 +43,14 @@ class Menu:
         {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 424},
         {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
+        self.buttons_menu_leader_board = [
+        {"text": "INFORMATION", "pos_x": 840, "pos_y": 264},
+        {"text": "AVERGAGE", "pos_x": 840, "pos_y": 289},
+        {"text": "TIME", "pos_x": 840, "pos_y": 319},
+        {"text": "AVERGAGE", "pos_x": 840, "pos_y": 369},
+        {"text": "STEP", "pos_x": 840, "pos_y": 399},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464}
+        ]
         self.buttons_menu_load = [
         {"text": "BACK", "pos_x": 840, "pos_y": 124},
         {"text": "FILE_SAVE", "pos_x": 840, "pos_y": 204}
@@ -66,6 +74,7 @@ class Menu:
             {"text": name, "pos_x": 250, "pos_y": 124 + 40 * i}
             for i, name in enumerate(self.file_save_name)
         ]
+        self.selected_button_leader_board = 0
         self.selected_button_random_custom = 0
         self.selected_button_menu = 0
         self.selected_button_setting = 0
@@ -75,6 +84,7 @@ class Menu:
         self.selected_button_sizemap = 0
         self.selected_music = 0
         self.selected_load = False # chon giua load ben trai va ben phai
+        self.run_leader_board = False
         self.run_random_custom = False
         self.run_start = False
         self.run_setting = False
@@ -318,8 +328,8 @@ class Menu:
             mg.Initialization().draw_to_delete("LEADER BOARD")
             self.run_guide = True
             while self.run_guide:
-                self.handle_menu_events_guide()
-                self.draw_menu_guide()
+                self.handle_menu_events_leader_board()
+                self.draw_menu_leader_board()
             mg.Initialization().draw_floor()
         elif index == 4:
             mg.Initialization().draw_to_delete("GUIDE")
@@ -546,21 +556,30 @@ class Menu:
     # LEADER BOARD
     def draw_menu_leader_board(self):
         # Vẽ nút
-        for i, button in enumerate(self.buttons_menu_guide_credits):
-            color = (255, 255, 255) if i == self.selected_button_load_guide_credits else (255, 255, 0)
+        for i, button in enumerate(self.buttons_menu_leader_board):
+            color = (255, 255, 255) if i == self.selected_button_leader_board else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
     def handle_key_events_leader_board(self, event):
-        if event.key == pygame.K_RETURN:
-            self.run_guide = False
+        if event.key == pygame.K_UP:
+            self.selected_button_leader_board = (self.selected_button_leader_board - 1) % len(self.buttons_menu_leader_board)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_leader_board = (self.selected_button_leader_board + 1) % len(self.buttons_menu_leader_board)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_leader_board(self.selected_button_leader_board)
     def handle_mouse_events_leader_board(self):
         mouse_pos = pygame.mouse.get_pos()
-        for i, button in enumerate(self.buttons_menu_guide_credits):
+        for i, button in enumerate(self.buttons_menu_leader_board):
             text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
-                self.run_guide = False
+                self.handle_button_click_leader_board(i)
     def handle_button_click_leader_board(self, index):
-        name = 1
+        if index == 0:
+            print("average time")
+        elif index == 1:
+            print("average step")
+        elif index == 2: 
+            self.run_leader_board = False
     def handle_menu_events_leader_board(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
