@@ -13,11 +13,11 @@ class Pause:
         self.player_step = player_step
         self.run_pause = True
         self.button_pause_manual = [
-        {"text": "SAVE", "pos_x": 840, "pos_y": 224},
-        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 304},
-        {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 384},
-        {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 464},
-        {"text": "RESUME", "pos_x": 840, "pos_y": 544}]
+        {"text": "SAVE", "pos_x": 896, "pos_y": 219},
+        {"text": "SOUND OFF", "pos_x": 896, "pos_y": 309},
+        {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 384},
+        {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 464},
+        {"text": "RESUME", "pos_x": 896, "pos_y": 544}]
         self.selected_button_pause_manual = 0
         # self.background_musics = menu.Menu().background_musics
         # self.sound_on = menu.Menu().sound_on
@@ -85,15 +85,16 @@ class Pause_auto:
         self.player_aimbitation = player_aimbitation
         self.run_pause = True
         self.button_pause_auto = [
-        {"text": "CHANGE ALGORITHM", "pos_x": 840, "pos_y": 264},
-        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 344},
-        {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 424},
-        {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 504},
-        {"text": "RESUME", "pos_x": 840, "pos_y": 584}]
+        {"text": "CHANGE", "pos_x": 896, "pos_y": 254},
+        {"text": "ALGORITHM", "pos_x": 896, "pos_y": 274},
+        {"text": "SOUND OFF", "pos_x": 896, "pos_y": 344},
+        {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 424},
+        {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 504},
+        {"text": "RESUME", "pos_x": 896, "pos_y": 584}]
         self.selected_button_pause_auto = 0
     def draw_pause_auto(self):
         for i, button in enumerate(self.button_pause_auto):
-            color = (0, 0, 0) if i == self.selected_button_pause_auto else (0, 0, 255)
+            color = (255, 255, 0) if i == self.selected_button_pause_auto else (0, 0, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
 
@@ -113,9 +114,9 @@ class Pause_auto:
                 self.handle_button_click_pause_auto(i)
 
     def handle_button_click_pause_auto(self, index):
-        if index == 0:
-            print("SAVED")
-        elif index == 1:
+        if index == 0 :
+            print("CHANGE ALGORITHM")
+        elif index == 1 :
             print("CHANGE ALGORITHM")
         elif index == 2:
             print("SOUND")
@@ -135,7 +136,7 @@ class Pause_auto:
             #         self.selected_music = 0
             #     self.background_musics[self.selected_music].play(-1)
         elif index == 4:
-            print("CHANGE ALGORITHM")
+            print("CHANGE THEME")
         elif index == 5:
             self.run_pause = False
 

@@ -24,6 +24,14 @@ class gameAutomatically:
         self.size = len(self.matrix)
         self.player_past = None
         self.searching_area = None
+        self.run_algorithm = False        
+        self.selected_button_algorithm = 0        
+        self.buttons_menu_algorithm = [
+        {"text": "DFS", "pos_x": 896, "pos_y": 304},
+        {"text": "DIJKSTRA", "pos_x": 896, "pos_y": 384},
+        {"text": "A STAR", "pos_x": 896, "pos_y": 464}
+        ]
+        self.mark = True
     def drawMaze(self):
         size = self.size
         # Khởi tạo Pygame
@@ -57,37 +65,41 @@ class gameAutomatically:
         self.drawMaze()
         running = True
         while running:
+            while self.mark:
+                self.draw_menu_algorithm()
+                self.handle_menu_events_algorithm()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                 elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_1:
-                        ### bfs
-                        play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
-                        self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
-                        drew = pA.showPath(self.size).show_searching_area(play.searching_area)
-                        path = play.Truyvet()
-                        print(path)
-                        path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath(self.size).go_to_final_cell(path_drew)
-                    elif event.key == pygame.K_2:
-                        ### dijkstra
-                        play = pA.playAutomatically().maze_dijkstra_solving(self.matrix)
-                        self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
-                        drew = pA.showPath(self.size).show_searching_area(play.searching_area)
-                        path = play.Truyvet()
-                        print(path)
-                        path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath(self.size).go_to_final_cell(path_drew)
-                    elif event.key == pygame.K_3:
-                        ### A_star
-                        play = pA.playAutomatically().A_solving(self.matrix)
-                        path = play.A_star(self.player_pos, self.player_aimbitation)
-                        drew = pA.showPath(self.size).show_searching_area(play.searching_area)
-                        print(path)
-                        path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath(self.size).go_to_final_cell(path_drew)
-                    elif event.key == pygame.K_d:
+                    # if event.key == pygame.K_1:
+                    #     ### bfs
+                    #     play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
+                    #     self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
+                    #     drew = pA.showPath(self.size).show_searching_area(play.searching_area)
+                    #     path = play.Truyvet()
+                    #     print(path)
+                    #     path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+                    #     pA.showPath(self.size).go_to_final_cell(path_drew)
+                    # elif event.key == pygame.K_2:
+                    #     ### dijkstra
+                    #     play = pA.playAutomatically().maze_dijkstra_solving(self.matrix)
+                    #     self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
+                    #     drew = pA.showPath(self.size).show_searching_area(play.searching_area)
+                    #     path = play.Truyvet()
+                    #     print(path)
+                    #     path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+                    #     pA.showPath(self.size).go_to_final_cell(path_drew)
+                    # elif event.key == pygame.K_3:
+                    #     ### A_star
+                    #     play = pA.playAutomatically().A_solving(self.matrix)
+                    #     path = play.A_star(self.player_pos, self.player_aimbitation)
+                    #     drew = pA.showPath(self.size).show_searching_area(play.searching_area)
+                    #     print(path)
+                    #     path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+                    #     pA.showPath(self.size).go_to_final_cell(path_drew)
+                    if event.key == pygame.K_d:
                         self.drawMaze()
                     elif event.key == pygame.K_p:
                         pause = gamepause.Pause_auto(self.matrix, self.player_pos, self.player_aimbitation)
@@ -108,4 +120,73 @@ class gameAutomatically:
         pygame.draw.rect(screen, (255, 255, 255), (player_x_past, player_y_past, self.cell_size - 5, self.cell_size - 5))
         pygame.draw.rect(screen, (255, 0, 0), (player_x, player_y, self.cell_size - 5, self.cell_size - 5))
         pygame.display.flip()
+    
+    # CHOOSE ALGORITHM
+    def draw_menu_algorithm(self):
+        # Vẽ nút
+        for i, button in enumerate(self.buttons_menu_algorithm):
+            color = (0, 0, 255) if i == self.selected_button_algorithm else (0, 0, 0)
+            mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        pygame.display.flip()
+    def handle_key_events_algorithm(self, event):
+        if event.key == pygame.K_UP:
+            self.selected_button_algorithm = (self.selected_button_algorithm - 1) % len(self.buttons_menu_algorithm)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_algorithm = (self.selected_button_algorithm + 1) % len(self.buttons_menu_algorithm)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_algorithm(self.selected_button_algorithm)
+    def handle_mouse_events_algorithm(self):
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(self.buttons_menu_algorithm):
+            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_algorithm(i)
+    def handle_button_click_algorithm(self, index):
+        if index == 0: # DFS
+            self.mark = False
+            mg.Initialization().draw_pause()
+            pygame.display.flip()
+            play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
+            self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
+            drew = pA.showPath(self.size).show_searching_area(play.searching_area)
+            path = play.Truyvet()
+            print(path)
+            path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+            pA.showPath(self.size).go_to_final_cell(path_drew)
+            mg.Initialization().draw_pause()
+            pygame.display.flip()
+        elif index == 1: # DIJKSTRA
+            self.mark = False
+            mg.Initialization().draw_pause()
+            pygame.display.flip()
+            play = pA.playAutomatically().maze_dijkstra_solving(self.matrix)
+            self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
+            drew = pA.showPath(self.size).show_searching_area(play.searching_area)
+            path = play.Truyvet()
+            print(path)
+            path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+            pA.showPath(self.size).go_to_final_cell(path_drew)
+            mg.Initialization().draw_pause()
+            pygame.display.flip()
+        elif index == 2: # A - STAR
+            self.mark = False
+            mg.Initialization().draw_pause()
+            pygame.display.flip()
+            play = pA.playAutomatically().A_solving(self.matrix)
+            path = play.A_star(self.player_pos, self.player_aimbitation)
+            drew = pA.showPath(self.size).show_searching_area(play.searching_area)
+            print(path)
+            path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+            pA.showPath(self.size).go_to_final_cell(path_drew)
+            mg.Initialization().draw_pause()
+            pygame.display.flip()
+    def handle_menu_events_algorithm(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                self.handle_key_events_algorithm(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_events_algorithm()
         
