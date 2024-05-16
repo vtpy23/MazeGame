@@ -28,8 +28,8 @@ class gameManually:
         self.button_pause_manual = [
         {"text": "SAVE", "pos_x": 896, "pos_y": 184},
         {"text": "SOUND OFF", "pos_x": 896, "pos_y": 264},
-        {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 344},
-        {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 424},
+        {"text": "CHANGE", "pos_x": 896, "pos_y": 329},
+        {"text": "CHANGE", "pos_x": 896, "pos_y": 409},
         {"text": "RESUME", "pos_x": 896, "pos_y": 504},
         {"text": "EXIT", "pos_x": 896, "pos_y": 584}]
         self.buttons_menu_exit= [
@@ -98,8 +98,10 @@ class gameManually:
                         self.player_step += 1
                         self.Move(0, 1)
                     elif event.key == pygame.K_p:
+                        self.run_pause = True
                         self.time_pause = self.run_pause_manual()
                         start_ticks = start_ticks + self.time_pause * 1000
+                        mg.Initialization().delete_pause_menu()
                     elif event.key == pygame.K_o:
                         ### Goi y nuoc di
                         play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
@@ -175,6 +177,10 @@ class gameManually:
         for i, button in enumerate(self.button_pause_manual):
             color = (0, 0, 0) if i == self.selected_button_pause_manual else (0, 0, 255)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+            if i == 2:
+                mg.Initialization().draw_text("SOUND", 36, color, 896, 359)
+            elif i == 3:
+                mg.Initialization().draw_text("THEME", 36, color, 896, 439)
         pygame.display.flip()
 
     def handle_key_events_pause_manual(self, event):
