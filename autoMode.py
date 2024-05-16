@@ -146,10 +146,14 @@ class gameAutomatically:
             if count_point == 0: 
                 self.player_pos = self.get_area_rec()
                 cell = pA.showPath(size)
+                if self.player_pos[0] >= size or self.player_pos[1] >= size:
+                    continue
                 cell.draw_cell(self.player_pos, (255, 0, 0))
                 count_point += 1
             if count_point == 1: 
                 self.player_aimbitation = self.get_area_rec()
+                if self.player_aimbitation[0] >= size or self.player_aimbitation[1] >= size:
+                    continue
                 cell = pA.showPath(size)
                 cell.draw_cell(self.player_aimbitation, (0, 0, 255))
                 count_point += 1

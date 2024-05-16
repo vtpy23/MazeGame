@@ -693,8 +693,8 @@ class UserInterface():
     def run(self):
         import menu
         import mazeGeneration as mg
-        run_ = menu.Menu()
         self.window.destroy()
+        run_ = menu.Menu()
         mg.Initialization().draw_floor()
         running = True
         while running: 
