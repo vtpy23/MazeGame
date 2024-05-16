@@ -150,13 +150,6 @@ class Menu:
                     mg.Initialization().draw_floor()
 
             elif mode == 1:
-                mg.Initialization().draw_to_delete("CHOOSE ALGORITHM")
-                self.run_algorithm = True
-                while self.run_algorithm:
-                    self.handle_menu_events_algorithm(index, sizemap)
-                    self.draw_menu_algorithm()
-                mg.Initialization().draw_floor()
-                mg.Initialization().draw_to_delete("START POINT END POINT")
                 if sizemap == 0: # map: 40x40, mode: auto, start point - end point: random
                     play = gameAutomatically(20)
                     play.creatingMaze()

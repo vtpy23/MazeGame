@@ -213,9 +213,7 @@ class showPath:
                     pg.quit()
                     exit()
                 elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_o or event.key == pg.K_ESCAPE:
-                        pause = gamepause.Pause_auto()
-                        pause.run_pause_auto()
+                    if event.key == pg.K_p or event.key == pg.K_ESCAPE:
                         return drew
         drew.append(area[-1])
         return drew
