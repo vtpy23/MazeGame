@@ -1,6 +1,6 @@
 [
     {
-        "count": 5
+        "count": 6
     },
     {
         "gameNumber": 1,
@@ -12287,20 +12287,20 @@
             ]
         ],
         "player_pos": [
-            0,
-            9
+            1,
+            18
         ],
         "ambitation_pos": [
             3,
             3
         ],
-        "player_step": 27,
+        "player_step": 60,
         "time": {
-            "Date": "15/5/2024",
-            "Time": "10:13:57"
+            "Date": "16/5/2024",
+            "Time": "19:35:5"
         },
-        "username": "aaaaaa",
-        "counting_sec": -24600.0
+        "username": "cailonma",
+        "counting_sec": -34033.0
     },
     {
         "gameNumber": 6,
