@@ -20,6 +20,9 @@ class Initialization:
         self.font_path = font_path
         self.screen = screen
 
+    def draw_pause(self):
+        self.draw_rectangle(769, 0, 256, 768, (255, 255, 255))
+
     def draw_rectangle(self, x, y, width, height, color):
         pygame.draw.rect(self.screen, color, (x, y, width, height))
         pygame.display.flip()

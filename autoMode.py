@@ -4,7 +4,7 @@ import mazeGeneration as mg
 from pygame.locals import *
 import playAutomatically as pA
 import saveLoad as sv
-import gamepause
+from sys import exit
 
 screen = mg.screen
 screen_width = mg.WINDOW_WIDTH
@@ -61,9 +61,13 @@ class gameAutomatically:
             pygame.display.flip()
         running = True
         while running:
+            while self.mark:
+                self.draw_menu_algorithm()
+                self.handle_menu_events_algorithm()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    exit()
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_1:
                         ### bfs

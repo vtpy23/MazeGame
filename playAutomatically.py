@@ -3,6 +3,8 @@ import numpy as np
 import heapq as pq
 import pygame as pg
 from queue import PriorityQueue
+import gamepause
+from sys import exit
 
 
 screen = mG.screen
@@ -209,8 +211,11 @@ class showPath:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
+                    exit()
                 elif event.type == pg.KEYDOWN:
-                    if event.key == pg.K_p or event.key == pg.K_ESCAPE:
+                    if event.key == pg.K_o or event.key == pg.K_ESCAPE:
+                        pause = gamepause.Pause_auto()
+                        pause.run_pause_auto()
                         return drew
         drew.append(area[-1])
         return drew
