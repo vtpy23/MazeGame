@@ -85,7 +85,6 @@ class Pause_auto:
         self.player_aimbitation = player_aimbitation
         self.run_pause = True
         self.button_pause_auto = [
-        {"text": "SAVE", "pos_x": 840, "pos_y": 184},
         {"text": "CHANGE ALGORITHM", "pos_x": 840, "pos_y": 264},
         {"text": "SOUND OFF", "pos_x": 840, "pos_y": 344},
         {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 424},

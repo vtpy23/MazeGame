@@ -25,23 +25,28 @@ class Menu:
         {"text": "CREDITS", "pos_x": 840, "pos_y": 544},
         {"text": "QUIT", "pos_x": 840, "pos_y": 624}
         ]
+        self.buttons_menu_algorithm = [
+        {"text": "DFS", "pos_x": 840, "pos_y": 264},
+        {"text": "DIJKSTRA", "pos_x": 840, "pos_y": 344},
+        {"text": "A STAR", "pos_x": 840, "pos_y": 424},
+        {"text": "BACK", "pos_x": 840, "pos_y": 504}
+        ]
         self.buttons_menu_start = [
         {"text": "MANUAL", "pos_x": 840, "pos_y": 304},
         {"text": "AUTOMATIC", "pos_x": 840, "pos_y": 384},
-        {"text": "BACK", "pos_x": 840, "pos_y": 464},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464}
         ]
-        self.buttons_menu_setting = None
         self.buttons_menu_setting_on = [
         {"text": "SOUND OFF", "pos_x": 840, "pos_y": 264},
         {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 344},
         {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 424},
-        {"text": "BACK", "pos_x": 840, "pos_y": 504},
+        {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
         self.buttons_menu_setting_off = [
         {"text": "SOUND ON", "pos_x": 840, "pos_y": 264},
         {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 344},
         {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 424},
-        {"text": "BACK", "pos_x": 840, "pos_y": 504},
+        {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
         self.buttons_menu_load = [
         {"text": "BACK", "pos_x": 840, "pos_y": 124},
@@ -54,7 +59,7 @@ class Menu:
         {"text": "MAP 20x20", "pos_x": 840, "pos_y": 264},
         {"text": "MAP 40x40", "pos_x": 840, "pos_y": 344},
         {"text": "MAP 100x100", "pos_x": 840, "pos_y": 424},
-        {"text": "BACK", "pos_x": 840, "pos_y": 504},
+        {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
         self.buttons_menu_random_custom = [
         {"text": "RANDOM", "pos_x": 840, "pos_y": 304},
@@ -73,8 +78,10 @@ class Menu:
         self.selected_button_load_file = 0
         self.selected_button_start = 0
         self.selected_button_sizemap = 0
+        self.selected_button_algorithm = 0
         self.selected_music = 0
         self.selected_load = False # chon giua load ben trai va ben phai
+        self.run_algorithm = False
         self.run_random_custom = False
         self.run_start = False
         self.run_setting = False
@@ -146,18 +153,13 @@ class Menu:
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
             elif mode == 1:
-                if sizemap == 0: # map: 40x40, mode: auto, start point - end point: random
-                    play = gameAutomatically(20)
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
-                elif sizemap == 1: # map: 40x40, mode: auto, start point - end point: random
-                    play = gameAutomatically(40)
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
-                elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
-                    play = gameAutomatically(100)
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                mg.Initialization().draw_to_delete("CHOOSE ALGORITHM")
+                self.run_algorithm = True
+                while self.run_algorithm:
+                    self.handle_menu_events_algorithm(index, sizemap)
+                    self.draw_menu_algorithm()
+                mg.Initialization().draw_floor()
+                mg.Initialization().draw_to_delete("START POINT END POINT")
         elif index == 1:
             if mode == 0:
                 if sizemap == 0: # map: 100x100, mode: manual, start point - end point: custom
@@ -173,18 +175,13 @@ class Menu:
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
             elif mode == 1:
-                if sizemap == 0: # map: 20x20, mode: auto, start point - end point: custom
-                    play = gameAutomatically(20)
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
-                elif sizemap == 1: # map: 20x20, mode: auto, start point - end point: custom
-                    play = gameAutomatically(40)
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
-                elif sizemap == 2: # map: 20x20, mode: auto, start point - end point: custom
-                    play = gameAutomatically(100)
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                mg.Initialization().draw_to_delete("CHOOSE ALGORITHM")
+                self.run_algorithm = True
+                while self.run_algorithm:
+                    self.handle_menu_events_algorithm(index, sizemap)
+                    self.draw_menu_algorithm()
+                mg.Initialization().draw_floor()
+                mg.Initialization().draw_to_delete("START POINT END POINT")
         elif index == 2:
             self.run_random_custom = False
     def handle_menu_events_random_custom(self, sizemap, mode):     
@@ -383,6 +380,84 @@ class Menu:
                 self.handle_key_events_start(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_start()
+
+    # CHOOSE ALGORITHM
+    def draw_menu_algorithm(self):
+        # Vẽ nút
+        for i, button in enumerate(self.buttons_menu_algorithm):
+            color = (255, 255, 255) if i == self.selected_button_algorithm else (255, 255, 0)
+            mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        pygame.display.flip()
+    def handle_key_events_algorithm(self, event, random_custom, sizemap):
+        if event.key == pygame.K_UP:
+            self.selected_button_algorithm = (self.selected_button_algorithm - 1) % len(self.buttons_menu_algorithm)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_algorithm = (self.selected_button_algorithm + 1) % len(self.buttons_menu_algorithm)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_algorithm(self.selected_button_sizemap, random_custom, sizemap)
+    def handle_mouse_events_algorithm(self, random_custom, sizemap):
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(self.buttons_menu_algorithm):
+            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_algorithm(i, random_custom, sizemap)
+    def handle_button_click_algorithm(self, index, random_custom, sizemap):
+        if index == 0: # DFS
+            if random_custom == 0: # Random
+                if sizemap == 0: # random dfs 20x20
+                    print("random dfs 20x20")
+                elif sizemap == 1: # random dfs 40x40
+                    print("random dfs 40x40")
+                elif sizemap == 2: # random dfs 100x100
+                    print("random dfs 100x100")
+            elif random_custom == 1: # custom 
+                if sizemap == 0: # custom dfs 20x20
+                    print("custom dfs 20x20")
+                elif sizemap == 1: # custom dfs 40x40
+                    print("custom dfs 40x40")
+                elif sizemap == 2: # custom dfs 100x100
+                    print("custom dfs 100x100")
+        elif index == 1: # DIJKSTRA
+            if random_custom == 0: # Random
+                if sizemap == 0: # random dijkstra 20x20
+                    print("random dijkstra 20x20")
+                elif sizemap == 1: # random dijkstra 40x40
+                    print("random dijkstra 40x40")
+                elif sizemap == 2: # random dijkstra 100x100
+                    print("random dijkstra 100x100")
+            elif random_custom == 1: # custom 
+                if sizemap == 0: # custom dijkstra 20x20
+                    print("custom dijkstra 20x20")
+                elif sizemap == 1: # custom dijkstra 40x40
+                    print("custom dijkstra 40x40")
+                elif sizemap == 2: # custom dijkstra 100x100
+                    print("custom dijkstra 100x100")
+        elif index == 2: # A - STAR
+            if random_custom == 0: # Random
+                if sizemap == 0: # random a - star 20x20
+                    print("random a - star 20x20")
+                elif sizemap == 1: # random a - star 40x40
+                    print("random a - star 40x40")
+                elif sizemap == 2: # random a - star 40x40
+                    print("random a - star 40x40")
+            elif random_custom == 1: # custom 
+                if sizemap == 0: # custom a - star 20x20
+                    print("custom a - star 20x20")
+                elif sizemap == 1: # custom a - star 40x40
+                    print("custom a - star 40x40")
+                elif sizemap == 2: # custom a - star 40x40
+                    print("custom a - star 40x40")
+        elif index == 3:
+            self.run_algorithm = False
+    def handle_menu_events_algorithm(self, random_custom, sizemap):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                self.handle_key_events_algorithm(event, random_custom, sizemap)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_events_algorithm(random_custom, sizemap)
 
     # Load
     ###Cac bien duoc dat o day khi nao lam xong se sua
