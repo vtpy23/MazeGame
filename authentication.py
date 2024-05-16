@@ -2,9 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from PIL import ImageTk, Image
 from random import randint, choice, shuffle
-import mazeGeneration as mg
 from database import *
-import menu
 from sys import exit
 
 USERNAME = None
@@ -492,9 +490,7 @@ class UserInterface():
         self.setup_ui()
         self.show_image = ImageTk.PhotoImage(file='Photos\\show.png')
         self.hide_image = ImageTk.PhotoImage(file='Photos\\hide1.png')
-        
 
-    
     def setup_ui(self):
         self.window.config(bg= self.bg_color)
         self.greet_label = Label(self.window, text=f'Welcome!', font=('yu gothuic ui', 24, 'bold'), bg=self.bg_color, fg=self.text_color)
@@ -695,6 +691,8 @@ class UserInterface():
         self.chpass_frame.destroy()
     
     def run(self):
+        import menu
+        import mazeGeneration as mg
         run_ = menu.Menu()
         self.window.destroy()
         mg.Initialization().draw_floor()

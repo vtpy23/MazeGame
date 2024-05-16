@@ -4,7 +4,6 @@ import numpy as np
 
 # Khởi tạo Pygame
 pygame.init()
-
 WINDOW_WIDTH = 1024
 WINDOW_HEIGHT = 768 
 white, black = (255, 255, 255), (0, 0, 0)
@@ -13,6 +12,7 @@ screen_color = (0, 0, 150)
 font_path = 'font/Pixeltype.TTF'
 
 class Initialization:
+
     def __init__(self):
         self.screen_width = WINDOW_WIDTH
         self.screen_height = WINDOW_HEIGHT

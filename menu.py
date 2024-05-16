@@ -5,6 +5,7 @@ from sys import exit
 from humanMode import gameManually
 from autoMode import gameAutomatically
 from humanMode import gameLoadManually
+
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
 screen = mg.screen
@@ -100,7 +101,7 @@ class Menu:
             else:   
                 self.background_musics[self.selected_music].stop()
                 mg.Initialization().draw_text("SOUND OFF", 36, text_color, text_x, text_y)
-    
+
     # CHANGE SOUND
     def change_sound(self):
         if self.sound_on:
@@ -172,18 +173,21 @@ class Menu:
             if mode == 0:
                 if sizemap == 0: # map: 100x100, mode: manual, start point - end point: custom
                     play = gameManually(20)
+                    play.mode_play == 1
                     play.drawMaze()
                     play.choose_start_end_point(20)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 1: # map: 100x100, mode: manual, start point - end point: custom
                     play = gameManually(40)
+                    play.mode_play == 1
                     play.drawMaze()
                     play.choose_start_end_point(40)
                     play.creatingMaze()
                     mg.Initialization().draw_floor()
                 elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: custom
                     play = gameManually(100)
+                    play.mode_play == 1
                     play.drawMaze()
                     play.choose_start_end_point(100)
                     play.creatingMaze()

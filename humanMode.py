@@ -22,6 +22,7 @@ class gameManually:
         self.player_aimbitation = (3, 3) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
         self.player_past = None
         self.player_step = 0
+        self.mode_play = 0
     def drawMaze(self):
         size = self.size
         # Khởi tạo Pygame
@@ -49,11 +50,12 @@ class gameManually:
                 pygame.display.flip()
                 
     def creatingMaze(self):
-        pygame.draw.rect(screen, (255, 0, 0), (0 + 1 + self.player_pos[1] * self.cell_size 
-                                               ,0 + 1 + self.player_pos[0] * self.cell_size, self.cell_size - 2, self.cell_size - 2))
-        pygame.draw.rect(screen, (0, 0, 255), (0 + 1 + self.player_aimbitation[1] * self.cell_size 
-                                               ,0 + 1 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 2, self.cell_size - 2))
-        pygame.display.flip()
+        if self.mode_play == 0:
+            pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                                ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+            pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
+                                                ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+            pygame.display.flip()
         ###Thoi gian choi
         start_ticks = pygame.time.get_ticks() 
         ###
@@ -61,7 +63,7 @@ class gameManually:
         self.time_pause = None
         while running:
             seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # milisec --> sec
-            mg.Initialization().draw_rectangle_with_text(824,20,140,f"time: {seconds: .2f}")
+            mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds: .2f}")
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

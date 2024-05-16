@@ -73,7 +73,11 @@ class gameAutomatically:
                         path = play.Truyvet()
                         print(path)
                         path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath(self.size).go_to_final_cell(path_drew)
+                        cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
+                        if cell_end != self.player_aimbitation:
+                            self.player_pos = cell_end
+                            self.drawMaze()
+                            self.creatingMaze()
                     elif event.key == pygame.K_2:
                         ### dijkstra
                         play = pA.playAutomatically().maze_dijkstra_solving(self.matrix)
@@ -82,7 +86,11 @@ class gameAutomatically:
                         path = play.Truyvet()
                         print(path)
                         path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath(self.size).go_to_final_cell(path_drew)
+                        cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
+                        if cell_end != self.player_aimbitation:
+                            self.player_pos = cell_end
+                            self.drawMaze()
+                            self.creatingMaze()
                     elif event.key == pygame.K_3:
                         ### A_star
                         play = pA.playAutomatically().A_solving(self.matrix)
@@ -90,7 +98,11 @@ class gameAutomatically:
                         drew = pA.showPath(self.size).show_searching_area(play.searching_area)
                         print(path)
                         path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-                        pA.showPath(self.size).go_to_final_cell(path_drew)
+                        cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
+                        if cell_end != self.player_aimbitation:
+                            self.player_pos = cell_end
+                            self.drawMaze()
+                            self.creatingMaze()
                     elif event.key == pygame.K_d:
                         self.drawMaze()
                     elif event.key == pygame.K_p:
