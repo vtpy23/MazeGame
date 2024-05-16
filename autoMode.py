@@ -4,7 +4,7 @@ import mazeGeneration as mg
 from pygame.locals import *
 import playAutomatically as pA
 import saveLoad as sv
-import gamepause
+from sys import exit
 
 screen = mg.screen
 screen_width = mg.WINDOW_WIDTH
@@ -27,9 +27,9 @@ class gameAutomatically:
         self.run_algorithm = False        
         self.selected_button_algorithm = 0        
         self.buttons_menu_algorithm = [
-        {"text": "DFS", "pos_x": 896, "pos_y": 304},
-        {"text": "DIJKSTRA", "pos_x": 896, "pos_y": 384},
-        {"text": "A STAR", "pos_x": 896, "pos_y": 464}
+        {"text": "DFS", "pos_x": 896, "pos_y": 104},
+        {"text": "DIJKSTRA", "pos_x": 896, "pos_y": 204},
+        {"text": "A STAR", "pos_x": 896, "pos_y": 304}
         ]
         self.mark = True
     def drawMaze(self):
@@ -68,10 +68,10 @@ class gameAutomatically:
             while self.mark:
                 self.draw_menu_algorithm()
                 self.handle_menu_events_algorithm()
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
+                    exit()
                 elif event.type == pygame.KEYDOWN:
                     # if event.key == pygame.K_1:
                     #     ### bfs
@@ -100,10 +100,6 @@ class gameAutomatically:
                     #     path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
                     #     pA.showPath(self.size).go_to_final_cell(path_drew)
                     if event.key == pygame.K_d:
-                        self.drawMaze()
-                    elif event.key == pygame.K_p:
-                        pause = gamepause.Pause_auto(self.matrix, self.player_pos, self.player_aimbitation)
-                        pause.run_pause_auto()
                         self.drawMaze()
                     elif event.key == pygame.K_ESCAPE:
                         #Pause game
@@ -138,7 +134,7 @@ class gameAutomatically:
     def handle_mouse_events_algorithm(self):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.buttons_menu_algorithm):
-            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 255), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_algorithm(i)
     def handle_button_click_algorithm(self, index):

@@ -13,8 +13,8 @@ class Pause:
         self.player_step = player_step
         self.run_pause = True
         self.button_pause_manual = [
-        {"text": "SAVE", "pos_x": 896, "pos_y": 219},
-        {"text": "SOUND OFF", "pos_x": 896, "pos_y": 309},
+        {"text": "SAVE", "pos_x": 896, "pos_y": 224},
+        {"text": "SOUND OFF", "pos_x": 896, "pos_y": 304},
         {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 384},
         {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 464},
         {"text": "RESUME", "pos_x": 896, "pos_y": 544}]
@@ -79,14 +79,11 @@ class Pause:
         return seconds
     
 class Pause_auto:
-    def __init__(self, matrix, player_pos, player_aimbitation):
-        self.matrix = matrix
-        self.player_pos = player_pos
-        self.player_aimbitation = player_aimbitation
+    def __init__(self):
         self.run_pause = True
         self.button_pause_auto = [
-        {"text": "CHANGE", "pos_x": 896, "pos_y": 254},
-        {"text": "ALGORITHM", "pos_x": 896, "pos_y": 274},
+        {"text": "CHANGE", "pos_x": 896, "pos_y": 249},
+        {"text": "ALGORITHM", "pos_x": 896, "pos_y": 279},
         {"text": "SOUND OFF", "pos_x": 896, "pos_y": 344},
         {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 424},
         {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 504},
