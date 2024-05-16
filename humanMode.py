@@ -202,6 +202,7 @@ class gameLoadManually:
         self.drawMaze()
         save_ticks = self.gameInfo[3]
         start_ticks = pygame.time.get_ticks() 
+        time_pause = None
         running = True
         while running:
             seconds = (pygame.time.get_ticks() - start_ticks - save_ticks) / 1000  # milisec --> sec
@@ -239,6 +240,10 @@ class gameLoadManually:
                     #     ### Luu game
                     #     save = sv.saveLoad()
                     #     save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
+                    elif event.key == pygame.K_p:
+                        pause = gamepause.Pause(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, -seconds * 1000)
+                        time_pause = pause.run_pause_manual()
+                        self.drawMaze()
                     elif event.key == pygame.K_ESCAPE:
                         ###pause game
                         running = False
