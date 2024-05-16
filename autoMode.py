@@ -145,7 +145,6 @@ class gameAutomatically:
         if index == 0: # DFS
             self.mark = False
             mg.Initialization().draw_pause()
-            pygame.display.flip()
             play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
             self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
             drew = pA.showPath(self.size).show_searching_area(play.searching_area)
@@ -153,12 +152,9 @@ class gameAutomatically:
             print(path)
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
             pA.showPath(self.size).go_to_final_cell(path_drew)
-            mg.Initialization().draw_pause()
-            pygame.display.flip()
         elif index == 1: # DIJKSTRA
             self.mark = False
             mg.Initialization().draw_pause()
-            pygame.display.flip()
             play = pA.playAutomatically().maze_dijkstra_solving(self.matrix)
             self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
             drew = pA.showPath(self.size).show_searching_area(play.searching_area)
@@ -166,20 +162,15 @@ class gameAutomatically:
             print(path)
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
             pA.showPath(self.size).go_to_final_cell(path_drew)
-            mg.Initialization().draw_pause()
-            pygame.display.flip()
         elif index == 2: # A - STAR
             self.mark = False
             mg.Initialization().draw_pause()
-            pygame.display.flip()
             play = pA.playAutomatically().A_solving(self.matrix)
             path = play.A_star(self.player_pos, self.player_aimbitation)
             drew = pA.showPath(self.size).show_searching_area(play.searching_area)
             print(path)
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
             pA.showPath(self.size).go_to_final_cell(path_drew)
-            mg.Initialization().draw_pause()
-            pygame.display.flip()
     def handle_menu_events_algorithm(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
