@@ -110,8 +110,8 @@ class gameAutomatically:
                     elif event.key == pygame.K_d:
                         self.drawMaze()
                     elif event.key == pygame.K_p:
-                        pause = gamepause.Pause_auto(self.matrix, self.player_pos, self.player_aimbitation)
-                        pause.run_pause_auto()
+                        #pause = gamepause.Pause_auto(self.matrix, self.player_pos, self.player_aimbitation)
+                        #pause.run_pause_auto()
                         self.drawMaze()
                     elif event.key == pygame.K_ESCAPE:
                         #Pause game
