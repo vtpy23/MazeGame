@@ -97,52 +97,44 @@ class Menu:
             pygame.mixer.Sound("audio/music4.wav"),
             pygame.mixer.Sound("audio/music5.wav")
         ]
-        with open("sound_status.json", encoding="utf-8") as fi:
-                data = js.load(fi)
-                self.sound_on = bool(data["status"])
-                self.selected_music = int(data["song"])
+        self.sound_on = True
+        self.selected_music = 0
         self.background_musics[self.selected_music].play(-1)
 
     # SOUND ON/OFF
-    def turn_sound_on_off(self, text_color, text_x, text_y):
-            with open("sound_status.json", encoding="utf-8") as fi:
-                data = js.load(fi)
-                self.sound_on = bool(data["status"])
-                self.selected_music = int(data["song"])
-                self.sound_on = not self.sound_on
-                data["status"] = self.sound_on
-                with open("sound_status.json", 'w') as file:
-                    js.dump(data, file, indent=4)
+    def turn_sound_on_off(self):
+            self.sound_on = not self.sound_on
             if self.sound_on == True:
                 self.background_musics[self.selected_music].play(-1)
-                mg.Initialization().draw_text("SOUND ON", 36, text_color, text_x, text_y)
+                mg.Initialization().draw_text("SOUND ON", 36, screen_color, 840, 264)
             else:   
                 self.background_musics[self.selected_music].stop()
-                mg.Initialization().draw_text("SOUND OFF", 36, text_color, text_x, text_y)
+                mg.Initialization().draw_text("SOUND OFF", 36, screen_color, 840, 264)
 
     # CHANGE SOUND
     def change_sound(self):
         if self.sound_on:
-                self.background_musics[self.selected_music].stop()
-                self.selected_music += 1
-                if self.selected_music > 4:
-                    self.selected_music = 0
-                try:
-                    with open("sound_status.json", "r") as fr:
-                        sound = js.load(fr)
-                    sound_status = sound[0]
-                except:
-                    sound_status = {'status': True, 'song': 0}
-                sound_status['song'] = self.selected_music
-                with open("sound_status.json", "w") as fw:
-                    js.dump([sound_status], fw, indent= 4)
-                self.background_musics[self.selected_music].play(-1)
+            self.background_musics[self.selected_music].stop()
+            self.selected_music = (self.selected_music + 1) % len(self.background_musics)
+            self.background_musics[self.selected_music].play(-1)
                 
     # RANDOM / CUSTOM
     def draw_menu_random_custom(self):
         for i, button in enumerate(self.buttons_menu_random_custom):
             color = (255, 255, 255) if i == self.selected_button_random_custom else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        if self.selected_button_random_custom == 0:
+            mg.Initialization().input_image_background("image/floor_bg.png")
+            mg.Initialization().draw_text("START POINT AND", 42, 'Black', 384, 324)
+            mg.Initialization().draw_text("END POINT WILL BE", 42, 'Black', 384, 384)
+            mg.Initialization().draw_text("GENERATED RANDOMLY", 42, 'Black', 384, 444)
+        elif self.selected_button_random_custom == 1:
+            mg.Initialization().input_image_background("image/floor_bg.png")
+            mg.Initialization().draw_text("YOU CAN SELECT START", 42, 'Black', 384, 324)
+            mg.Initialization().draw_text("POINT AND END POINT", 42, 'Black', 384, 384)
+            mg.Initialization().draw_text("WITH THE MOUSE", 42, 'Black', 384, 444)
+        elif self.selected_button_random_custom == 2: 
+            mg.Initialization().input_image_background("image/floor_bg.png")
         pygame.display.flip()
     def handle_key_events_random_custom(self, event, sizemap, mode):
         if event.key == pygame.K_UP:
@@ -286,6 +278,13 @@ class Menu:
                 mg.Initialization().draw_text("40x40", 36, color, 840, 349)
             elif i == 2:
                 mg.Initialization().draw_text("100x100", 36, color, 840, 449)
+
+        if self.selected_button_sizemap == 0:
+            mg.Initialization().input_image_background("image/20x20.jpg")
+        elif self.selected_button_sizemap == 1:
+            mg.Initialization().input_image_background("image/40x40.jpg")
+        elif self.selected_button_sizemap == 2:
+            mg.Initialization().input_image_background("image/100x100.jpg")
         pygame.display.flip()
     def handle_key_events_sizemap(self, event, mode):
         if event.key == pygame.K_UP:
@@ -429,6 +428,10 @@ class Menu:
         for i, button in enumerate(self.buttons_menu_start):
             color = (255, 255, 255) if i == self.selected_button_start else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        if self.selected_button_start == 0:
+            mg.Initialization().input_image_background("image/arrow.png")
+        elif self.selected_button_start == 1:
+            mg.Initialization().input_image_background("image/algorithm.png")
         pygame.display.flip()
     def handle_key_events_start(self, event):
         if event.key == pygame.K_UP:
@@ -550,6 +553,23 @@ class Menu:
                 mg.Initialization().draw_text("SOUND", 36, color, 840, 359)
             elif i == 2:
                 mg.Initialization().draw_text("THEME", 36, color, 840, 439)
+        if self.selected_button_setting == 0:        
+            if self.sound_on == True:
+                mg.Initialization().input_image_background("image/unmute.png")
+            else:
+                mg.Initialization().input_image_background("image/mute.png")
+        elif self.selected_button_setting == 1:
+            mg.Initialization().input_image_background("image/floor_bg.png")
+            name_songs = [
+            {"text": "1. EXCITED", "pos_x": 300, "pos_y": 264},
+            {"text": "2. DELIGHTED", "pos_x": 300, "pos_y": 324},
+            {"text": "3. INTERESTED", "pos_x": 300, "pos_y": 384},
+            {"text": "4. ENJOYED", "pos_x": 300, "pos_y": 444},
+            {"text": "5. RELAXED", "pos_x": 300, "pos_y": 504}    
+            ]
+            for i, button in enumerate(name_songs):
+                color = (0, 0, 255) if i == self.selected_music else (0, 0, 0)
+                mg.Initialization().draw_text_2(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
     def handle_key_events_setting(self, event):
         if event.key == pygame.K_UP:
@@ -566,7 +586,7 @@ class Menu:
                 self.handle_button_click_setting(i)
     def handle_button_click_setting(self, index):
         if index == 0:
-            self.turn_sound_on_off(screen_color, 840, 264)
+            self.turn_sound_on_off()
         elif index == 1:
             self.change_sound()
         elif index == 2:

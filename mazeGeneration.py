@@ -11,9 +11,6 @@ white, black = (255, 255, 255), (0, 0, 0)
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 screen_color = (0, 0, 150)
 font_path = 'font/Pixeltype.TTF'
-with open("sound_status.json", 'w') as fw:
-    json.dump({'status': True, 'song': 0}, fw, indent= 4)
-
 
 class Initialization:
 

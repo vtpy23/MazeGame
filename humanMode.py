@@ -23,27 +23,21 @@ class gameManually:
         self.player_past = None
         self.player_step = 0
         self.mode_play = 0
-        self.run_pause = True
+        self.run_pause = False
         self.run_exit = False
-        self.button_pause_manual_sound_on = [
-        {"text": "SAVE", "pos_x": 896, "pos_y": 184},
-        {"text": "SOUND OFF", "pos_x": 896, "pos_y": 264},
-        {"text": "CHANGE", "pos_x": 896, "pos_y": 329},
-        {"text": "CHANGE", "pos_x": 896, "pos_y": 409},
-        {"text": "RESUME", "pos_x": 896, "pos_y": 504},
-        {"text": "EXIT", "pos_x": 896, "pos_y": 584}]
-        self.button_pause_manual_sound_off = [
-        {"text": "SAVE", "pos_x": 896, "pos_y": 184},
-        {"text": "SOUND ON", "pos_x": 896, "pos_y": 264},
-        {"text": "CHANGE", "pos_x": 896, "pos_y": 329},
-        {"text": "CHANGE", "pos_x": 896, "pos_y": 409},
-        {"text": "RESUME", "pos_x": 896, "pos_y": 504},
-        {"text": "EXIT", "pos_x": 896, "pos_y": 584}]
-        self.buttons_menu_exit= [
+        self.button_pause_manual = [
+        {"text": "SAVE", "pos_x": 896, "pos_y": 304},
+        {"text": "RESUME", "pos_x": 896, "pos_y": 384},
+        {"text": "EXIT", "pos_x": 896, "pos_y": 464}]
+        self.buttons_menu_exit = [
         {"text": "Yes", "pos_x": 448, "pos_y": 420},
         {"text": "No", "pos_x": 576, "pos_y": 420}]
+        self.buttons_menu_pause_help = [
+        {"text": "PAUSE (P)", "pos_x": 896, "pos_y": 344},
+        {"text": "HELP (O)", "pos_x": 896, "pos_y": 424}]
         self.selected_button_pause_manual = 0
         self.selected_button_exit = 0
+        self.selected_button = 0
         self.running = True
         self.background_musics = [
             pygame.mixer.Sound("audio/music1.wav"),
@@ -52,11 +46,7 @@ class gameManually:
             pygame.mixer.Sound("audio/music4.wav"),
             pygame.mixer.Sound("audio/music5.wav")
         ]
-        with open("sound_status.json", encoding="utf-8") as fi:
-                data = js.load(fi)
-                self.sound_on = bool(data["status"])
-                self.selected_music = int(data["song"])
-
+        self.help = False
 
     def drawMaze(self):
         size = self.size
@@ -86,6 +76,7 @@ class gameManually:
 
     # CONTROL IN GAME            
     def creatingMaze(self):
+        self.draw_menu_pause_help()
         if self.mode_play == 0:
             pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
                                                 ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
@@ -104,7 +95,9 @@ class gameManually:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     exit()
-                elif event.type == pygame.KEYDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.handle_mouse_events_pause_help(seconds, start_ticks)    
+                if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.player_step += 1
                         self.Move(-1, 0)
@@ -118,23 +111,28 @@ class gameManually:
                         self.player_step += 1
                         self.Move(0, 1)
                     elif event.key == pygame.K_p:
+                        mg.Initialization().delete_pause_menu()
                         self.run_pause = True
                         self.time_pause = self.run_pause_manual(seconds)
                         start_ticks = start_ticks + self.time_pause * 1000
                         mg.Initialization().delete_pause_menu()
+                        self.draw_menu_pause_help()
                     elif event.key == pygame.K_o:
-                        ### Goi y nuoc di
-                        play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
-                        play.Bfs(self.player_pos, self.player_aimbitation)
-                        path = play.Truyvet()
-                        mg.mazeGeneration().mazeApplicationManual(self.matrix, path, (255,0,0))
-                    elif event.key == pygame.K_c:
-                        ### Tat nuoc di goi y
-                        self.drawMaze()
-                        pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
-                                        ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
-                        pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
-                                        ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+                        self.help = not self.help
+                        if self.help:
+                            ### Goi y nuoc di
+                            play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
+                            play.Bfs(self.player_pos, self.player_aimbitation)
+                            path = play.Truyvet()
+                            mg.mazeGeneration().mazeApplicationManual(self.matrix, path, (255,0,0))
+                        else: 
+                            ### Tat nuoc di goi y
+                            self.drawMaze()
+                            pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                            ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+                            pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
+                                            ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+                            self.draw_menu_pause_help()
                     elif event.key == pygame.K_ESCAPE:
                         self.running = False
             if(self.player_pos == self.player_aimbitation): 
@@ -199,17 +197,9 @@ class gameManually:
     
     # PAUSE MENU
     def draw_pause_manual(self):
-        if self.sound_on == True:
-            self.button_pause_manual = self.button_pause_manual_sound_on
-        else: 
-            self.button_pause_manual = self.button_pause_manual_sound_off
         for i, button in enumerate(self.button_pause_manual):
             color = (0, 0, 0) if i == self.selected_button_pause_manual else (0, 0, 255)
-            mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
-            if i == 2:
-                mg.Initialization().draw_text("SOUND", 36, color, 896, 359)
-            elif i == 3:
-                mg.Initialization().draw_text("THEME", 36, color, 896, 439)
+            mg.Initialization().draw_text(button["text"], 24, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
 
     def handle_key_events_pause_manual(self, event, time):
@@ -223,7 +213,7 @@ class gameManually:
     def handle_mouse_events_pause_manual(self, time):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.button_pause_manual):
-            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            text_rect = mg.Initialization().draw_text(button["text"], 24, (0, 0, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_pause_manual(i, time)
 
@@ -231,28 +221,10 @@ class gameManually:
         if index == 0:
             save = sv.saveLoad()
             save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, time)
+            mg.Initialization().draw_text("SAVE", 24, (0, 255, 0), 896, 304)
         elif index == 1:
-            with open("sound_status.json", encoding="utf-8") as fi:
-                data = js.load(fi)
-                self.sound_on = bool(data["status"])
-                self.selected_music = int(data["song"])
-                self.sound_on = not self.sound_on
-                data["status"] = self.sound_on
-                with open("sound_status.json", 'w') as file:
-                    js.dump(data, file, indent=4)
-            if self.sound_on == True:
-                self.background_musics[self.selected_music].play(-1)
-                mg.Initialization().draw_text("SOUND ON", 36, (255, 255, 255), 896, 264)
-            else:   
-                self.background_musics[self.selected_music].stop()
-                mg.Initialization().draw_text("SOUND OFF", 36, (255, 255, 255), 896, 264)
-        elif index == 2:
-            print("CHANGE SOUND")
-        elif index == 3:
-            print("CHANGE THEME")
-        elif index == 4:
             self.run_pause = False
-        elif index == 5:
+        elif index == 2:
             mg.Initialization().draw_rectangle(384, 320, 256, 128, (0, 0, 0))
             mg.Initialization().draw_rectangle(392, 320, 248, 120, (255, 255, 255))
             mg.Initialization().draw_text("Do you want", 28, (0, 0, 0), 512, 344)
@@ -323,6 +295,44 @@ class gameManually:
                 self.handle_key_events_exit(event, time)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_exit(time)
+        
+    # PAUSE - HELP 
+    def draw_menu_pause_help(self):
+        for i, button in enumerate(self.buttons_menu_pause_help):
+            color = (0, 0, 255)
+            mg.Initialization().draw_text(button["text"], 24, color, button["pos_x"], button["pos_y"])
+        pygame.display.flip()
+    def handle_mouse_events_pause_help(self, time, start_ticks):
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(self.buttons_menu_pause_help):
+            text_rect = mg.Initialization().draw_text(button["text"], 24, (0, 0, 255), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_pause_help(i, time, start_ticks)
+
+    def handle_button_click_pause_help(self, index, time, start_ticks):
+        if index == 0:
+            mg.Initialization().delete_pause_menu()
+            self.run_pause = True
+            self.time_pause = self.run_pause_manual(time)
+            start_ticks = start_ticks + self.time_pause * 1000
+            mg.Initialization().delete_pause_menu()
+            self.draw_menu_pause_help()
+        elif index == 1:
+            self.help = not self.help
+            if self.help:
+                play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
+                play.Bfs(self.player_pos, self.player_aimbitation)
+                path = play.Truyvet()
+                mg.mazeGeneration().mazeApplicationManual(self.matrix, path, (255,0,0))
+            else:
+                ### Tat nuoc di goi y
+                self.drawMaze()
+                pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+                pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
+                                ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+                self.draw_menu_pause_help()
+
         
 class gameLoadManually:
     def __init__(self, save_matrix, gameInfo) -> None:
@@ -406,10 +416,6 @@ class gameLoadManually:
                     elif event.key == pygame.K_c:
                         ### Tat nuoc di goi y
                         self.drawMaze()
-                    # elif event.key == pygame.K_s:
-                    #     ### Luu game
-                    #     save = sv.saveLoad()
-                    #     save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step)
                     elif event.key == pygame.K_p:
                         gameManually.run_pause = True
                         time_pause = gameManually(self.size).run_pause_manual(seconds)
