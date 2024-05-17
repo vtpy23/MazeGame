@@ -58,37 +58,44 @@ class gameAutomatically:
                 if self.matrix[y][x][0] == 1:  # Tường phía dưới
                     pygame.draw.line(screen, black, (start_x + x * self.cell_size, start_y + (y + 1) * self.cell_size),
                                     (start_x + (x + 1) * self.cell_size, start_y + (y + 1) * self.cell_size))
-        pygame.display.flip()
-
-    def creatingMaze(self):
-        self.drawMaze()
         if self.mode_play == 0:
             pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
                                                 ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
             pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
                                                 ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
-            pygame.display.flip()
+        pygame.display.flip()
 
+    def creatingMaze(self):
         running = True
+        if self.player_pos == self.player_aimbitation: running = False
+        pause = gamepause.Pause_auto()
+        while self.run_algorithm:
+            self.draw_menu_algorithm()
+            self.handle_menu_events_algorithm()
         while running:
-            while self.run_algorithm:
-                self.draw_menu_algorithm()
-                self.handle_menu_events_algorithm()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    exit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_d:
-                        self.drawMaze()
-                    elif event.key == pygame.K_p:
-                        pause = gamepause.Pause_auto()
-                        pause.run_pause_auto()
-                        self.drawMaze()
-                    elif event.key == pygame.K_ESCAPE:
-                        #Pause game
-                        running = False
-            if(self.player_pos == self.player_aimbitation): running = False
+            pause.run_pause_auto()
+            if pause.choose_algorimth:
+                self.drawMaze()
+                pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
+                                                ,0 + 3 + self.player_pos[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+                pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
+                                                ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
+                while pause.choose_algorimth:
+                    self.draw_menu_algorithm()
+                    self.handle_menu_events_algorithm()
+            else:
+                if pause.run_pause == False:
+                    running = False
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        pygame.quit()
+                        exit()
+                    elif event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_d:
+                            self.drawMaze()
+                        elif event.key == pygame.K_ESCAPE:
+                            #Pause game
+                            running = False
 
     def draw_player(self):
         # Vẽ hình vuông đại diện cho người chơi
@@ -162,8 +169,10 @@ class gameAutomatically:
                 self.handle_button_click_algorithm(i)
 
     def handle_button_click_algorithm(self, index):
+        pause = gamepause.Pause_auto()
         if index == 0: # DFS
             self.run_algorithm = False
+            pause.choose_algorimth = False
             mg.Initialization().draw_pause()
             play = pA.playAutomatically().Maze_bfs_solving(self.matrix)
             self.searching_area = play.Bfs(self.player_pos, self.player_aimbitation)
@@ -172,11 +181,11 @@ class gameAutomatically:
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
             cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
             if cell_end != self.player_aimbitation:
-                self.run_algorithm = True
                 self.player_pos = cell_end
                 self.creatingMaze()
         elif index == 1: # DIJKSTRA
             self.run_algorithm = False
+            pause.choose_algorimth = False
             mg.Initialization().draw_pause()
             play = pA.playAutomatically().maze_dijkstra_solving(self.matrix)
             self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
@@ -185,11 +194,11 @@ class gameAutomatically:
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
             cell_end != pA.showPath(self.size).go_to_final_cell(path_drew)
             if cell_end != self.player_aimbitation:
-                self.run_algorithm = True
                 self.player_pos = cell_end
                 self.creatingMaze()
         elif index == 2: # A - STAR
             self.run_algorithm = False
+            pause.choose_algorimth = False
             mg.Initialization().draw_pause()
             play = pA.playAutomatically().A_solving(self.matrix)
             path = play.A_star(self.player_pos, self.player_aimbitation)
@@ -197,7 +206,6 @@ class gameAutomatically:
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
             cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
             if cell_end != self.player_aimbitation:
-                self.run_algorithm = True
                 self.player_pos = cell_end
                 self.creatingMaze()
 

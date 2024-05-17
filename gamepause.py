@@ -1,6 +1,5 @@
 from typing import Any
 import mazeGeneration as mg
-import menu
 import pygame
 import saveLoad as sv
 
@@ -13,6 +12,7 @@ class Pause_auto:
         {"text": "CHANGE SOUND", "pos_x": 896, "pos_y": 384},
         {"text": "CHANGE THEME", "pos_x": 896, "pos_y": 464},
         {"text": "RESUME", "pos_x": 896, "pos_y": 544}]
+        self.choose_algorimth = False
         self.selected_button_pause_auto = 0
     def draw_pause_auto(self):
         for i, button in enumerate(self.button_pause_auto):
@@ -39,7 +39,9 @@ class Pause_auto:
 
     def handle_button_click_pause_auto(self, index):
         if index == 0 :
-            print("CHANGE ALGORITHM")
+           self.choose_algorimth = True
+           self.run_pause = False
+           print(self.choose_algorimth)
         elif index == 1:
             print("SOUND")
         elif index == 2:

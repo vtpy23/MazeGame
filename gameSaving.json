@@ -12288,19 +12288,19 @@
         ],
         "player_pos": [
             0,
-            0
+            9
         ],
         "ambitation_pos": [
             3,
             3
         ],
-        "player_step": 0,
+        "player_step": 27,
         "time": {
-            "Date": "16/5/2024",
-            "Time": "22:44:10"
+            "Date": "15/5/2024",
+            "Time": "10:13:57"
         },
-        "username": "hoangvu",
-        "counting_sec": -909.0
+        "username": "aaaaaa",
+        "counting_sec": -24600.0
     },
     {
         "gameNumber": 6,
