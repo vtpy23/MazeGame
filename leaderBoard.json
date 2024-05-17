@@ -1,5 +1,21 @@
 [
     {
+        "name": "bbbb",
+        "average_timer": 2,
+        "average_step": 11,
+        "count_win": 3,
+        "timer": [
+            26.815,
+            8.425,
+            76.026
+        ],
+        "step": [
+            54,
+            13,
+            168
+        ]
+    },
+    {
         "name": "quangminh",
         "average_timer": 3.462,
         "average_step": 11.0,
@@ -29,38 +45,6 @@
             40,
             6,
             7
-        ]
-    },
-    {
-        "name": "aaaaaa",
-        "average_timer": 37.08866666666666,
-        "average_step": 78.33333333333333,
-        "count_win": 3,
-        "timer": [
-            26.815,
-            8.425,
-            76.026
-        ],
-        "step": [
-            54,
-            13,
-            168
-        ]
-    },
-    {
-        "name": "bbbb",
-        "average_timer": 2,
-        "average_step": 11,
-        "count_win": 3,
-        "timer": [
-            26.815,
-            8.425,
-            76.026
-        ],
-        "step": [
-            54,
-            13,
-            168
         ]
     },
     {
@@ -109,6 +93,34 @@
             54,
             13,
             168
+        ]
+    },
+    {
+        "name": "aaaaaa",
+        "average_timer": 37.08866666666666,
+        "average_step": 78.33333333333333,
+        "count_win": 3,
+        "timer": [
+            26.815,
+            8.425,
+            76.026
+        ],
+        "step": [
+            54,
+            13,
+            168
+        ]
+    },
+    {
+        "name": "hoangvu",
+        "average_timer": 5.751,
+        "average_step": 14,
+        "count_win": 1,
+        "timer": [
+            5.751
+        ],
+        "step": [
+            14
         ]
     }
 ]

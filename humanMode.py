@@ -38,6 +38,7 @@ class gameManually:
         self.selected_button_pause_manual = 0
         self.selected_button_exit = 0
         self.running = True
+        self.time = None
 
     def drawMaze(self):
         size = self.size
@@ -99,7 +100,7 @@ class gameManually:
                         self.Move(0, 1)
                     elif event.key == pygame.K_p:
                         self.run_pause = True
-                        self.time_pause = self.run_pause_manual()
+                        self.time_pause = self.run_pause_manual(seconds)
                         start_ticks = start_ticks + self.time_pause * 1000
                         mg.Initialization().delete_pause_menu()
                     elif event.key == pygame.K_o:
@@ -183,25 +184,25 @@ class gameManually:
                 mg.Initialization().draw_text("THEME", 36, color, 896, 439)
         pygame.display.flip()
 
-    def handle_key_events_pause_manual(self, event):
+    def handle_key_events_pause_manual(self, event, time):
         if event.key == pygame.K_UP:
             self.selected_button_pause_manual = (self.selected_button_pause_manual - 1) % len(self.button_pause_manual)
         elif event.key == pygame.K_DOWN:
             self.selected_button_pause_manual = (self.selected_button_pause_manual + 1) % len(self.button_pause_manual)
         elif event.key == pygame.K_RETURN:
-            self.handle_button_click_pause_manual(self.selected_button_pause_manual)
+            self.handle_button_click_pause_manual(self.selected_button_pause_manual, time)
 
-    def handle_mouse_events_pause_manual(self):
+    def handle_mouse_events_pause_manual(self, time):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.button_pause_manual):
             text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
-                self.handle_button_click_pause_manual(i)
+                self.handle_button_click_pause_manual(i, time)
 
-    def handle_button_click_pause_manual(self, index):
+    def handle_button_click_pause_manual(self, index, time):
         if index == 0:
             save = sv.saveLoad()
-            save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, self.time)
+            save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, time)
         elif index == 1:
             print("SOUND")
         elif index == 2:
@@ -217,24 +218,24 @@ class gameManually:
             mg.Initialization().draw_text("to save?", 28, (0, 0, 0), 512, 374)
             self.run_exit = True
             while self.run_exit:
-                self.handle_menu_events_exit()
+                self.handle_menu_events_exit(time)
                 self.draw_menu_exit()
             self.run_pause = False
 
-    def handle_pause_manual_events(self):
+    def handle_pause_manual_events(self, time):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
             elif event.type == pygame.KEYDOWN:
-                self.handle_key_events_pause_manual(event)
+                self.handle_key_events_pause_manual(event, time)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.handle_mouse_events_pause_manual()
+                self.handle_mouse_events_pause_manual(time)
     
-    def run_pause_manual(self):
+    def run_pause_manual(self, time):
         pause_time = pygame.time.get_ticks()
         while self.run_pause:
-            self.handle_pause_manual_events()
+            self.handle_pause_manual_events(time)
             self.draw_pause_manual()
             seconds = (pygame.time.get_ticks() - pause_time) / 1000
         return seconds
@@ -245,37 +246,37 @@ class gameManually:
             color = (0, 255, 0) if i == self.selected_button_exit else (255, 0, 0)
             mg.Initialization().draw_text(button["text"], 24, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
-    def handle_key_events_exit(self, event):
+    def handle_key_events_exit(self, event, time):
         if event.key == pygame.K_LEFT:
             self.selected_button_exit = (self.selected_button_exit - 1) % len(self.buttons_menu_exit)
         elif event.key == pygame.K_RIGHT:
             self.selected_button_exit = (self.selected_button_exit + 1) % len(self.buttons_menu_exit)
         elif event.key == pygame.K_RETURN:
-            self.handle_button_click_exit(self.selected_button_exit)
-    def handle_mouse_events_exit(self):
+            self.handle_button_click_exit(self.selected_button_exit, time)
+    def handle_mouse_events_exit(self, time):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.buttons_menu_exit):
             text_rect = mg.Initialization().draw_text(button["text"], 24, (0, 255, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
-                self.handle_button_click_exit(i)
-    def handle_button_click_exit(self, index):
+                self.handle_button_click_exit(i, time)
+    def handle_button_click_exit(self, index, time):
         if index == 0: # i want to save before exit
             save = sv.saveLoad()
-            save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, self.time)
+            save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, time)
             self.run_exit = False
             self.running = False
         elif index == 1: # i dont want to save before exit
             self.run_exit = False
             self.running = False
-    def handle_menu_events_exit(self):
+    def handle_menu_events_exit(self, time):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 exit()
             elif event.type == pygame.KEYDOWN:
-                self.handle_key_events_exit(event)
+                self.handle_key_events_exit(event, time)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.handle_mouse_events_exit()
+                self.handle_mouse_events_exit(time)
         
 class gameLoadManually:
     def __init__(self, save_matrix, gameInfo) -> None:
