@@ -5,7 +5,7 @@ from sys import exit
 from humanMode import gameManually
 from autoMode import gameAutomatically
 from humanMode import gameLoadManually
-
+import json as js
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
 screen = mg.screen
@@ -97,12 +97,22 @@ class Menu:
             pygame.mixer.Sound("audio/music4.wav"),
             pygame.mixer.Sound("audio/music5.wav")
         ]
+        with open("sound_status.json", encoding="utf-8") as fi:
+                data = js.load(fi)
+                self.sound_on = bool(data["status"])
+                self.selected_music = int(data["song"])
         self.background_musics[self.selected_music].play(-1)
-        self.sound_on = True
 
     # SOUND ON/OFF
     def turn_sound_on_off(self, text_color, text_x, text_y):
-            self.sound_on = not self.sound_on
+            with open("sound_status.json", encoding="utf-8") as fi:
+                data = js.load(fi)
+                self.sound_on = bool(data["status"])
+                self.selected_music = int(data["song"])
+                self.sound_on = not self.sound_on
+                data["status"] = self.sound_on
+                with open("sound_status.json", 'w') as file:
+                    js.dump(data, file, indent=4)
             if self.sound_on == True:
                 self.background_musics[self.selected_music].play(-1)
                 mg.Initialization().draw_text("SOUND ON", 36, text_color, text_x, text_y)
@@ -117,6 +127,15 @@ class Menu:
                 self.selected_music += 1
                 if self.selected_music > 4:
                     self.selected_music = 0
+                try:
+                    with open("sound_status.json", "r") as fr:
+                        sound = js.load(fr)
+                    sound_status = sound[0]
+                except:
+                    sound_status = {'status': True, 'song': 0}
+                sound_status['song'] = self.selected_music
+                with open("sound_status.json", "w") as fw:
+                    js.dump([sound_status], fw, indent= 4)
                 self.background_musics[self.selected_music].play(-1)
                 
     # RANDOM / CUSTOM
