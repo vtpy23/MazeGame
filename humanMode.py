@@ -25,6 +25,7 @@ class gameManually:
         self.mode_play = 0
         self.run_pause = False
         self.run_exit = False
+        self.run_play_again = False
         self.button_pause_manual = [
         {"text": "SAVE", "pos_x": 896, "pos_y": 304},
         {"text": "RESUME", "pos_x": 896, "pos_y": 384},
@@ -35,10 +36,14 @@ class gameManually:
         self.buttons_menu_pause_help = [
         {"text": "PAUSE (P)", "pos_x": 896, "pos_y": 344},
         {"text": "HELP (O)", "pos_x": 896, "pos_y": 424}]
+        self.buttons_menu_play_again = [
+        {"text": "PLAY AGAIN", "pos_x": 896, "pos_y": 344},
+        {"text": "EXIT", "pos_x": 896, "pos_y": 424}]
         self.selected_button_pause_manual = 0
+        self.selected_button_play_again = 0
         self.selected_button_exit = 0
         self.selected_button = 0
-        self.running = True
+        self.running = None
         self.background_musics = [
             pygame.mixer.Sound("audio/music1.wav"),
             pygame.mixer.Sound("audio/music2.wav"),
@@ -47,6 +52,7 @@ class gameManually:
             pygame.mixer.Sound("audio/music5.wav")
         ]
         self.help = False
+        self.play_again = None
 
     def drawMaze(self):
         size = self.size
@@ -76,6 +82,8 @@ class gameManually:
 
     # CONTROL IN GAME            
     def creatingMaze(self):
+        self.running = True
+        self.play_again = False
         self.draw_menu_pause_help()
         if self.mode_play == 0:
             pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + self.player_pos[1] * self.cell_size 
@@ -133,12 +141,31 @@ class gameManually:
                             pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
                                             ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
                             self.draw_menu_pause_help()
-                    elif event.key == pygame.K_ESCAPE:
-                        self.running = False
+
             if(self.player_pos == self.player_aimbitation): 
                 save = sv.LeaderBoard()
                 save.saveWin(self.player_step, seconds)
+                mg.Initialization().delete_pause_menu()
+                self.win_screen(seconds, self.player_step)
+                self.run_play_again = True
+                while self.run_play_again:
+                    self.handle_menu_events_play_again()
+                    self.draw_menu_play_again()
                 self.running = False
+        if self.play_again:
+            self.player_pos = (0,0)
+            self.matrix = mg.mazeGeneration().createMaze(self.size)
+            self.drawMaze()
+            self.creatingMaze()
+
+    def win_screen(self, time, step):
+        image = pygame.image.load("image/Tam catch gia huy.png").convert()
+        screen.blit(image, (0, 0))
+        mg.Initialization().draw_text ("YOU WIN", 42, (255, 255, 0), 534, 234)
+        finish_time = "TIME:  " + str(time)
+        finish_step = "STEP:  " + str(step)
+        mg.Initialization().draw_text_2(finish_time, 36, (0, 0, 0), 400, 504)
+        mg.Initialization().draw_text_2(finish_step, 36, (0, 0, 0), 400, 564)
 
     def Move(self, dx, dy):
         # Kiểm tra xem người chơi có thể di chuyển đến ô mới không
@@ -295,13 +322,56 @@ class gameManually:
                 self.handle_key_events_exit(event, time)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_exit(time)
-        
+
+    # PLAY AGAIN    
+    def draw_menu_play_again(self):
+        # Vẽ nút
+        for i, button in enumerate(self.buttons_menu_play_again):
+            color = (0, 0, 0) if i == self.selected_button_play_again else (0, 0, 255)
+            mg.Initialization().draw_text(button["text"], 24, color, button["pos_x"], button["pos_y"])
+        pygame.display.flip()
+    
+    def handle_key_events_play_again(self, event):
+        if event.key == pygame.K_UP:
+            self.selected_button_play_again = (self.selected_button_play_again - 1) % len(self.buttons_menu_play_again)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_play_again = (self.selected_button_play_again + 1) % len(self.buttons_menu_play_again)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_play_again(self.selected_button_play_again)
+    
+    def handle_mouse_events_play_again(self):
+        mouse_pos = pygame.mouse.get_pos()
+        for i, button in enumerate(self.buttons_menu_play_again):
+            text_rect = mg.Initialization().draw_text(button["text"], 24, (0, 0, 0), button["pos_x"], button["pos_y"])
+            if text_rect.collidepoint(mouse_pos):
+                self.handle_button_click_play_again(i)
+    
+    def handle_button_click_play_again(self, index):
+        if index == 0: # play again
+            print("1")
+            self.run_play_again = False
+            self.play_again = True
+        elif index == 1: # exit
+            print("1")
+            self.run_play_again = False
+
+    def handle_menu_events_play_again(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+            elif event.type == pygame.KEYDOWN:
+                self.handle_key_events_play_again(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.handle_mouse_events_play_again()
+       
     # PAUSE - HELP 
     def draw_menu_pause_help(self):
         for i, button in enumerate(self.buttons_menu_pause_help):
             color = (0, 0, 255)
             mg.Initialization().draw_text(button["text"], 24, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
+    
     def handle_mouse_events_pause_help(self, time, start_ticks):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.buttons_menu_pause_help):
@@ -333,7 +403,7 @@ class gameManually:
                                 ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
                 self.draw_menu_pause_help()
 
-        
+
 class gameLoadManually:
     def __init__(self, save_matrix, gameInfo) -> None:
         self.screen = None
