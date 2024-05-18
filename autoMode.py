@@ -21,7 +21,7 @@ class gameAutomatically:
         self.matrix = mg.mazeGeneration().createMaze(size)
         self.cell_size = ((768)**2 / (self.size) ** 2) ** 0.5
         self.player_pos = (0,0) #Vi tri co the thay doi
-        self.player_aimbitation = (10, 10) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
+        self.player_aimbitation = (self.size - random.randint(0, self.size // 2), self.size - random.randint(0, self.size // 2))
         self.size = len(self.matrix)
         self.player_past = None
         self.searching_area = None
@@ -191,8 +191,9 @@ class gameAutomatically:
             self.searching_area = play.Dijkstra(self.player_pos, self.player_aimbitation)
             drew = pA.showPath(self.size).show_searching_area(play.searching_area)
             path = play.Truyvet()
+            print(path)
             path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
-            cell_end != pA.showPath(self.size).go_to_final_cell(path_drew)
+            cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
             if cell_end != self.player_aimbitation:
                 self.player_pos = cell_end
                 self.creatingMaze()

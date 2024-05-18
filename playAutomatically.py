@@ -44,6 +44,8 @@ class playAutomatically:
             while(len(queue) > 0):
                 top = queue.pop(0)
                 self.searching_area.append(top)
+                if top[0] == self.B_x and top[1] == self.B_y:
+                    break
                 for k in range(4):
                     i1 = top[0] + dx[k]
                     j1 = top[1] + dy[k]
@@ -51,7 +53,6 @@ class playAutomatically:
                         if(self.maze[top[0]][top[1]][k] != 1 and self.visited[i1, j1] == False):
                             self.step[i1, j1] = self.step[top[0], top[1]] + 1
                             self.parent[i1, j1] = (top[0], top[1])
-                            if(i1 == self.B_x and j1 == self.B_y): return
                             queue.append((i1, j1))
                             self.visited[i1, j1] = True
             return self.searching_area
@@ -96,14 +97,17 @@ class playAutomatically:
             self.step[self.A_x, self.A_y] = 0
             Q = []
             pq.heappush(Q, (0, (self.A_x, self.A_y)))
-            while(Q):
+            while len(Q) != 0:
                 top = pq.heappop(Q)
                 kc = top[0]
                 u = top[1]
                 i = u[0]
                 j = u[1]
-                if(kc > self.step[u]): continue
+                if kc > self.step[u]: continue
                 self.searching_area.append(u)
+                if i == self.B_x and j == self.B_y:
+                    print(self.B_x, self.B_y)
+                    break
                 for k in range(4):
                     newi = i + dx[k]
                     newj = j + dy[k] 
@@ -116,12 +120,9 @@ class playAutomatically:
                             self.step[newi, newj] = self.step[u] + w
                             self.parent[newi, newj] = u
                             pq.heappush(Q, (self.step[newi, newj], (newi, newj)))
-                    if(newi == self.B_x and newj == self.B_y):
-                        break
             return self.searching_area
 
         def Truyvet(self):
-            #print(self.parent[self.B_x, self.B_y])
             u, v = self.B_x, self.B_y
             way = []
             way.append((u, v))
@@ -143,7 +144,7 @@ class playAutomatically:
             x2, y2 = cell2
             return abs(x1 - x2) + abs(y1 - y2)
         
-        def A_star(self,  start, end):
+        def A_star(self, start, end):
             maze = np.array(self.maze)
             path = {}
             g_scores = {(i,j): float('inf') for i in range(maze.shape[0]) for j in range(maze.shape[1])} # cost (distance) from current cell to start cell
@@ -201,7 +202,7 @@ class showPath:
         pg.display.flip()
 
     def show_searching_area(self, area : list):
-        sleep = 50
+        sleep = 25
         drew = [area[0]]
         for i in area:
             if i not in drew and i != area[-1]: 
