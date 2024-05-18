@@ -168,5 +168,17 @@
             13,
             168
         ]
+    },
+    {
+        "name": "cailonma",
+        "average_timer": 10.064,
+        "average_step": 30,
+        "count_win": 1,
+        "timer": [
+            10.064
+        ],
+        "step": [
+            30
+        ]
     }
 ]

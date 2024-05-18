@@ -65,6 +65,7 @@ class Random_custom:
                     play = gameManually(100)
                     play.mode_play = 0
                     play.drawMaze()
+                    play.drawMaze()
                     play.creatingMaze()
                     mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
@@ -73,6 +74,7 @@ class Random_custom:
                 if sizemap == 0: # map: 40x40, mode: auto, start point - end point: random
                     play = gameAutomatically(20)
                     play.mode_play = 0
+                    play.drawMaze()
                     play.creatingMaze()
                     mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
@@ -80,6 +82,7 @@ class Random_custom:
                 elif sizemap == 1: # map: 40x40, mode: auto, start point - end point: random
                     play = gameAutomatically(40)
                     play.mode_play = 0
+                    play.drawMaze()
                     play.creatingMaze()
                     mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
@@ -87,6 +90,7 @@ class Random_custom:
                 elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
                     play = gameAutomatically(100)
                     play.mode_play = 0
+                    play.drawMaze()
                     play.creatingMaze()
                     mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
