@@ -124,22 +124,20 @@ class Menu:
             color = (255, 255, 255) if i == self.selected_button_random_custom else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         if self.selected_button_random_custom == 0:
-            mg.Initialization().input_image_background("image/floor_bg.png")
             mg.Initialization().draw_text("START POINT AND", 42, 'Black', 384, 324)
             mg.Initialization().draw_text("END POINT WILL BE", 42, 'Black', 384, 384)
             mg.Initialization().draw_text("GENERATED RANDOMLY", 42, 'Black', 384, 444)
         elif self.selected_button_random_custom == 1:
-            mg.Initialization().input_image_background("image/floor_bg.png")
             mg.Initialization().draw_text("YOU CAN SELECT START", 42, 'Black', 384, 324)
             mg.Initialization().draw_text("POINT AND END POINT", 42, 'Black', 384, 384)
             mg.Initialization().draw_text("WITH THE MOUSE", 42, 'Black', 384, 444)
-        elif self.selected_button_random_custom == 2: 
-            mg.Initialization().input_image_background("image/floor_bg.png")
         pygame.display.flip()
     def handle_key_events_random_custom(self, event, sizemap, mode):
         if event.key == pygame.K_UP:
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.selected_button_random_custom = (self.selected_button_random_custom - 1) % len(self.buttons_menu_random_custom)
         elif event.key == pygame.K_DOWN:
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.selected_button_random_custom = (self.selected_button_random_custom + 1) % len(self.buttons_menu_random_custom)
         elif event.key == pygame.K_RETURN:
             self.handle_button_click_random_custom(self.selected_button_random_custom, sizemap, mode)
@@ -157,7 +155,7 @@ class Menu:
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 1: # map: 40x40, mode: manual, start point - end point: random
@@ -165,7 +163,7 @@ class Menu:
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: random
@@ -173,7 +171,7 @@ class Menu:
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             elif mode == 1:
@@ -181,21 +179,21 @@ class Menu:
                     play = gameAutomatically(20)
                     play.mode_play = 0
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
                 elif sizemap == 1: # map: 40x40, mode: auto, start point - end point: random
                     play = gameAutomatically(40)
                     play.mode_play = 0
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
                 elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
                     play = gameAutomatically(100)
                     play.mode_play = 0
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
         elif index == 1:
@@ -206,7 +204,7 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(20)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 1: # map: 40x40, mode: manual, start point - end point: custom
@@ -215,7 +213,7 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(40)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                   
                 elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: custom
@@ -224,7 +222,7 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(100)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             elif mode == 1:
@@ -234,7 +232,7 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(20)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
                 elif sizemap == 1: # map: 20x20, mode: auto, start point - end point: custom
@@ -243,7 +241,7 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(40)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
                 elif sizemap == 2: # map: 20x20, mode: auto, start point - end point: custom
@@ -252,7 +250,7 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(100)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
         elif index == 2:
@@ -303,6 +301,7 @@ class Menu:
         if index == 0: # 20 x 20
             mg.Initialization().draw_to_delete("")
             mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
@@ -312,6 +311,7 @@ class Menu:
         elif index == 1: # 40 x 40
             mg.Initialization().draw_to_delete("")
             mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
@@ -321,6 +321,7 @@ class Menu:
         elif index == 2: # 100 x 100
             mg.Initialization().draw_to_delete("")
             mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
