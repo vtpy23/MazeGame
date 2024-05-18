@@ -51,30 +51,21 @@ class Sizemap:
             mg.Initialization().draw_to_delete("")
             mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             mg.Initialization().input_image_background("image/floor_bg.png")
-            self.run_random_custom = True
-            while self.run_random_custom:
-                Random_custom().handle_menu_events_random_custom(index, mode)
-                Random_custom().draw_menu_random_custom()
+            Random_custom().run_menu_random_custom(index, mode)
             mg.Initialization().draw_floor()
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 1: # 40 x 40
             mg.Initialization().draw_to_delete("")
             mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             mg.Initialization().input_image_background("image/floor_bg.png")
-            self.run_random_custom = True
-            while self.run_random_custom:
-                Random_custom().handle_menu_events_random_custom(index, mode)
-                Random_custom().draw_menu_random_custom()
+            Random_custom().run_menu_random_custom(index, mode)
             mg.Initialization().draw_floor()
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 2: # 100 x 100
             mg.Initialization().draw_to_delete("")
             mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             mg.Initialization().input_image_background("image/floor_bg.png")
-            self.run_random_custom = True
-            while self.run_random_custom:
-                Random_custom().handle_menu_events_random_custom(index, mode)
-                Random_custom().draw_menu_random_custom()
+            Random_custom().run_menu_random_custom(index, mode)
             mg.Initialization().draw_floor()
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 3:
@@ -88,3 +79,9 @@ class Sizemap:
                 self.handle_key_events_sizemap(event, mode)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_sizemap(mode)
+    
+    def run_menu_sizemap(self, mode):
+        self.run_sizemap = True
+        while self.run_sizemap:
+            self.handle_menu_events_sizemap(mode)
+            self.draw_menu_sizemaze()

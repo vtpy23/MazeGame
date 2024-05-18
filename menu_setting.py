@@ -2,10 +2,6 @@ import pygame
 import mazeGeneration as mg 
 import saveLoad as sv
 from sys import exit
-from humanMode import gameManually
-from autoMode import gameAutomatically
-from humanMode import gameLoadManually
-import json as js
 from mode import Mode
 from load import Load
 from leaderboard import LeaderBoard
@@ -29,11 +25,12 @@ class Menu:
         {"text": "SETTING", "pos_x": 840, "pos_y": 384},
         {"text": "GUIDE", "pos_x": 840, "pos_y": 464},
         {"text": "CREDITS", "pos_x": 840, "pos_y": 544},
-        {"text": "QUIT", "pos_x": 840, "pos_y": 624}
+        {"text": "BACK", "pos_x": 840, "pos_y": 624}
         ]
         self.buttons_menu_version = [
-        {"text": "VERSION 1", "pos_x": 840, "pos_y": 344},
-        {"text": "VERSION 2", "pos_x": 840, "pos_y": 424}
+        {"text": "VERSION 1", "pos_x": 840, "pos_y": 304},
+        {"text": "VERSION 2", "pos_x": 840, "pos_y": 384},
+        {"text": "QUIT", "pos_x": 840, "pos_y": 464}
         ]
         self.buttons_menu_setting_on = [
         {"text": "SOUND OFF", "pos_x": 840, "pos_y": 264},
@@ -112,6 +109,9 @@ class Menu:
             mg.Initialization().draw_floor()
         elif index == 1:
             print("version 2")
+        elif index == 2:
+            pygame.quit()
+            exit()
     def handle_menu_events_version(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -147,10 +147,7 @@ class Menu:
     def handle_button_click(self, index):
         if index == 0:
             mg.Initialization().draw_to_delete("CHOOSE MODE")
-            self.run_start = True
-            while self.run_start:
-                Mode().handle_menu_events_start()
-                Mode().draw_menu_start()
+            Mode().run_menu_start()
             mg.Initialization().draw_floor()
         elif index == 1:
             self.file_save_name = sv.saveLoad().takeNameFile()
@@ -160,9 +157,7 @@ class Menu:
             ]
             self.run_load = True
             mg.Initialization().draw_to_delete("LOAD")
-            while self.run_load:
-                Load().handle_menu_events_load()
-                Load().draw_menu_load()
+            Load().run_menu_load()
             mg.Initialization().draw_floor()
         elif index == 3:
             mg.Initialization().draw_to_delete("SETTING")
@@ -173,29 +168,19 @@ class Menu:
             mg.Initialization().draw_floor()
         elif index == 2:
             mg.Initialization().draw_to_delete("LEADER BOARD")
-            self.run_leader_board = True
-            while self.run_leader_board:
-                LeaderBoard().handle_menu_events_leader_board()
-                LeaderBoard().draw_menu_leader_board()
+            LeaderBoard().run_menu_leader_board()
             mg.Initialization().draw_floor()
         elif index == 4:
             mg.Initialization().draw_to_delete("GUIDE")
-            self.run_guide = True
-            while self.run_guide:
-                Guide_Credit().handle_menu_events_guide()
-                Guide_Credit().draw_menu_guide()
+            Guide_Credit().run_menu_guide()
             mg.Initialization().draw_floor()
         elif index == 5:
             mg.Initialization().input_image_background("image/credit.png")
             mg.Initialization().draw_to_delete("Credits")
-            self.run_credits = True
-            while self.run_credits:
-                Guide_Credit().handle_menu_events_credits()
-                Guide_Credit().draw_menu_credits()
+            Guide_Credit().run_menu_credits()
             mg.Initialization().draw_floor()
         elif index == 6:
-            pygame.quit()
-            exit()
+            self.run_menu = False
     def handle_menu_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

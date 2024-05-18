@@ -13,7 +13,7 @@ class Guide_Credit:
     def draw_menu_guide(self):
         # Vẽ nút
         for i, button in enumerate(self.buttons_menu_guide_credits):
-            color = (255, 255, 255) if i == self.selected_button_load_guide_credits else (255, 255, 0)
+            color = (255, 255, 255) if i == self.selected_button_guide_credits else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
     def handle_key_events_guide(self, event):
@@ -36,12 +36,17 @@ class Guide_Credit:
                 self.handle_key_events_guide(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_guide()
+    def run_menu_guide(self):
+        self.run_guide = True
+        while self.run_guide:
+            self.handle_menu_events_guide()
+            self.draw_menu_credits()
 
     # Credits   
     def draw_menu_credits(self):
         # Vẽ nút
         for i, button in enumerate(self.buttons_menu_guide_credits):
-            color = (255, 255, 255) if i == self.selected_button_load_guide_credits else (255, 255, 0)
+            color = (255, 255, 255) if i == self.selected_button_guide_credits else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
     def handle_key_events_credits(self, event):
@@ -64,3 +69,8 @@ class Guide_Credit:
                 self.handle_key_events_credits(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_credits()
+    def run_menu_credits(self):
+        self.run_credits = True
+        while self.run_credits:
+            self.handle_menu_events_credits()
+            self.draw_menu_credits()

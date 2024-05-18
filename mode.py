@@ -39,18 +39,12 @@ class Mode:
     def handle_button_click_start(self, index):
         if index == 0:
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
-            self.run_sizemap = True
-            while self.run_sizemap:
-                Sizemap().handle_menu_events_sizemap(index)
-                Sizemap().draw_menu_sizemaze()
+            Sizemap().run_menu_sizemap(index)
             mg.Initialization().draw_floor()
             mg.Initialization().draw_to_delete("CHOOSE MODE")
         elif index == 1:
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
-            self.run_sizemap = True
-            while self.run_sizemap:
-                Sizemap().handle_menu_events_sizemap(index)
-                Sizemap().draw_menu_sizemaze()
+            Sizemap().run_menu_sizemap(index)
             mg.Initialization().draw_floor()
             mg.Initialization().draw_to_delete("CHOOSE MODE")
         elif index == 2:
@@ -64,3 +58,9 @@ class Mode:
                 self.handle_key_events_start(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_start()
+
+    def run_menu_start(self):
+        self.run_start = True
+        while self.run_start:
+            self.handle_menu_events_start()
+            self.draw_menu_start()

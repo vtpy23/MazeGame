@@ -73,4 +73,10 @@ class LeaderBoard:
             elif event.type == pygame.KEYDOWN:
                 self.handle_key_events_leader_board(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                self.handle_mouse_events_leader_board()    
+                self.handle_mouse_events_leader_board()  
+
+    def run_menu_leader_board(self):
+        self.run_leader_board = True
+        while self.run_leader_board:
+            self.handle_menu_events_leader_board()
+            self.draw_menu_leader_board()

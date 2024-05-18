@@ -160,4 +160,10 @@ class Random_custom:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_random_custom(sizemap, mode)       
     
+    def run_menu_random_custom(self, sizemap, mode):
+        self.run_random_custom = True
+        while self.run_random_custom:
+            self.handle_menu_events_random_custom(sizemap, mode)
+            self.draw_menu_random_custom()
+    
 

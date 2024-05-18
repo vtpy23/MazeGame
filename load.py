@@ -82,3 +82,10 @@ class Load:
                 self.handle_key_events_load(event)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_load()
+
+    def run_menu_load(self):
+        self.run_load = True
+        mg.Initialization().draw_rectangle(84, 84, 600, 600, "White")
+        while self.run_load:
+            self.handle_menu_events_load()
+            self.draw_menu_load()
