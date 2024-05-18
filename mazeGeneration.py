@@ -1,6 +1,7 @@
 import random
 import pygame
 import numpy as np
+import json
 
 # Khởi tạo Pygame
 pygame.init()
@@ -34,6 +35,11 @@ class Initialization:
         self.screen.blit(text, text_rect)
         pygame.display.flip()
         return text_rect
+    
+    def draw_text_2(self, text, text_size, color, x, y):
+        text = pygame.font.Font(self.font_path, text_size).render(text, True, color)
+        self.screen.blit(text, (x, y))
+        pygame.display.flip()
 
     def input_image_background(self, image_path):
         image = pygame.image.load(image_path).convert()
@@ -48,6 +54,16 @@ class Initialization:
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
         self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
         self.input_image_background("image/Tam and gia huy.png")
+
+    def draw_floor_background(self):
+        self.screen.fill(self.screen_color)
+        # Vẽ hình
+        self.draw_rectangle(75, (self.screen_height - 618) // 2, 618, 618, (255, 215, 0))
+        self.draw_rectangle(84, (self.screen_height - 600) // 2, 600, 600, (255, 255, 255))
+        self.draw_rectangle(716, (self.screen_height - 618) // 2, 248, 618, (255, 215, 0))
+        self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
+        self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
+        self.input_image_background("image/floor_bg.png")
 
     def draw_load(self):
         self.screen.fill(self.screen_color)
@@ -70,6 +86,9 @@ class Initialization:
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
         self.draw_rectangle(84, 0, 600, 70, self.screen_color)
         self.draw_text(title, 64, (255, 255, 0), 384, 42)
+
+    def delete_pause_menu(self):
+        self.draw_rectangle(770, 0, 256, 768, (255, 255, 255))
         
 class mazeGeneration:
     def __init__(self) -> None:
