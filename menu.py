@@ -5,7 +5,7 @@ from sys import exit
 from humanMode import gameManually
 from autoMode import gameAutomatically
 from humanMode import gameLoadManually
-
+import json as js
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
 screen = mg.screen
@@ -20,7 +20,7 @@ class Menu:
         self.buttons_menu = [
         {"text": "START", "pos_x": 840, "pos_y": 144},
         {"text": "LOAD", "pos_x": 840, "pos_y": 224},
-        {"text": "LEADER BOARD", "pos_x": 840, "pos_y": 304},
+        {"text": "LEADER", "pos_x": 840, "pos_y": 289},
         {"text": "SETTING", "pos_x": 840, "pos_y": 384},
         {"text": "GUIDE", "pos_x": 840, "pos_y": 464},
         {"text": "CREDITS", "pos_x": 840, "pos_y": 544},
@@ -33,14 +33,20 @@ class Menu:
         ]
         self.buttons_menu_setting_on = [
         {"text": "SOUND OFF", "pos_x": 840, "pos_y": 264},
-        {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 344},
-        {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 424},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 329},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 409},
         {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
         self.buttons_menu_setting_off = [
         {"text": "SOUND ON", "pos_x": 840, "pos_y": 264},
-        {"text": "CHANGE SOUND", "pos_x": 840, "pos_y": 344},
-        {"text": "CHANGE THEME", "pos_x": 840, "pos_y": 424},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 329},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 409},
+        {"text": "BACK", "pos_x": 840, "pos_y": 504}
+        ]
+        self.buttons_menu_leader_board = [
+        {"text": "PLAYER", "pos_x": 840, "pos_y": 264},
+        {"text": "AVERGAGE", "pos_x": 840, "pos_y": 329},
+        {"text": "AVERGAGE", "pos_x": 840, "pos_y": 409},
         {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
         self.buttons_menu_load = [
@@ -51,10 +57,10 @@ class Menu:
         {"text": "BACK", "pos_x": 840, "pos_y": 384}
         ]
         self.buttons_menu_sizemap = [
-        {"text": "MAP 20x20", "pos_x": 840, "pos_y": 264},
-        {"text": "MAP 40x40", "pos_x": 840, "pos_y": 344},
-        {"text": "MAP 100x100", "pos_x": 840, "pos_y": 424},
-        {"text": "BACK", "pos_x": 840, "pos_y": 504}
+        {"text": "MAP", "pos_x": 840, "pos_y": 219},
+        {"text": "MAP", "pos_x": 840, "pos_y": 319},
+        {"text": "MAP", "pos_x": 840, "pos_y": 419},
+        {"text": "BACK", "pos_x": 840, "pos_y": 534}
         ]
         self.buttons_menu_random_custom = [
         {"text": "RANDOM", "pos_x": 840, "pos_y": 304},
@@ -66,6 +72,7 @@ class Menu:
             {"text": name, "pos_x": 250, "pos_y": 124 + 40 * i}
             for i, name in enumerate(self.file_save_name)
         ]
+        self.selected_button_leader_board = 0
         self.selected_button_random_custom = 0
         self.selected_button_menu = 0
         self.selected_button_setting = 0
@@ -75,6 +82,7 @@ class Menu:
         self.selected_button_sizemap = 0
         self.selected_music = 0
         self.selected_load = False # chon giua load ben trai va ben phai
+        self.run_leader_board = False
         self.run_random_custom = False
         self.run_start = False
         self.run_setting = False
@@ -89,38 +97,47 @@ class Menu:
             pygame.mixer.Sound("audio/music4.wav"),
             pygame.mixer.Sound("audio/music5.wav")
         ]
-        self.background_musics[self.selected_music].play(-1)
         self.sound_on = True
+        self.selected_music = 0
+        self.background_musics[self.selected_music].play(-1)
 
     # SOUND ON/OFF
-    def turn_sound_on_off(self, text_color, text_x, text_y):
+    def turn_sound_on_off(self):
             self.sound_on = not self.sound_on
             if self.sound_on == True:
                 self.background_musics[self.selected_music].play(-1)
-                mg.Initialization().draw_text("SOUND ON", 36, text_color, text_x, text_y)
+                mg.Initialization().draw_text("SOUND ON", 36, screen_color, 840, 264)
             else:   
                 self.background_musics[self.selected_music].stop()
-                mg.Initialization().draw_text("SOUND OFF", 36, text_color, text_x, text_y)
+                mg.Initialization().draw_text("SOUND OFF", 36, screen_color, 840, 264)
 
     # CHANGE SOUND
     def change_sound(self):
         if self.sound_on:
-                self.background_musics[self.selected_music].stop()
-                self.selected_music += 1
-                if self.selected_music > 4:
-                    self.selected_music = 0
-                self.background_musics[self.selected_music].play(-1)
+            self.background_musics[self.selected_music].stop()
+            self.selected_music = (self.selected_music + 1) % len(self.background_musics)
+            self.background_musics[self.selected_music].play(-1)
                 
     # RANDOM / CUSTOM
     def draw_menu_random_custom(self):
         for i, button in enumerate(self.buttons_menu_random_custom):
             color = (255, 255, 255) if i == self.selected_button_random_custom else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        if self.selected_button_random_custom == 0:
+            mg.Initialization().draw_text("START POINT AND", 42, 'Black', 384, 324)
+            mg.Initialization().draw_text("END POINT WILL BE", 42, 'Black', 384, 384)
+            mg.Initialization().draw_text("GENERATED RANDOMLY", 42, 'Black', 384, 444)
+        elif self.selected_button_random_custom == 1:
+            mg.Initialization().draw_text("YOU CAN SELECT START", 42, 'Black', 384, 324)
+            mg.Initialization().draw_text("POINT AND END POINT", 42, 'Black', 384, 384)
+            mg.Initialization().draw_text("WITH THE MOUSE", 42, 'Black', 384, 444)
         pygame.display.flip()
     def handle_key_events_random_custom(self, event, sizemap, mode):
         if event.key == pygame.K_UP:
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.selected_button_random_custom = (self.selected_button_random_custom - 1) % len(self.buttons_menu_random_custom)
         elif event.key == pygame.K_DOWN:
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.selected_button_random_custom = (self.selected_button_random_custom + 1) % len(self.buttons_menu_random_custom)
         elif event.key == pygame.K_RETURN:
             self.handle_button_click_random_custom(self.selected_button_random_custom, sizemap, mode)
@@ -134,40 +151,51 @@ class Menu:
         if index == 0:
             if mode == 0:
                 if sizemap == 0: # map: 20x20, mode: manual, start point - end point: random
-                    play.mode_play = 0
                     play = gameManually(20)
+                    play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 1: # map: 40x40, mode: manual, start point - end point: random
-                    play.mode_play = 0
                     play = gameManually(40)
-                    play.drawMaze()
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
-                elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: random
                     play.mode_play = 0
-                    play = gameManually(100)
                     play.drawMaze()
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
-
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
+                elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: random
+                    play = gameManually(100)
+                    play.mode_play = 0
+                    play.drawMaze()
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             elif mode == 1:
                 if sizemap == 0: # map: 40x40, mode: auto, start point - end point: random
-                    play.mode_play = 0
                     play = gameAutomatically(20)
+                    play.mode_play = 0
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
                 elif sizemap == 1: # map: 40x40, mode: auto, start point - end point: random
-                    play.mode_play = 0
                     play = gameAutomatically(40)
-                    play.creatingMaze()
-                    mg.Initialization().draw_floor()
-                elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
                     play.mode_play = 0
-                    play = gameAutomatically(100)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
+                elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
+                    play = gameAutomatically(100)
+                    play.mode_play = 0
+                    play.creatingMaze()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
         elif index == 1:
             if mode == 0:
                 if sizemap == 0: # map: 20x20, mode: manual, start point - end point: custom
@@ -176,22 +204,27 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(20)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 1: # map: 40x40, mode: manual, start point - end point: custom
                     play = gameManually(40)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(40)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                   
                 elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: custom
                     play = gameManually(100)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(100)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
-
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             elif mode == 1:
                 if sizemap == 0: # map: 20x20, mode: auto, start point - end point: custom
                     play = gameAutomatically(20)
@@ -199,21 +232,27 @@ class Menu:
                     play.drawMaze()
                     play.choose_start_end_point(20)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
                 elif sizemap == 1: # map: 20x20, mode: auto, start point - end point: custom
                     play = gameAutomatically(40)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(40)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
                 elif sizemap == 2: # map: 20x20, mode: auto, start point - end point: custom
                     play = gameAutomatically(100)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(100)
                     play.creatingMaze()
-                    mg.Initialization().draw_floor()
+                    mg.Initialization().draw_floor_background()
+                    mg.Initialization().draw_to_delete("")
+                    mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
         elif index == 2:
             self.run_random_custom = False
     def handle_menu_events_random_custom(self, sizemap, mode):     
@@ -225,12 +264,25 @@ class Menu:
                 self.handle_key_events_random_custom(event, sizemap, mode)
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_random_custom(sizemap, mode)       
-    # Choose size maze
+    # Size maze
     def draw_menu_sizemaze(self):
         # Vẽ nút
         for i, button in enumerate(self.buttons_menu_sizemap):
             color = (255, 255, 255) if i == self.selected_button_sizemap else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+            if i == 0:
+                mg.Initialization().draw_text("20x20", 36, color, 840, 249)
+            elif i == 1:
+                mg.Initialization().draw_text("40x40", 36, color, 840, 349)
+            elif i == 2:
+                mg.Initialization().draw_text("100x100", 36, color, 840, 449)
+
+        if self.selected_button_sizemap == 0:
+            mg.Initialization().input_image_background("image/20x20.jpg")
+        elif self.selected_button_sizemap == 1:
+            mg.Initialization().input_image_background("image/40x40.jpg")
+        elif self.selected_button_sizemap == 2:
+            mg.Initialization().input_image_background("image/100x100.jpg")
         pygame.display.flip()
     def handle_key_events_sizemap(self, event, mode):
         if event.key == pygame.K_UP:
@@ -247,7 +299,9 @@ class Menu:
                 self.handle_button_click_sizemap(i, mode)
     def handle_button_click_sizemap(self, index, mode):
         if index == 0: # 20 x 20
-            mg.Initialization().draw_to_delete("START POINT END POINT")
+            mg.Initialization().draw_to_delete("")
+            mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
@@ -255,7 +309,9 @@ class Menu:
             mg.Initialization().draw_floor()
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 1: # 40 x 40
-            mg.Initialization().draw_to_delete("START POINT END POINT")
+            mg.Initialization().draw_to_delete("")
+            mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
@@ -263,7 +319,9 @@ class Menu:
             mg.Initialization().draw_floor()
             mg.Initialization().draw_to_delete("CHOOSE SIZE MAP")
         elif index == 2: # 100 x 100
-            mg.Initialization().draw_to_delete("START POINT END POINT")
+            mg.Initialization().draw_to_delete("")
+            mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
+            mg.Initialization().input_image_background("image/floor_bg.png")
             self.run_random_custom = True
             while self.run_random_custom:
                 self.handle_menu_events_random_custom(index, mode)
@@ -287,6 +345,8 @@ class Menu:
         for i, button in enumerate(self.buttons_menu):
             color = (255, 255, 255) if i == self.selected_button_menu else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+            if i == 2:
+                mg.Initialization().draw_text("BOARD", 36, color, 840, 319)
         pygame.display.flip()
     def handle_key_events(self, event):
         if event.key == pygame.K_UP:
@@ -310,14 +370,13 @@ class Menu:
                 self.draw_menu_start()
             mg.Initialization().draw_floor()
         elif index == 1:
-            mg.Initialization().draw_to_delete("LOAD")
             self.file_save_name = sv.saveLoad().takeNameFile()
             self.buttons_file_load = [
                 {"text": name, "pos_x": 250, "pos_y": 124 + 40 * i}
                 for i, name in enumerate(self.file_save_name)
             ]
             self.run_load = True
-            mg.Initialization().draw_load()
+            mg.Initialization().draw_to_delete("LOAD")
             while self.run_load:
                 self.handle_menu_events_load()
                 self.draw_menu_load()
@@ -331,10 +390,10 @@ class Menu:
             mg.Initialization().draw_floor()
         elif index == 2:
             mg.Initialization().draw_to_delete("LEADER BOARD")
-            self.run_guide = True
-            while self.run_guide:
-                self.handle_menu_events_guide()
-                self.draw_menu_guide()
+            self.run_leader_board = True
+            while self.run_leader_board:
+                self.handle_menu_events_leader_board()
+                self.draw_menu_leader_board()
             mg.Initialization().draw_floor()
         elif index == 4:
             mg.Initialization().draw_to_delete("GUIDE")
@@ -370,6 +429,10 @@ class Menu:
         for i, button in enumerate(self.buttons_menu_start):
             color = (255, 255, 255) if i == self.selected_button_start else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+        if self.selected_button_start == 0:
+            mg.Initialization().input_image_background("image/arrow.png")
+        elif self.selected_button_start == 1:
+            mg.Initialization().input_image_background("image/algorithm.png")
         pygame.display.flip()
     def handle_key_events_start(self, event):
         if event.key == pygame.K_UP:
@@ -487,6 +550,27 @@ class Menu:
         for i, button in enumerate(self.buttons_menu_setting):
             color = (255, 255, 255) if i == self.selected_button_setting else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+            if i == 1:
+                mg.Initialization().draw_text("SOUND", 36, color, 840, 359)
+            elif i == 2:
+                mg.Initialization().draw_text("THEME", 36, color, 840, 439)
+        if self.selected_button_setting == 0:        
+            if self.sound_on == True:
+                mg.Initialization().input_image_background("image/unmute.png")
+            else:
+                mg.Initialization().input_image_background("image/mute.png")
+        elif self.selected_button_setting == 1:
+            mg.Initialization().input_image_background("image/floor_bg.png")
+            name_songs = [
+            {"text": "1. EXCITED", "pos_x": 300, "pos_y": 264},
+            {"text": "2. DELIGHTED", "pos_x": 300, "pos_y": 324},
+            {"text": "3. INTERESTED", "pos_x": 300, "pos_y": 384},
+            {"text": "4. ENJOYED", "pos_x": 300, "pos_y": 444},
+            {"text": "5. RELAXED", "pos_x": 300, "pos_y": 504}    
+            ]
+            for i, button in enumerate(name_songs):
+                color = (0, 0, 255) if i == self.selected_music else (0, 0, 0)
+                mg.Initialization().draw_text_2(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
     def handle_key_events_setting(self, event):
         if event.key == pygame.K_UP:
@@ -503,7 +587,7 @@ class Menu:
                 self.handle_button_click_setting(i)
     def handle_button_click_setting(self, index):
         if index == 0:
-            self.turn_sound_on_off(screen_color, 840, 264)
+            self.turn_sound_on_off()
         elif index == 1:
             self.change_sound()
         elif index == 2:
@@ -551,21 +635,56 @@ class Menu:
     # LEADER BOARD
     def draw_menu_leader_board(self):
         # Vẽ nút
-        for i, button in enumerate(self.buttons_menu_guide_credits):
-            color = (255, 255, 255) if i == self.selected_button_load_guide_credits else (255, 255, 0)
+        for i, button in enumerate(self.buttons_menu_leader_board):
+            color = (255, 255, 255) if i == self.selected_button_leader_board else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+            if i == 1:
+                mg.Initialization().draw_text("TIME", 36, color, 840, 359)
+            elif i == 2:
+                mg.Initialization().draw_text("STEP", 36, color, 840, 439)
         pygame.display.flip()
     def handle_key_events_leader_board(self, event):
-        if event.key == pygame.K_RETURN:
-            self.run_guide = False
+        if event.key == pygame.K_UP:
+            self.selected_button_leader_board = (self.selected_button_leader_board - 1) % len(self.buttons_menu_leader_board)
+        elif event.key == pygame.K_DOWN:
+            self.selected_button_leader_board = (self.selected_button_leader_board + 1) % len(self.buttons_menu_leader_board)
+        elif event.key == pygame.K_RETURN:
+            self.handle_button_click_leader_board(self.selected_button_leader_board)
     def handle_mouse_events_leader_board(self):
         mouse_pos = pygame.mouse.get_pos()
-        for i, button in enumerate(self.buttons_menu_guide_credits):
+        for i, button in enumerate(self.buttons_menu_leader_board):
             text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
-                self.run_guide = False
+                self.handle_button_click_leader_board(i)
     def handle_button_click_leader_board(self, index):
-        name = 1
+        if index == 0:
+            print("information")
+        elif index == 1:
+            mg.Initialization().input_image_background("image/bg_line.png")
+            mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
+            mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
+            top_average_time = sv.LeaderBoard().get_top(sv.LeaderBoard().sort_average_time())
+            for i, button in enumerate(top_average_time):
+                rank = str(i + 1) + "."
+                color = (0, 0, 0)
+                mg.Initialization().draw_text_2(rank, 36, color, 150, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["name"]).encode('utf-8'), 36, color, 200, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["average_timer"])[:5].encode('utf-8'), 36, color, 500, 248 + 71 * i)
+            pygame.display.flip()
+        elif index == 2: 
+            mg.Initialization().input_image_background("image/bg_line.png")
+            mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
+            mg.Initialization().draw_text_2("AVG_STEP", 30, (0, 0, 0), 500, 190)
+            top_average_step = sv.LeaderBoard().get_top(sv.LeaderBoard().sort_average_step())
+            for i, button in enumerate(top_average_step):
+                rank = str(i + 1) + "."
+                color = (0, 0, 0)
+                mg.Initialization().draw_text_2(rank, 36, color, 150, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["name"]).encode('utf-8'), 36, color, 200, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["average_step"])[:5].encode('utf-8'), 36, color, 500, 248 + 71 * i)
+            pygame.display.flip()
+        elif index == 3:
+            self.run_leader_board = False
     def handle_menu_events_leader_board(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

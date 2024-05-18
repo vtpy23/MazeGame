@@ -1,10 +1,12 @@
 from tkinter import *
+from tkinter import font as tkfont
 from tkinter import messagebox
 from PIL import ImageTk, Image
 from random import randint, choice, shuffle
 from database import *
 from sys import exit
 
+FONT_PATH = None
 USERNAME = None
 
 class LoginForm():
@@ -13,6 +15,7 @@ class LoginForm():
         self.window.geometry('1280x720')
         self.window.title('Authentication')
         self.window.resizable(False, False)
+        self.custom_font = tkfont.Font(font="font/Minecraftia-Regular.TTF", size=12, weight="bold")
         self.current_frame = 'login'
         # =============== Login Frame ================
         self.lg_frame = Frame(self.window, bg='#FFFFFF' , width=1280/8*6, height=600)
@@ -50,11 +53,11 @@ class LoginForm():
         #self.sign_in_image_label = Label(self.lg_frame, image=photo, bg= "#FFFFFF")
         #self.sign_in_image_label.image = photo
         #self.sign_in_image_label.place(x=20, y= 130) 
-        self.sign_in_label = Label(self.lg_frame, text= "Sign In", bg="#FFFFFF",fg= "black", font=('yu gothic ui', 17, 'bold'))
+        self.sign_in_label = Label(self.lg_frame, text= "Sign In", bg="#FFFFFF",fg= "black", font=(self.custom_font))
         self.sign_in_label.place(x=250, y=140)
 
         # =============== Username ================
-        self.username_label = Label(self.lg_frame, text= "Username", bg="#FFFFFF",fg= "black", font=('yu gothic ui', 13, 'bold'))
+        self.username_label = Label(self.lg_frame, text= "Username", bg="#FFFFFF",fg= "black", font=("font/Minecraftia-Regular.TTF", 13, 'bold'))
         self.username_label.place(x=120, y=200)
 
         self.username_entry = Entry(self.lg_frame, highlightthickness=0, relief= FLAT, bg="#FFFFFF", fg="black", font=('yu gothic ui', 12, 'bold') )

@@ -108,5 +108,23 @@ class LeaderBoard:
         self.leaderBoard = self.sortLeaderBoard(self.leaderBoard)
         with open("leaderBoard.json", "w") as fw:
             js.dump(self.leaderBoard, fw, indent=4)
-        
 
+    def get_data(self, file_path):
+        with open(file_path, encoding="utf-8") as fi:
+            return js.load(fi)
+    
+    def sort_average_time(self):
+        data = self.get_data("leaderBoard.json")
+        return sorted(data, key=lambda x: x['average_timer'])
+        
+    def sort_average_step(self):
+        data = self.get_data("leaderBoard.json")
+        return sorted(data, key=lambda x: x['average_step'])
+        
+    def get_top(self, top_list):
+        data = self.get_data("leaderBoard.json")
+        if len(data) < 5:
+            leader_board_len = len(data)
+        else: leader_board_len = 5 
+        return top_list[:5]
+    
