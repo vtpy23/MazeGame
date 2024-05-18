@@ -4,15 +4,17 @@ from random import randint
 from old_mg import mazeGeneration
 from old_md import Maze_bfs_solving
 class DrawMaze:
-    def __init__(self, maze, screen, camera_offset, wall, lava_image) -> None:
+    def __init__(self, maze, screen, camera_offset, wall, lava_image, door) -> None:
         self.maze = maze
         self.screen = screen
         self.solvedMaze = Maze_bfs_solving(self.maze)
         self.searching_area = self.solvedMaze.Bfs()
         self.camera_offset = camera_offset
         self.wall = wall
+        self.door = door
         self.lava_image = lava_image
         self.ambitation_rect = None
+        self.door_rect = None
         self.lava_rect = []
         self.lava_pos = 0
         self.break_loop = 7 # using for lava spreading
@@ -22,6 +24,9 @@ class DrawMaze:
                 if cell == 'x':
                     wall_rect = self.wall.get_rect(topleft=(710 + (x * 40) - self.camera_offset.x, 1112 + (y * 40) - self.camera_offset.y))
                     self.screen.blit(self.wall, wall_rect)
+        self.door_rect = self.wall.get_rect(topleft=(1530 + (x * 40), 1900 + (y * 40)))
+        door_rect = self.wall.get_rect(topleft=(1530 + (x * 40) - self.camera_offset.x, 1900 + (y * 40) - self.camera_offset.y))
+        self.screen.blit(self.door, door_rect)
 
     def check_collision(self, rect):
         for y, row in enumerate(self.maze):
@@ -46,10 +51,13 @@ class DrawMaze:
         if rect.colliderect(self.ambitation_rect):
             return True
         return False
-
+    def checkQuit(self, rect):
+        if rect.colliderect(self.door_rect):
+            return True
+        return False
     def game_events(self, reward_image):
-        i_placing = 23
-        j_placing = 23
+        i_placing = len(self.maze) - 2
+        j_placing = len(self.maze) - 2
         ambitation_rect = reward_image.get_rect(topleft=(710 + (j_placing * 40) - self.camera_offset.x, 1112 + (i_placing * 40) - self.camera_offset.y))
         self.ambitation_rect = reward_image.get_rect(topleft=(710 + (j_placing * 40), 1112 + (i_placing * 40)))
         self.screen.blit(reward_image, ambitation_rect)
@@ -69,9 +77,10 @@ class DrawMaze:
                 top = self.searching_area[i]
                 lava_rect = self.lava_image.get_rect(topleft=(710 + (top[1] * 40) - self.camera_offset.x, 1112 + (top[0] * 40) - self.camera_offset.y))
                 self.screen.blit(self.lava_image, lava_rect)
+
 class gameGeneral:
     def __init__(self) -> None:
-        self.player_rect = player_image.get_rect(center=(720, 1100))
+        self.player_rect = player_image.get_rect(center=(677, 712))
         self.player_speed = 10
         self.maze = mazeGeneration().createMaze()
         self.camera_offset = pygame.Vector2()
@@ -80,14 +89,13 @@ class gameGeneral:
         self.time = None
     def gameplay(self):
         self.maze[0][1] = 'o'
-        A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image)
+        A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
             keys = pygame.key.get_pressed()
-            
             # Store the current position
             player_rect_backup = self.player_rect.copy()
             # Draw ambitation pos
@@ -106,11 +114,10 @@ class gameGeneral:
             
             # Check for lava collision
             if A.check_lava_collision(self.player_rect):
-                print('Chết vì dung nham')
-                pygame.quit()
-                sys.exit()
+                print('Chết vì dung nham dong 117')
+                break
+                #them man hinh thua
             # Check for game starting
-            
             if A.check_game_starting(self.player_rect) == True and self.time is None:
                 self.time = pygame.time.get_ticks()
             try:
@@ -137,8 +144,14 @@ class gameGeneral:
                 A.draw_lava_continuous()
             # Check win
             if A.check_win(self.player_rect):
-                print('Chiến thắng')
+                print('Chiến thắng dong 147')
                 self.win_status = True
+                self.maze[len(self.maze) - 1][len(self.maze) - 2] = 'o'
+                self.maze[0][1] = 'x'
+                break
+            if A.checkQuit(self.player_rect):
+                print('quit dong 153')
+                break
 
             # Draw player
             scaled_player_image = pygame.transform.scale(player_image, (int(self.player_rect.width), int(self.player_rect.height)))
@@ -160,6 +173,4 @@ tree_image = pygame.image.load('graphics/tree.png').convert_alpha()
 wall = pygame.image.load('graphics/wall.png').convert_alpha()
 bed = pygame.image.load('graphics/bed.png').convert_alpha()
 lava_image = pygame.image.load('graphics/lava.png').convert_alpha()
-
-A = gameGeneral()
-A.gameplay()
+door = pygame.image.load('graphics/door.png').convert_alpha()

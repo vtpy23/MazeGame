@@ -6,6 +6,7 @@ from mode import Mode
 from load import Load
 from leaderboard import LeaderBoard
 from guide_credit import Guide_Credit
+from humanModes2 import gameGeneral
 
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
@@ -108,7 +109,9 @@ class Menu:
                 self.draw_menu()
             mg.Initialization().draw_floor()
         elif index == 1:
-            print("version 2")
+            A = gameGeneral()
+            A.gameplay()
+            mg.Initialization().draw_floor()
         elif index == 2:
             pygame.quit()
             exit()
