@@ -8,7 +8,8 @@ cursor.execute('''CREATE TABLE IF NOT EXISTS users (
                id INTEGER PRIMARY KEY AUTOINCREMENT,
                username TEXT NOT NULL,
                password TEXT NOT NULL,
-               PIN INTERGER NOT NULL
+               PIN INTERGER NOT NULL,
+               sound INTERGER NOT NULL
                )
                '''
 )
@@ -60,6 +61,25 @@ def check_username_availability(username):
             messagebox.showerror(title='Oops', message="This username is already taken, please choose another username")
             return False
         return True
+
+def add_sound_stage(sound):
+    try:
+        sound_value = 1 if sound else 0
+        cursor.execute('INSERT INTO users (sound) VALUES (?)', (sound_value,))
+        conn.commit()
+        return True
+    except Exception as e:
+        messagebox.showerror(title='Oops', message=f"Something went wrong: {e}")
+        return False
+
+def change_sound_stage(username, sound):
+    try:
+        sound_value = 1 if sound else 0
+        cursor.execute('UPDATE users SET sound=? WHERE username=?', (sound_value, username))
+        conn.commit()
+    except Exception as e:
+        messagebox.showerror(title='Oops', message=f"Something went wrong: {e}")
+
 
 def close_connection():
     conn.close()

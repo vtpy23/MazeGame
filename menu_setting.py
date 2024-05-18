@@ -7,6 +7,8 @@ from load import Load
 from leaderboard import LeaderBoard
 from guide_credit import Guide_Credit
 from humanModes2 import gameGeneral
+from database import add_sound_stage, change_sound_stage
+from authentication import USERNAME
 
 # Các hằng số
 FONT_PATH = 'font/Pixeltype.TTF'
@@ -60,6 +62,7 @@ class Menu:
             pygame.mixer.Sound("audio/music5.wav")
         ]
         self.sound_on = True
+        add_sound_stage(self.sound_on)
         self.selected_music = 0
         self.background_musics[self.selected_music].play(-1)
 
@@ -67,9 +70,11 @@ class Menu:
     def turn_sound_on_off(self):
             self.sound_on = not self.sound_on
             if self.sound_on == True:
+                change_sound_stage(USERNAME, self.sound_on)
                 self.background_musics[self.selected_music].play(-1)
                 mg.Initialization().draw_text("SOUND ON", 36, screen_color, 840, 264)
             else:   
+                change_sound_stage(USERNAME, self.sound_on)
                 self.background_musics[self.selected_music].stop()
                 mg.Initialization().draw_text("SOUND OFF", 36, screen_color, 840, 264)
 
