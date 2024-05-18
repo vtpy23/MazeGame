@@ -7,7 +7,7 @@ from load import Load
 from leaderboard import LeaderBoard
 from guide_credit import Guide_Credit
 from humanModes2 import gameGeneral
-from database import add_sound_stage, change_sound_stage
+from database import get_sound_value, change_sound_stage, get_song, change_song
 from authentication import USERNAME
 
 # Các hằng số
@@ -50,7 +50,7 @@ class Menu:
         self.selected_button_menu = 0
         self.selected_button_menu_version = 0
         self.selected_button_setting = 0
-        self.selected_music = 0
+        self.selected_music = get_song(USERNAME)
         self.run_setting = False
         self.run_version = False
         self.run_menu = False
@@ -61,11 +61,13 @@ class Menu:
             pygame.mixer.Sound("audio/music4.wav"),
             pygame.mixer.Sound("audio/music5.wav")
         ]
-        self.sound_on = True
-        add_sound_stage(self.sound_on)
-        self.selected_music = 0
-        self.background_musics[self.selected_music].play(-1)
-
+        self.sound_on = get_sound_value(USERNAME)
+        if self.sound_on == 1:
+            self.selected_music = get_song(USERNAME)
+            self.background_musics[self.selected_music].play(-1)
+        else:
+            pass
+        
     # SOUND ON/OFF
     def turn_sound_on_off(self):
             self.sound_on = not self.sound_on
@@ -83,6 +85,7 @@ class Menu:
         if self.sound_on:
             self.background_musics[self.selected_music].stop()
             self.selected_music = (self.selected_music + 1) % len(self.background_musics)
+            change_song(USERNAME, self.selected_music)
             self.background_musics[self.selected_music].play(-1)
     
     # VERSION
