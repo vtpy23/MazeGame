@@ -71,7 +71,7 @@ class Random_custom:
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
             elif mode == 1:
-                if sizemap == 0: # map: 40x40, mode: auto, start point - end point: random
+                if sizemap == 0: # map: 20x20, mode: auto, start point - end point: random
                     play = gameAutomatically(20)
                     play.mode_play = 0
                     play.drawMaze()
@@ -87,7 +87,7 @@ class Random_custom:
                     mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                    
-                elif sizemap == 2: # map: 40x40, mode: auto, start point - end point: random
+                elif sizemap == 2: # map: 100x100, mode: auto, start point - end point: random
                     play = gameAutomatically(100)
                     play.mode_play = 0
                     play.drawMaze()

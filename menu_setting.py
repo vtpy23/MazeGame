@@ -36,16 +36,14 @@ class Menu:
         {"text": "QUIT", "pos_x": 840, "pos_y": 464}
         ]
         self.buttons_menu_setting_on = [
-        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 264},
-        {"text": "CHANGE", "pos_x": 840, "pos_y": 329},
-        {"text": "CHANGE", "pos_x": 840, "pos_y": 409},
-        {"text": "BACK", "pos_x": 840, "pos_y": 504}
+        {"text": "SOUND ON", "pos_x": 840, "pos_y": 304},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 369},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464}
         ]
         self.buttons_menu_setting_off = [
-        {"text": "SOUND ON", "pos_x": 840, "pos_y": 264},
-        {"text": "CHANGE", "pos_x": 840, "pos_y": 329},
-        {"text": "CHANGE", "pos_x": 840, "pos_y": 409},
-        {"text": "BACK", "pos_x": 840, "pos_y": 504}
+        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 304},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 369},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464}
         ]
         self.selected_button_menu = 0
         self.selected_button_menu_version = 0
@@ -72,13 +70,13 @@ class Menu:
     def turn_sound_on_off(self):
             self.sound_on = not self.sound_on
             if self.sound_on == True:
+                mg.Initialization().draw_text("SOUND OFF", 36, screen_color, 840, 304)
                 change_sound_stage(USERNAME, self.sound_on)
                 self.background_musics[self.selected_music].play(-1)
-                mg.Initialization().draw_text("SOUND ON", 36, screen_color, 840, 264)
             else:   
+                mg.Initialization().draw_text("SOUND ON", 36, screen_color, 840, 304)
                 change_sound_stage(USERNAME, self.sound_on)
                 self.background_musics[self.selected_music].stop()
-                mg.Initialization().draw_text("SOUND OFF", 36, screen_color, 840, 264)
 
     # CHANGE SOUND
     def change_sound(self):
@@ -213,16 +211,13 @@ class Menu:
             color = (255, 255, 255) if i == self.selected_button_setting else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
             if i == 1:
-                mg.Initialization().draw_text("SOUND", 36, color, 840, 359)
-            elif i == 2:
-                mg.Initialization().draw_text("THEME", 36, color, 840, 439)
+                mg.Initialization().draw_text("SOUND", 36, color, 840, 399)
         if self.selected_button_setting == 0:        
             if self.sound_on == True:
                 mg.Initialization().input_image_background("image/unmute.png")
             else:
                 mg.Initialization().input_image_background("image/mute.png")
         elif self.selected_button_setting == 1:
-            mg.Initialization().input_image_background("image/floor_bg.png")
             name_songs = [
             {"text": "1. EXCITED", "pos_x": 300, "pos_y": 264},
             {"text": "2. DELIGHTED", "pos_x": 300, "pos_y": 324},
@@ -241,6 +236,9 @@ class Menu:
             self.selected_button_setting = (self.selected_button_setting + 1) % len(self.buttons_menu_setting)
         elif event.key == pygame.K_RETURN:
             self.handle_button_click_setting(self.selected_button_setting)
+
+        if self.selected_button_setting == 1:
+            mg.Initialization().input_image_background("image/floor_bg.png")
     def handle_mouse_events_setting(self):
         mouse_pos = pygame.mouse.get_pos()
         for i, button in enumerate(self.buttons_menu_setting):
@@ -253,8 +251,6 @@ class Menu:
         elif index == 1:
             self.change_sound()
         elif index == 2:
-            print("change theme")
-        elif index == 3:
             self.run_setting = False
     def handle_menu_events_setting(self):
         for event in pygame.event.get():

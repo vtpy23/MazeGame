@@ -3,7 +3,6 @@ import numpy as np
 import heapq as pq
 import pygame as pg
 from queue import PriorityQueue
-import gamepause
 from sys import exit
 
 
@@ -215,6 +214,11 @@ class showPath:
                     exit()
                 elif event.type == pg.KEYDOWN:
                     if event.key == pg.K_p or event.key == pg.K_ESCAPE:
+                        return drew
+                elif event.type == pg.MOUSEBUTTONDOWN:
+                    mouse_pos = pg.mouse.get_pos()
+                    text_rect = mG.Initialization().draw_text("PAUSE (P)", 36, (0, 0, 255), 896, 384)
+                    if text_rect.collidepoint(mouse_pos):
                         return drew
         drew.append(area[-1])
         return drew
