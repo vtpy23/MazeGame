@@ -3,6 +3,7 @@ import mazeGeneration as mg
 import json as js
 import time
 import authentication 
+from authentication import USERNAME
 class saveLoad:
     count = None
     maxFile = 10
@@ -127,4 +128,16 @@ class LeaderBoard:
             leader_board_len = len(data)
         else: leader_board_len = 5 
         return top_list[:5]
-    
+
+def savebyusername():
+    try:
+        with open('gameSaving.json', 'r') as file:
+            data = js.load(file)
+        filtered_data = [entry for entry in data if entry.get('username') == USERNAME]
+
+        with open('save_byUSERNAME.json', 'w') as file:
+            js.dump(filtered_data, file, indent=4)
+    except Exception as e:
+        print(f'Something went wrong: {e}')
+
+savebyusername()
