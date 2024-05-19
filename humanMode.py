@@ -144,7 +144,7 @@ class gameManually:
 
             if(self.player_pos == self.player_aimbitation): 
                 save = sv.LeaderBoard()
-                save.saveWin(self.player_step, seconds)
+                save.saveWin(self.player_step, seconds, self.size)
                 mg.Initialization().delete_pause_menu()
                 self.win_screen(seconds, self.player_step)
                 self.run_play_again = True
@@ -496,7 +496,7 @@ class gameLoadManually:
                         running = False
             if(self.player_pos == self.player_aimbitation): 
                 save = sv.LeaderBoard()
-                save.saveWin(self.player_step, seconds)
+                save.saveWin(self.player_step, seconds, self.size)
                 running = False
 
     def Move(self, dx, dy):

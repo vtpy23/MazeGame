@@ -68,46 +68,40 @@ class LeaderBoard:
         self.count_win = 0
         self.timer = 0
         self.step = 0
+        self.size = None
         self.name = authentication.USERNAME
-    def sortLeaderBoard(self, data):
-        #list player
-        for i in range(len(data)):
-            Flag = i
-            top = data[i]
-            for j in range(i+1, len(data)):
-                if(data[j]['count_win'] > top['count_win']):
-                    Flag = j
-                    top = data[j]
-                elif(data[j]['count_win'] == top['count_win']):
-                    if(data[j]['average_timer'] < top['average_timer']):
-                        Flag = j
-                        top = data[j]
-            data[i], data[Flag] = data[Flag], data[i]
-        return data
     
-    def saveWin(self, step, timer):
+    def saveWin(self, step, timer, mazeSize):
         Flag = False
         self.timer = timer
         self.step = step
-        game = {'name': self.name, 'average_timer': self.timer, 'average_step': self.step, 'count_win': 1, 'timer': [self.timer], 'step': [self.step]}
+        self.size = mazeSize
+        game = {'name': self.name, 'hard_mode': self.size, 
+                'Info' :{'average_timer': self.timer, 'average_step': self.step, 'count_win': 1, 'timer': [self.timer], 'step': [self.step]}}
         try:
             with open("leaderBoard.json", encoding="utf-8") as fr:
                 self.leaderBoard = js.load(fr)
         except:
             self.leaderBoard = []
         for i in range(len(self.leaderBoard)):
-            if(self.leaderBoard[i]['name'] == self.name):
+            # if(self.leaderBoard[i]['name'] == self.name):
+            #     Flag = True
+                # self.leaderBoard[i]['timer'].append(self.timer)
+                # self.leaderBoard[i]['step'].append(self.step)
+                # self.leaderBoard[i]['average_timer'] = sum(self.leaderBoard[i]['timer'])/len(self.leaderBoard[i]['timer'])
+                # self.leaderBoard[i]['average_step'] = sum(self.leaderBoard[i]['step'])/len(self.leaderBoard[i]['step'])
+                # self.leaderBoard[i]['count_win'] += 1
+            if(self.leaderBoard[i]['name'] == self.name and self.leaderBoard['hard_mode'] == self.size):
                 Flag = True
-                self.leaderBoard[i]['timer'].append(self.timer)
-                self.leaderBoard[i]['step'].append(self.step)
-                self.leaderBoard[i]['average_timer'] = sum(self.leaderBoard[i]['timer'])/len(self.leaderBoard[i]['timer'])
-                self.leaderBoard[i]['average_step'] = sum(self.leaderBoard[i]['step'])/len(self.leaderBoard[i]['step'])
-                self.leaderBoard[i]['count_win'] += 1
+                self.leaderBoard[i]['Info']['timer'].append(self.timer)
+                self.leaderBoard[i]['Info']['step'].append(self.step)
+                self.leaderBoard[i]['Info']['average_timer'] = sum(self.leaderBoard[i]['Info']['timer'])/len(self.leaderBoard[i]['Info']['timer'])
+                self.leaderBoard[i]['Info']['average_step'] = sum(self.leaderBoard[i]['Info']['step'])/len(self.leaderBoard[i]['Info']['step'])
+                self.leaderBoard[i]['Info']['count_win'] += 1
+
 
         if(Flag == False):
             self.leaderBoard.append(game)
-        
-        self.leaderBoard = self.sortLeaderBoard(self.leaderBoard)
         with open("leaderBoard.json", "w") as fw:
             js.dump(self.leaderBoard, fw, indent=4)
 
