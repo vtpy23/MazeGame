@@ -57,7 +57,8 @@ class saveLoad:
             return []
         for i in range(len(self.dataGame)):
             try:
-                dataFile.append(self.dataGame[i]['username'])
+                name = self.dataGame[i]['username'] + "    " + self.dataGame[i]['time']['Time'] + "    " + self.dataGame[i]['time']['Date']
+                dataFile.append(name)
             except:
                 print()
         return dataFile

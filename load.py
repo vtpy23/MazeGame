@@ -31,16 +31,16 @@ class Load:
         #Ve game save
         for i, button in enumerate(self.buttons_file_load):
             color = (0, 255, 0) if i == self.selected_button_load_file else (0, 0, 255)
-            mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
+            mg.Initialization().draw_text(button["text"], 18, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
     def handle_key_events_load(self, event):
         if self.selected_load == False:
             if event.key == pygame.K_RETURN:
-                self.handle_button_click_load_right(self.selected_button_load_guide_credits)
+                self.handle_button_click_load_right(self.selected_button_load)
             elif event.key == pygame.K_UP:
-                self.selected_button_load_guide_credits = (self.selected_button_load_guide_credits - 1) % len(self.buttons_menu_load)
+                self.selected_button_load = (self.selected_button_load - 1) % len(self.buttons_menu_load)
             elif event.key == pygame.K_DOWN:
-                self.selected_button_load_guide_credits = (self.selected_button_load_guide_credits + 1) % len(self.buttons_menu_load)
+                self.selected_button_load = (self.selected_button_load + 1) % len(self.buttons_menu_load)
         elif self.selected_load == True:
             if event.key == pygame.K_RETURN:
                 self.handle_button_click_load_left(self.selected_button_load_file)
