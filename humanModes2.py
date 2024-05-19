@@ -148,7 +148,6 @@ class gameGeneral:
                 self.win_status = True
                 self.maze[len(self.maze) - 1][len(self.maze) - 2] = 'o'
                 self.maze[0][1] = 'x'
-                break
             if A.checkQuit(self.player_rect):
                 print('quit dong 153')
                 break
@@ -174,3 +173,6 @@ wall = pygame.image.load('graphics/wall.png').convert_alpha()
 bed = pygame.image.load('graphics/bed.png').convert_alpha()
 lava_image = pygame.image.load('graphics/lava.png').convert_alpha()
 door = pygame.image.load('graphics/door.png').convert_alpha()
+
+A = gameGeneral()
+A.gameplay()

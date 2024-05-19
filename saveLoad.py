@@ -84,13 +84,6 @@ class LeaderBoard:
         except:
             self.leaderBoard = []
         for i in range(len(self.leaderBoard)):
-            # if(self.leaderBoard[i]['name'] == self.name):
-            #     Flag = True
-                # self.leaderBoard[i]['timer'].append(self.timer)
-                # self.leaderBoard[i]['step'].append(self.step)
-                # self.leaderBoard[i]['average_timer'] = sum(self.leaderBoard[i]['timer'])/len(self.leaderBoard[i]['timer'])
-                # self.leaderBoard[i]['average_step'] = sum(self.leaderBoard[i]['step'])/len(self.leaderBoard[i]['step'])
-                # self.leaderBoard[i]['count_win'] += 1
             if(self.leaderBoard[i]['name'] == self.name and self.leaderBoard['hard_mode'] == self.size):
                 Flag = True
                 self.leaderBoard[i]['Info']['timer'].append(self.timer)
@@ -98,8 +91,6 @@ class LeaderBoard:
                 self.leaderBoard[i]['Info']['average_timer'] = sum(self.leaderBoard[i]['Info']['timer'])/len(self.leaderBoard[i]['Info']['timer'])
                 self.leaderBoard[i]['Info']['average_step'] = sum(self.leaderBoard[i]['Info']['step'])/len(self.leaderBoard[i]['Info']['step'])
                 self.leaderBoard[i]['Info']['count_win'] += 1
-
-
         if(Flag == False):
             self.leaderBoard.append(game)
         with open("leaderBoard.json", "w") as fw:
