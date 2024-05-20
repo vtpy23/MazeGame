@@ -1,6 +1,5 @@
 import pygame
 import mazeGeneration as mg 
-import saveLoad as sv
 from sys import exit
 from mode import Mode
 from load import Load
@@ -159,12 +158,6 @@ class Menu:
             Mode().run_menu_start()
             mg.Initialization().draw_floor()
         elif index == 1:
-            self.file_save_name = sv.saveLoad().takeNameFile()
-            self.buttons_file_load = [
-                {"text": name, "pos_x": 250, "pos_y": 124 + 40 * i}
-                for i, name in enumerate(self.file_save_name)
-            ]
-            self.run_load = True
             mg.Initialization().draw_to_delete("LOAD")
             Load().run_menu_load()
             mg.Initialization().draw_floor()

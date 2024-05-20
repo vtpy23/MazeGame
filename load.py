@@ -11,7 +11,7 @@ class Load:
         ]
         self.file_save_name = sv.saveLoad().takeNameFile()
         self.buttons_file_load = [
-            {"text": name, "pos_x": 250, "pos_y": 124 + 40 * i}
+            {"text": name, "pos_x": 384, "pos_y": 200 + 40 * i}
             for i, name in enumerate(self.file_save_name)
         ]
         self.selected_button_load_file = 0
@@ -31,7 +31,7 @@ class Load:
         #Ve game save
         for i, button in enumerate(self.buttons_file_load):
             color = (0, 255, 0) if i == self.selected_button_load_file else (0, 0, 255)
-            mg.Initialization().draw_text(button["text"], 18, color, button["pos_x"], button["pos_y"])
+            mg.Initialization().draw_text(button["text"], 30, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
     def handle_key_events_load(self, event):
         if self.selected_load == False:
