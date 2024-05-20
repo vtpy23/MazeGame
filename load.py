@@ -6,8 +6,7 @@ from humanMode import gameLoadManually
 class Load:
     def __init__(self):
         self.buttons_menu_load = [
-        {"text": "BACK", "pos_x": 840, "pos_y": 124},
-        {"text": "FILE_SAVE", "pos_x": 840, "pos_y": 204}
+        {"text": "BACK", "pos_x": 840, "pos_y": 384}
         ]
         self.file_save_name = sv.saveLoad().takeNameFile()
         self.buttons_file_load = [
@@ -15,7 +14,7 @@ class Load:
             for i, name in enumerate(self.file_save_name)
         ]
         self.selected_button_load_file = 0
-        self.selected_load = False # chon giua load ben trai va ben phai
+        self.selected_load = True # chon giua load ben trai va ben phai
         self.selected_button_load = 0
         self.run_load = False
 
@@ -25,7 +24,7 @@ class Load:
     def draw_menu_load(self):
         # Vẽ nút
         for i, button in enumerate(self.buttons_menu_load ):
-            color = (255, 255, 255) if i == self.selected_button_load else (255, 255, 0)
+            color = (255, 255, 255) if self.selected_load == False else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
         pygame.display.flip()
         #Ve game save
@@ -37,10 +36,6 @@ class Load:
         if self.selected_load == False:
             if event.key == pygame.K_RETURN:
                 self.handle_button_click_load_right(self.selected_button_load)
-            elif event.key == pygame.K_UP:
-                self.selected_button_load = (self.selected_button_load - 1) % len(self.buttons_menu_load)
-            elif event.key == pygame.K_DOWN:
-                self.selected_button_load = (self.selected_button_load + 1) % len(self.buttons_menu_load)
         elif self.selected_load == True:
             if event.key == pygame.K_RETURN:
                 self.handle_button_click_load_left(self.selected_button_load_file)
@@ -59,11 +54,9 @@ class Load:
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_load_left(i)
     def handle_button_click_load_right(self, index):
-        if(index == 0):
+        if index == 0:
             self.run_load = False
-        if(index == 1):
-            self.file_save_name = sv.saveLoad().takeNameFile()
-            print(self.file_save_name)
+
     def handle_button_click_load_left(self, index):
         matrix, gameInfo = sv.saveLoad().loadGame(index + 1)
         play = gameLoadManually(matrix, gameInfo)
@@ -86,6 +79,7 @@ class Load:
     def run_menu_load(self):
         self.run_load = True
         mg.Initialization().draw_rectangle(84, 84, 600, 600, "White")
+        mg.Initialization().draw_text("MAP   POINT    TIME       DATE     ", 32, "Black", 384, 150)
         while self.run_load:
             self.handle_menu_events_load()
             self.draw_menu_load()

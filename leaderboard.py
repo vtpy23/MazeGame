@@ -37,53 +37,48 @@ class LeaderBoard:
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_leader_board(i)
     def handle_button_click_leader_board(self, index):
+        text_size = 20
         if index == 0:
-            mg.Initialization().input_image_background("image/bg_line.png")
-            # mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
-            # mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
+            self.bg_line()
             level_1 = sv.LeaderBoard().data_processing(20)
             for i, button in enumerate(level_1):
                 rank = str(i + 1) + "."
                 color = (0, 0, 0)
-                mg.Initialization().draw_text_2(rank, 18, color, 100, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), 18, color, 130, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), 18, color, 280, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_time"])[:5].encode('utf-8'), 18, color, 320, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), 18, color, 380, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), 18, color, 460, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), 18, color, 540, 248 + 71 * i)
+                mg.Initialization().draw_text_2(rank, text_size, color, 140, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), text_size, color, 170, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), text_size, color, 330, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"])[:4].encode('utf-8'), text_size, color, 370, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), text_size, color, 440, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), text_size, color, 510, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), text_size, color, 580, 265 + 71 * i)
             pygame.display.flip()
         elif index == 1:
-            mg.Initialization().input_image_background("image/bg_line.png")
-            # mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
-            # mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
+            self.bg_line()
             level_2 = sv.LeaderBoard().data_processing(40)
             for i, button in enumerate(level_2):
                 rank = str(i + 1) + "."
                 color = (0, 0, 0)
-                mg.Initialization().draw_text_2(rank, 36, color, 130, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), 36, color, 150, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), 36, color, 250, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_time"])[:5].encode('utf-8'), 36, color, 300, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), 36, color, 380, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), 36, color, 460, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), 36, color, 540, 248 + 71 * i)
+                mg.Initialization().draw_text_2(rank, text_size, color, 140, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), text_size, color, 170, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), text_size, color, 330, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"])[:4].encode('utf-8'), text_size, color, 370, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), text_size, color, 440, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), text_size, color, 510, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), text_size, color, 580, 265 + 71 * i)
             pygame.display.flip()
         elif index == 2: 
-            mg.Initialization().input_image_background("image/bg_line.png")
-            # mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
-            # mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
+            self.bg_line()
             level_3 = sv.LeaderBoard().data_processing(40)
             for i, button in enumerate(level_3):
                 rank = str(i + 1) + "."
                 color = (0, 0, 0)
-                mg.Initialization().draw_text_2(rank, 36, color, 130, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), 36, color, 150, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), 36, color, 250, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_time"])[:5].encode('utf-8'), 36, color, 300, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), 36, color, 380, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), 36, color, 460, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), 36, color, 540, 248 + 71 * i)
+                mg.Initialization().draw_text_2(rank, text_size, color, 140, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), text_size, color, 170, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), text_size, color, 330, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"])[:4].encode('utf-8'), text_size, color, 370, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), text_size, color, 440, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), text_size, color, 510, 265 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), text_size, color, 580, 265 + 71 * i)
             pygame.display.flip()
         elif index == 3:
             self.run_leader_board = False
@@ -98,7 +93,12 @@ class LeaderBoard:
                 self.handle_mouse_events_leader_board()  
 
     def run_menu_leader_board(self):
+        self.bg_line()
         self.run_leader_board = True
         while self.run_leader_board:
             self.handle_menu_events_leader_board()
             self.draw_menu_leader_board()
+
+    def bg_line(self):
+        mg.Initialization().input_image_background("image/bg_line.png")
+        mg.Initialization().draw_text("USER   NUMBER    TIME   STEP   AVG TIME    AVG STEP", 18, "Black", 384, 200)
