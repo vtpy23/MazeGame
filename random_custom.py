@@ -65,7 +65,6 @@ class Random_custom:
                     play = gameManually(100)
                     play.mode_play = 0
                     play.drawMaze()
-                    play.drawMaze()
                     play.creatingMaze()
                     mg.Initialization().draw_floor_background()
                     mg.Initialization().draw_to_delete("")

@@ -5,6 +5,7 @@ import playAutomatically as pA
 import saveLoad as sv
 from sys import exit
 import json as js
+import random
 
 screen = mg.screen
 screen_width = mg.WINDOW_WIDTH
@@ -19,7 +20,7 @@ class gameManually:
         self.matrix = mg.mazeGeneration().createMaze(self.size)
         self.cell_size = ((768)**2 / (self.size) ** 2) ** 0.5
         self.player_pos = (0,0) #Vi tri co the thay doi
-        self.player_aimbitation = (3, 3) #Vi tri dich co the thay doi va chuong trinh se tu dong tat sau khi dat den vi tri nay
+        self.player_aimbitation = (self.size - random.randint(1, self.size // 2), self.size - random.randint(1, self.size // 2))
         self.player_past = None
         self.player_step = 0
         self.mode_play = 0
@@ -157,10 +158,19 @@ class gameManually:
                     self.handle_menu_events_play_again()
                     self.draw_menu_play_again()
                 self.running = False
-        if self.play_again:
+        if self.play_again and self.mode_play == 0:
             self.player_pos = (0,0)
+            self.player_aimbitation = (self.size - random.randint(1, self.size // 2), self.size - random.randint(1, self.size // 2))
+            self.player_step = 0
             self.matrix = mg.mazeGeneration().createMaze(self.size)
             self.drawMaze()
+            self.creatingMaze()
+        
+        if self.play_again and self.mode_play == 1:
+            self.player_step = 0
+            self.matrix = mg.mazeGeneration().createMaze(self.size)
+            self.drawMaze()
+            self.choose_start_end_point(self.size)
             self.creatingMaze()
 
     def win_screen(self, time, step):
@@ -356,11 +366,9 @@ class gameManually:
     
     def handle_button_click_play_again(self, index):
         if index == 0: # play again
-            print("1")
             self.run_play_again = False
             self.play_again = True
         elif index == 1: # exit
-            print("1")
             self.run_play_again = False
 
     def handle_menu_events_play_again(self):
