@@ -53,6 +53,7 @@ class gameManually:
         ]
         self.help = False
         self.play_again = None
+        self.saved = False
 
     def drawMaze(self):
         size = self.size
@@ -107,15 +108,19 @@ class gameManually:
                     self.handle_mouse_events_pause_help(seconds, start_ticks)    
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
+                        self.saved = False
                         self.player_step += 1
                         self.Move(-1, 0)
                     elif event.key == pygame.K_DOWN:
+                        self.saved = False
                         self.player_step += 1
                         self.Move(1, 0)
                     elif event.key == pygame.K_LEFT:
+                        self.saved = False
                         self.player_step += 1
                         self.Move(0, -1)
                     elif event.key == pygame.K_RIGHT:
+                        self.saved = False
                         self.player_step += 1
                         self.Move(0, 1)
                     elif event.key == pygame.K_p:
@@ -249,18 +254,21 @@ class gameManually:
             save = sv.saveLoad()
             save.saveGame(self.matrix, self.player_pos, self.player_aimbitation, self.player_step, time)
             mg.Initialization().draw_text("SAVE", 24, (0, 255, 0), 896, 304)
+            self.saved = True
         elif index == 1:
             self.run_pause = False
         elif index == 2:
-            mg.Initialization().draw_rectangle(384, 320, 256, 128, (0, 0, 0))
-            mg.Initialization().draw_rectangle(392, 320, 248, 120, (255, 255, 255))
-            mg.Initialization().draw_text("Do you want", 28, (0, 0, 0), 512, 344)
-            mg.Initialization().draw_text("to save?", 28, (0, 0, 0), 512, 374)
-            self.run_exit = True
-            while self.run_exit:
-                self.handle_menu_events_exit(time)
-                self.draw_menu_exit()
+            if self.saved == False:
+                mg.Initialization().draw_rectangle(384, 320, 256, 128, (0, 0, 0))
+                mg.Initialization().draw_rectangle(392, 320, 248, 120, (255, 255, 255))
+                mg.Initialization().draw_text("Do you want", 28, (0, 0, 0), 512, 344)
+                mg.Initialization().draw_text("to save?", 28, (0, 0, 0), 512, 374)
+                self.run_exit = True
+                while self.run_exit:
+                    self.handle_menu_events_exit(time)
+                    self.draw_menu_exit()
             self.run_pause = False
+            self.running = False
 
     def handle_pause_manual_events(self, time):
         for event in pygame.event.get():

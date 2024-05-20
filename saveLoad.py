@@ -50,17 +50,20 @@ class saveLoad:
         gameInfo.extend([gameLoader['player_pos'], gameLoader['ambitation_pos'], gameLoader['player_step'], gameLoader['counting_sec']])
         return matrix, gameInfo
     
+    def savebyusername(self):
+        with open('gameSaving.json', 'r') as file:
+            data = js.load(file)
+            filtered_data = [entry for entry in data if entry.get('username') == USERNAME]
+            return filtered_data
+
     def takeNameFile(self):
-        self.takeNumericalOrder()
-        dataFile =[]
-        if len(self.dataGame) == 1: 
-            return []
-        for i in range(len(self.dataGame)):
-            try:
-                name = self.dataGame[i]['username'] + "    " + self.dataGame[i]['time']['Time'] + "    " + self.dataGame[i]['time']['Date']
-                dataFile.append(name)
-            except:
-                print()
+        dataGame = self.savebyusername()
+        dataFile = []
+        for i in range(len(dataGame)):
+            sizemap = str(len(dataGame[i]['board']))
+            ran_cus = "Random" if dataGame[i]['player_pos'] == [0, 0] else "Custom"
+            name = sizemap + "   " + ran_cus + "   " + dataGame[i]['time']['Time'] + "   " + dataGame[i]['time']['Date']
+            dataFile.append(name)
         return dataFile
 
 class LeaderBoard:
@@ -69,61 +72,45 @@ class LeaderBoard:
         self.timer = 0
         self.step = 0
         self.size = None
-        self.name = authentication.USERNAME
+        self.name = USERNAME
     
     def saveWin(self, step, timer, mazeSize):
-        Flag = False
-        self.timer = timer
-        self.step = step
-        self.size = mazeSize
-        game = {'name': self.name, 'hard_mode': self.size, 
-                'Info' :{'average_timer': self.timer, 'average_step': self.step, 'count_win': 1, 'timer': [self.timer], 'step': [self.step]}}
-        try:
-            with open("leaderBoard.json", encoding="utf-8") as fr:
-                self.leaderBoard = js.load(fr)
-        except:
-            self.leaderBoard = []
-        for i in range(len(self.leaderBoard)):
-            if(self.leaderBoard[i]['name'] == self.name and self.leaderBoard['hard_mode'] == self.size):
-                Flag = True
-                self.leaderBoard[i]['Info']['timer'].append(self.timer)
-                self.leaderBoard[i]['Info']['step'].append(self.step)
-                self.leaderBoard[i]['Info']['average_timer'] = sum(self.leaderBoard[i]['Info']['timer'])/len(self.leaderBoard[i]['Info']['timer'])
-                self.leaderBoard[i]['Info']['average_step'] = sum(self.leaderBoard[i]['Info']['step'])/len(self.leaderBoard[i]['Info']['step'])
-                self.leaderBoard[i]['Info']['count_win'] += 1
-        if(Flag == False):
-            self.leaderBoard.append(game)
-        with open("leaderBoard.json", "w") as fw:
-            js.dump(self.leaderBoard, fw, indent=4)
-
-    def get_data(self, file_path):
-        with open(file_path, encoding="utf-8") as fi:
-            return js.load(fi)
-    
-    def sort_average_time(self):
-        data = self.get_data("leaderBoard.json")
-        return sorted(data, key=lambda x: x['average_timer'])
-        
-    def sort_average_step(self):
-        data = self.get_data("leaderBoard.json")
-        return sorted(data, key=lambda x: x['average_step'])
-        
-    def get_top(self, top_list):
-        data = self.get_data("leaderBoard.json")
-        if len(data) < 5:
-            leader_board_len = len(data)
-        else: leader_board_len = 5 
-        return top_list[:5]
-
-def savebyusername():
-    try:
-        with open('gameSaving.json', 'r') as file:
+        with open("leaderBoard.json", 'r') as file:
             data = js.load(file)
-        filtered_data = [entry for entry in data if entry.get('username') == USERNAME]
 
-        with open('save_byUSERNAME.json', 'w') as file:
-            js.dump(filtered_data, file, indent=4)
-    except Exception as e:
-        print(f'Something went wrong: {e}')
+        game = {
+            'username' : USERNAME,
+            'hard_mode': mazeSize, 
+            'timer': timer, 
+            'step': step
+            }
 
-savebyusername()
+        data.append(game)
+
+        with open("leaderBoard.json", 'w') as file:
+            js.dump(data, file, indent=4)
+
+    def ldbbysizemap(self, sizemap):
+        with open('leaderBoard.json', 'r') as file:
+            data_by_user = js.load(file)
+            data_by_size = [entry for entry in data_by_user if entry.get('hard_mode') == sizemap]
+            return data_by_size
+        
+    def data_processing(self,sizemap):
+        data = self.ldbbysizemap(sizemap)
+        result = {}
+        for item in data:
+            username = item['username']
+            if username in result:
+                result[username]['number'] += 1
+                result[username]['total_time'] += item['timer']
+                result[username]['total_step'] += item['step']
+            else:
+                result[username] = {
+                    'number': 1,
+                    'total_time': item['timer'],
+                    'total_step': item['step']
+                }
+
+        return [{'username': username, **info} for username, info in result.items()]
+    

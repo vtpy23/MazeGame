@@ -5,9 +5,9 @@ import saveLoad as sv
 class LeaderBoard:
     def __init__(self):
         self.buttons_menu_leader_board = [
-        {"text": "PLAYER", "pos_x": 840, "pos_y": 264},
-        {"text": "AVERGAGE", "pos_x": 840, "pos_y": 329},
-        {"text": "AVERGAGE", "pos_x": 840, "pos_y": 409},
+        {"text": "20x20", "pos_x": 840, "pos_y": 264},
+        {"text": "40x40", "pos_x": 840, "pos_y": 329},
+        {"text": "100x100", "pos_x": 840, "pos_y": 409},
         {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
         self.selected_button_leader_board = 0
@@ -38,30 +38,52 @@ class LeaderBoard:
                 self.handle_button_click_leader_board(i)
     def handle_button_click_leader_board(self, index):
         if index == 0:
-            print("information")
-        elif index == 1:
             mg.Initialization().input_image_background("image/bg_line.png")
-            mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
-            mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
-            top_average_time = sv.LeaderBoard().get_top(sv.LeaderBoard().sort_average_time())
-            for i, button in enumerate(top_average_time):
+            # mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
+            # mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
+            level_1 = sv.LeaderBoard().data_processing(20)
+            for i, button in enumerate(level_1):
                 rank = str(i + 1) + "."
                 color = (0, 0, 0)
-                mg.Initialization().draw_text_2(rank, 36, color, 150, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["name"]).encode('utf-8'), 36, color, 200, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["average_timer"])[:5].encode('utf-8'), 36, color, 500, 248 + 71 * i)
+                mg.Initialization().draw_text_2(rank, 18, color, 100, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), 18, color, 130, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), 18, color, 280, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"])[:5].encode('utf-8'), 18, color, 320, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), 18, color, 380, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), 18, color, 460, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), 18, color, 540, 248 + 71 * i)
+            pygame.display.flip()
+        elif index == 1:
+            mg.Initialization().input_image_background("image/bg_line.png")
+            # mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
+            # mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
+            level_2 = sv.LeaderBoard().data_processing(40)
+            for i, button in enumerate(level_2):
+                rank = str(i + 1) + "."
+                color = (0, 0, 0)
+                mg.Initialization().draw_text_2(rank, 36, color, 130, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), 36, color, 150, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), 36, color, 250, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"])[:5].encode('utf-8'), 36, color, 300, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), 36, color, 380, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), 36, color, 460, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), 36, color, 540, 248 + 71 * i)
             pygame.display.flip()
         elif index == 2: 
             mg.Initialization().input_image_background("image/bg_line.png")
-            mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
-            mg.Initialization().draw_text_2("AVG_STEP", 30, (0, 0, 0), 500, 190)
-            top_average_step = sv.LeaderBoard().get_top(sv.LeaderBoard().sort_average_step())
-            for i, button in enumerate(top_average_step):
+            # mg.Initialization().draw_text_2("USER", 30, (0, 0, 0), 200, 190)
+            # mg.Initialization().draw_text_2("AVG_TIME", 30, (0, 0, 0), 500, 190)
+            level_3 = sv.LeaderBoard().data_processing(40)
+            for i, button in enumerate(level_3):
                 rank = str(i + 1) + "."
                 color = (0, 0, 0)
-                mg.Initialization().draw_text_2(rank, 36, color, 150, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["name"]).encode('utf-8'), 36, color, 200, 248 + 71 * i)
-                mg.Initialization().draw_text_2(str(button["average_step"])[:5].encode('utf-8'), 36, color, 500, 248 + 71 * i)
+                mg.Initialization().draw_text_2(rank, 36, color, 130, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["username"]).encode('utf-8'), 36, color, 150, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["number"]).encode('utf-8'), 36, color, 250, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"])[:5].encode('utf-8'), 36, color, 300, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]).encode('utf-8'), 36, color, 380, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_time"]//button["number"]).encode('utf-8'), 36, color, 460, 248 + 71 * i)
+                mg.Initialization().draw_text_2(str(button["total_step"]//button["number"]).encode('utf-8'), 36, color, 540, 248 + 71 * i)
             pygame.display.flip()
         elif index == 3:
             self.run_leader_board = False
