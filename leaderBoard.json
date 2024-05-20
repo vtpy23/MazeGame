@@ -130,5 +130,11 @@
         "hard_mode": 20,
         "timer": 1.791,
         "step": 8
+    },
+    {
+        "username": "quangminh",
+        "hard_mode": 40,
+        "timer": 2.483278,
+        "step": 13
     }
 ]

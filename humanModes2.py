@@ -24,7 +24,7 @@ class DrawMaze:
         self.lava_pos = 0
         self.cure_points = None
         self.count_cure = 0
-        self.break_loop = 7 # using for lava spreading
+        self.break_loop = 5 # using for lava spreading
     def opening_guide(self, screen):
         castle = pygame.image.load('graphics/castle.png')
         castle_rect = castle.get_rect()
@@ -131,7 +131,7 @@ class DrawMaze:
         self.screen.blit(reward_image, ambitation_rect)
     
     def lavaSpreading(self):
-        if(self.lava_pos < len(self.searching_area) and self.break_loop % 7 == 0):
+        if(self.lava_pos < len(self.searching_area) and self.break_loop % 5 == 0):
             for i in range(self.lava_pos + 1):
                 top = self.searching_area[i]
                 lava_rect = self.lava_image.get_rect(topleft=(710 + (top[1] * 40) - self.camera_offset.x, 1112 + (top[0] * 40) - self.camera_offset.y))
@@ -367,3 +367,5 @@ door = pygame.image.load('graphics/door.png').convert_alpha()
 cure = pygame.image.load('graphics/cure.png').convert_alpha()
 princess = pygame.image.load('graphics/princess.png').convert_alpha()
 
+A = gameGeneral()
+A.gameplay()
