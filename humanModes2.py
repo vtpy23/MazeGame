@@ -5,7 +5,7 @@ from old_mg import mazeGeneration
 from old_md import Maze_bfs_solving
 import math
 import random
-
+import mazeGeneration as mg
 class DrawMaze:
     def __init__(self, maze, screen, camera_offset, wall, lava_image, door) -> None:
         self.maze = maze
@@ -47,6 +47,16 @@ class DrawMaze:
             pygame.draw.circle(screen, (255,255,255), (1024 // 2, 768 // 2), radius)
             pygame.display.flip()
             clock.tick(60)
+    def draw_lose1(self, screen):
+        castle = pygame.image.load('graphics/lose1.png')
+        castle_rect = castle.get_rect()
+        castle_rect.center = (1024 // 2, 768 // 2)
+        screen.blit(castle, castle_rect)
+    def draw_lose2(self, screen):
+        castle = pygame.image.load('graphics/lose2.png')
+        castle_rect = castle.get_rect()
+        castle_rect.center = (1024 // 2, 768 // 2)
+        screen.blit(castle, castle_rect)
     def draw(self):
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
@@ -184,9 +194,10 @@ class gameGeneral:
             
             # Check for lava collision
             if A.check_lava_collision(self.player_rect):
-                print('Chết vì dung nham dong 117')
+                A.draw_lose1(screen)
+                pygame.display.flip()
+                pygame.time.wait(3000)
                 break
-                #them man hinh thua
             # Check for game starting
             if A.check_game_starting(self.player_rect) == True and self.time is None:
                 self.time = pygame.time.get_ticks()
@@ -242,14 +253,17 @@ class savePrincess(gameGeneral):
         self.win_all = False
     def gameplay(self):
         self.maze[0][1] = 'o'
+        start_time = 2
         A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
         A.select_points(A.searching_area)
         A.draw_opening_circle(screen)
+        start_ticks = pygame.time.get_ticks()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+            seconds = start_time - (pygame.time.get_ticks() - start_ticks) / 1000
             keys = pygame.key.get_pressed()
             # Store the current position
             player_rect_backup = self.player_rect.copy()
@@ -267,7 +281,14 @@ class savePrincess(gameGeneral):
             if A.check_collision(self.player_rect):
                 self.player_rect = player_rect_backup  # Restore the previous position if there is a collision
             
-           
+            # Check for run out time
+            if seconds <= 0 and self.win_all == False:
+                seconds = 0
+                #Them man hinh thua
+                A.draw_lose2(screen)
+                pygame.display.flip()
+                pygame.time.wait(5000)
+                break
             # Calculate camera offset to keep player in the center
             camera_offset = pygame.Vector2(self.player_rect.center) - pygame.Vector2(screen.get_rect().center)
 
@@ -280,25 +301,28 @@ class savePrincess(gameGeneral):
             A.camera_offset = camera_offset
             A.draw()
             A.draw_selected_point()
-            A.game_events(bed)#Sau nay thay doi thanh princess
+            if self.win_all == False:
+                A.game_events(princess)#Sau nay thay doi thanh princess
             #Check collecting Cure
             A.check_collecting_cure(self.player_rect)
             # Check win
             if A.check_win(self.player_rect) and A.count_cure == 5:
                 self.win_all = True
-                print('Cuu duoc cong chua')
                 self.maze[len(self.maze) - 1][len(self.maze) - 2] = 'o'
                 self.maze[0][1] = 'x'
                # ra duoc khoi me cung ve man hinh thang cuu duoc cong chua
             if A.checkQuit(self.player_rect):
-                print('quit dong 153')
                 break
 
             # Draw player
             scaled_player_image = pygame.transform.scale(player_image, (int(self.player_rect.width), int(self.player_rect.height)))
             player_rect_scaled = scaled_player_image.get_rect(center=screen.get_rect().center)
             screen.blit(scaled_player_image, player_rect_scaled)
-
+            # Draw princess Move
+            if self.win_all == True:
+                princess_rect = princess.get_rect(topleft=(1024//2 - 40 - self.camera_offset.x, 768//2 - 30 - self.camera_offset.y))
+                screen.blit(princess, princess_rect)
+            mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds: .2f}")
             pygame.display.flip()
             clock.tick(60)
 
@@ -316,3 +340,5 @@ bed = pygame.image.load('graphics/bed.png').convert_alpha()
 lava_image = pygame.image.load('graphics/lava.png').convert_alpha()
 door = pygame.image.load('graphics/door.png').convert_alpha()
 cure = pygame.image.load('graphics/cure.png').convert_alpha()
+princess = pygame.image.load('graphics/princess.png').convert_alpha()
+
