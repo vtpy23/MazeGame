@@ -40,5 +40,47 @@
         "hard_mode": 20,
         "timer": 8.202,
         "step": 103
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 4.533,
+        "step": 15
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 10.694,
+        "step": 71
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 46.006,
+        "step": 369
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 40,
+        "timer": 2.5,
+        "step": 9
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 40,
+        "timer": 2.911,
+        "step": 9
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 40,
+        "timer": 2.522,
+        "step": 7
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 100,
+        "timer": 14.162,
+        "step": 58
     }
 ]
