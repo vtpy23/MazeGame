@@ -25,13 +25,21 @@ class DrawMaze:
         self.cure_points = None
         self.count_cure = 0
         self.break_loop = 5 # using for lava spreading
-    def opening_guide(self, screen):
+    def castle_draw(self, screen):
         castle = pygame.image.load('graphics/castle.png')
         castle_rect = castle.get_rect()
         castle_rect.center = (1024 // 2, 768 // 2)
         screen.blit(castle, castle_rect)
+        pygame.display.flip()
+        pygame.time.wait(1500)
+        screen.fill((113, 221, 238))
+    def opening_guide(self, screen):
+        castle = pygame.image.load('graphics/fire_maze.jpg')
+        castle_rect = castle.get_rect()
+        castle_rect.center = (1024 // 2, 768 // 2)
+        screen.blit(castle, castle_rect)
     def opening_guide2(self, screen):
-        castle = pygame.image.load('graphics/castle.png')
+        castle = pygame.image.load('graphics/horror_maze.jpg')
         castle_rect = castle.get_rect()
         castle_rect.center = (1024 // 2, 768 // 2)
         screen.blit(castle, castle_rect)
@@ -184,6 +192,7 @@ class gameGeneral:
     def gameplay(self):
         self.maze[0][1] = 'o'
         A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
+        A.castle_draw(screen)
         opening_guide = True
         while opening_guide:
             A.opening_guide(screen)
@@ -280,6 +289,13 @@ class savePrincess(gameGeneral):
         start_time = 120
         A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
         A.select_points(A.searching_area)
+        opening_guide = True
+        while opening_guide:
+            A.opening_guide2(screen)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    opening_guide = False
         A.draw_opening_circle(screen)
         start_ticks = pygame.time.get_ticks()
         while True:
@@ -367,5 +383,5 @@ door = pygame.image.load('graphics/door.png').convert_alpha()
 cure = pygame.image.load('graphics/cure.png').convert_alpha()
 princess = pygame.image.load('graphics/princess.png').convert_alpha()
 
-A = gameGeneral()
+A = savePrincess()
 A.gameplay()
