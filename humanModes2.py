@@ -47,6 +47,28 @@ class DrawMaze:
             pygame.draw.circle(screen, (255,255,255), (1024 // 2, 768 // 2), radius)
             pygame.display.flip()
             clock.tick(60)
+    def draw_arrow(self, surface, start, end, color, camera_offset):
+        adjusted_start = (start[0] - camera_offset.x, start[1] - camera_offset.y)
+        adjusted_end = (end[0] - camera_offset.x, end[1] - camera_offset.y)
+        
+        pygame.draw.line(surface, color, adjusted_start, adjusted_end, 5)
+        
+        angle = math.atan2(adjusted_end[1] - adjusted_start[1], adjusted_end[0] - adjusted_start[0])
+        arrow_head_length = 20
+        arrow_head_angle = math.pi / 6
+        
+        arrow_point1 = (
+            adjusted_end[0] - arrow_head_length * math.cos(angle - arrow_head_angle),
+            adjusted_end[1] - arrow_head_length * math.sin(angle - arrow_head_angle)
+        )
+        arrow_point2 = (
+            adjusted_end[0] - arrow_head_length * math.cos(angle + arrow_head_angle),
+            adjusted_end[1] - arrow_head_length * math.sin(angle + arrow_head_angle)
+        )
+        
+        pygame.draw.line(surface, color, adjusted_end, arrow_point1, 5)
+        pygame.draw.line(surface, color, adjusted_end, arrow_point2, 5)
+
     def draw_lose1(self, screen):
         castle = pygame.image.load('graphics/lose1.png')
         castle_rect = castle.get_rect()
@@ -233,6 +255,8 @@ class gameGeneral:
                 B = savePrincess()
                 B.gameplay()
                 break
+            if self.win_status == True:
+                A.draw_arrow(screen, (self.player_rect.centerx, self.player_rect.centery), (3000,3300), (0, 255, 0), camera_offset)
             if A.checkQuit(self.player_rect):
                 print('quit dong 153')
                 break
@@ -253,7 +277,7 @@ class savePrincess(gameGeneral):
         self.win_all = False
     def gameplay(self):
         self.maze[0][1] = 'o'
-        start_time = 2
+        start_time = 120
         A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
         A.select_points(A.searching_area)
         A.draw_opening_circle(screen)
@@ -320,13 +344,14 @@ class savePrincess(gameGeneral):
             screen.blit(scaled_player_image, player_rect_scaled)
             # Draw princess Move
             if self.win_all == True:
+                A.draw_arrow(screen, (self.player_rect.centerx, self.player_rect.centery), (3000,3300), (0, 255, 0), camera_offset)
                 princess_rect = princess.get_rect(topleft=(1024//2 - 40 - self.camera_offset.x, 768//2 - 30 - self.camera_offset.y))
                 screen.blit(princess, princess_rect)
             mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds: .2f}")
             pygame.display.flip()
             clock.tick(60)
 
-# Main Program Execution
+# Main Program Executiona
 pygame.init()
 screen = pygame.display.set_mode((1024, 768))
 clock = pygame.time.Clock()
