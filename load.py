@@ -1,7 +1,9 @@
 import pygame
 import mazeGeneration as mg 
 import saveLoad as sv
-from humanMode import gameLoadManually
+from humanMode import gameManually
+
+screen = mg.screen
 
 class Load:
     def __init__(self):
@@ -23,6 +25,11 @@ class Load:
     #self.file_save_name = sv.saveLoad().takeNameFile()
     def draw_menu_load(self):
         # Vẽ nút
+        self.file_save_name = sv.saveLoad().takeNameFile()
+        self.buttons_file_load = [
+            {"text": name, "pos_x": 384, "pos_y": 200 + 40 * i}
+            for i, name in enumerate(self.file_save_name)
+        ]
         for i, button in enumerate(self.buttons_menu_load ):
             color = (255, 255, 255) if self.selected_load == False else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
@@ -58,8 +65,16 @@ class Load:
             self.run_load = False
 
     def handle_button_click_load_left(self, index):
-        matrix, gameInfo = sv.saveLoad().loadGame(index + 1)
-        play = gameLoadManually(matrix, gameInfo)
+        mode, matrix, size, player_pos, player_aimbitation = sv.saveLoad().loadGame(index)
+        cell_size = ((768)**2 / (size) ** 2) ** 0.5
+        play = gameManually(size, matrix, player_pos, player_aimbitation)
+        play.mode_play = mode
+        play.drawMaze()
+        pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + player_pos[1] * cell_size 
+                                            ,0 + 3 + player_pos[0] * cell_size, cell_size - 5, cell_size - 5))
+        pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + player_aimbitation[1] * cell_size 
+                                            ,0 + 3 + player_aimbitation[0] * cell_size, cell_size - 5, cell_size - 5))
+        pygame.display.flip()
         play.creatingMaze()
         mg.Initialization().draw_load()
     def handle_menu_events_load(self):

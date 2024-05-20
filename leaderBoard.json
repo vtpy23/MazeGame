@@ -130,5 +130,29 @@
         "hard_mode": 20,
         "timer": 1.791,
         "step": 8
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 41.088,
+        "step": 72
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 41.849,
+        "step": 242
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 2.164,
+        "step": 8
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 3.306,
+        "step": 12
     }
 ]

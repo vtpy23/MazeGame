@@ -6,7 +6,7 @@ import authentication
 from authentication import USERNAME
 class saveLoad:
     count = None
-    maxFile = 10
+    maxFile = 200
     def __init__(self):
         self.dataGame = None
         self.name = None
@@ -19,16 +19,17 @@ class saveLoad:
             self.dataGame = [{'count' : 1}]
         order = self.dataGame[0]
         saveLoad.count = order['count']
-    def saveGame(self, board_matrix, start_point, end_point, player_step, timer_count):
+    def saveGame(self, mode_play, board_matrix, start_point, end_point, player_step, timer_count):
         self.takeNumericalOrder()
         self.local_time = time.localtime()
+        self.mode_play = mode_play
         self.matrix = board_matrix  # Corrected variable name
         self.start_point = start_point
         self.end_point = end_point
         time_saving = {'Date': str(self.local_time.tm_mday) + '/' + str(self.local_time.tm_mon) + '/' + str(self.local_time.tm_year), 
                        'Time' : str(self.local_time.tm_hour) + ':' + str(self.local_time.tm_min) + ':' + str(self.local_time.tm_sec)}
 
-        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'player_step': player_step, 'time': time_saving, 'username': authentication.USERNAME, 'counting_sec': timer_count}
+        newGame = {"gameNumber": saveLoad.count, 'board': self.matrix, 'player_pos': self.start_point, 'ambitation_pos': self.end_point, 'player_step': player_step, 'time': time_saving, 'username': authentication.USERNAME, 'counting_sec': timer_count, 'ran_cus': self.mode_play}
         try:
             del self.dataGame[self.count]
         except:
@@ -42,19 +43,22 @@ class saveLoad:
         
     
     def loadGame(self, num):
-        with open("gameSaving.json", encoding="utf-8") as fr:
-            self.dataGame = js.load(fr)
-        gameLoader = self.dataGame[num]
-        matrix = gameLoader['board']
-        gameInfo = []
-        gameInfo.extend([gameLoader['player_pos'], gameLoader['ambitation_pos'], gameLoader['player_step'], gameLoader['counting_sec']])
-        return matrix, gameInfo
+        with open("gameSaveUser.json", encoding="utf-8") as fr:
+            dataGame = js.load(fr)
+            matrix = dataGame[num]["board"]
+            size = len(dataGame[num]["board"])
+            player_pos = dataGame[num]["player_pos"]
+            player_aimbitation = dataGame[num]["ambitation_pos"]
+            ran_cus = dataGame[num]["ran_cus"]
+        return ran_cus, matrix, size, tuple(player_pos), tuple(player_aimbitation)
     
     def savebyusername(self):
         with open('gameSaving.json', 'r') as file:
             data = js.load(file)
             filtered_data = [entry for entry in data if entry.get('username') == USERNAME]
-            return filtered_data
+            with open('gameSaveUser.json', 'w') as file:
+                js.dump(filtered_data[-10:], file, indent=4)
+            return filtered_data[-10:]
 
     def takeNameFile(self):
         dataGame = self.savebyusername()

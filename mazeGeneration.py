@@ -72,7 +72,8 @@ class Initialization:
         self.draw_rectangle(84, (self.screen_height - 600) // 2, 600, 600, (255, 255, 255))
         self.draw_rectangle(716, (self.screen_height - 618) // 2, 248, 618, (255, 215, 0))
         self.draw_rectangle(725, (self.screen_height - 600) // 2, 230, 600, self.screen_color)
-        self.draw_text("MENU", 64, (255, 255, 0), 384, 42)
+        self.draw_to_delete("LOAD")
+        self.draw_text("MAP   POINT    TIME       DATE     ", 32, "Black", 384, 150)
 
     def draw_rectangle_with_text(self,x, y,width,text):
         font = pygame.font.Font(None, 36)
