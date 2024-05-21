@@ -43,6 +43,16 @@ class DrawMaze:
         castle_rect = castle.get_rect()
         castle_rect.center = (1024 // 2, 768 // 2)
         screen.blit(castle, castle_rect)
+    def opening_guide3(self, screen):
+        castle = pygame.image.load('graphics/key_maze.jpg')
+        castle_rect = castle.get_rect()
+        castle_rect.center = (1024 // 2, 768 // 2)
+        screen.blit(castle, castle_rect)
+    def closing_guide(self, screen):
+        castle = pygame.image.load('graphics/win.jpg')
+        castle_rect = castle.get_rect()
+        castle_rect.center = (1024 // 2, 768 // 2)
+        screen.blit(castle, castle_rect)
     def draw_opening_circle(self, screen):
         max_radius = max(1024, 768) // 2
         for radius in range(0, max_radius + 1, 5):
@@ -99,7 +109,15 @@ class DrawMaze:
         self.next_door_rect = self.door.get_rect(topleft=(1700 + (x * 40), 1900 + (y * 40)))
         next_door_rect = self.door.get_rect(topleft=(1700 + (x * 40) - self.camera_offset.x, 1900 + (y * 40) - self.camera_offset.y))
         self.screen.blit(self.door, next_door_rect)
-
+    def drawlastgame(self):
+        for y, row in enumerate(self.maze):
+            for x, cell in enumerate(row):
+                if cell == 'x':
+                    wall_rect = self.wall.get_rect(topleft=(710 + (x * 40) - self.camera_offset.x, 1112 + (y * 40) - self.camera_offset.y))
+                    self.screen.blit(self.wall, wall_rect)
+        self.door_rect = self.door.get_rect(topleft=(1530 + (x * 40), 1900 + (y * 40)))
+        door_rect = self.door.get_rect(topleft=(1530 + (x * 40) - self.camera_offset.x, 1900 + (y * 40) - self.camera_offset.y))
+        self.screen.blit(self.door, door_rect)
     def check_collision(self, rect):
         for y, row in enumerate(self.maze):
             for x, cell in enumerate(row):
@@ -184,7 +202,7 @@ class DrawMaze:
         solved = Maze_bfs_solving(maze, (1,1), (len(maze) - 2, len(maze) - 2))
         way = solved.Truyvet()
         self.selected_door = []
-        self.select_key = []
+        self.selected_key = []
         begin = 0
         end = len(way) // 3 - 1
         for i in range(3):
@@ -192,6 +210,7 @@ class DrawMaze:
             begin = end
             end = end + len(way) // 3 - 1
         self.door_game_rect = []
+        self.key_rect = []
         for y, x in self.selected_door:
             cure_rect = self.wall.get_rect(topleft=(710 + (x * 40), 1112 + (y * 40)))
             self.door_game_rect.append(cure_rect)
@@ -209,21 +228,46 @@ class DrawMaze:
                         count += 1
                         begin = pos
                         random_key_area = []
-                        self.select_key.append(key)
-                        print(key)
+                        self.selected_key.append(key)
                         break
-            if(count == 3): break    
+            if(count == 3): break   
+        for y, x in self.selected_key:
+            cure_rect = self.wall.get_rect(topleft=(710 + (x * 40), 1112 + (y * 40)))
+            self.key_rect.append(cure_rect) 
     def draw_door(self):
         for y, x in self.selected_door:
-            door_rect = self.door.get_rect(topleft=(710 + (x * 40) - self.camera_offset.x, 1112 + (y * 40) - self.camera_offset.y))
-            self.screen.blit(door, door_rect)
-    def check_collision_door(self,rect):
+            door_rect = self.wall.get_rect(topleft=(710 + (x * 40) - self.camera_offset.x, 1112 + (y * 40) - self.camera_offset.y))
+            self.screen.blit(door_ingame, door_rect)
+    def check_collision_door(self,rect, key):
+        if key != 0: return False
         if self.door_game_rect:
             for door in self.door_game_rect:
                 if rect.colliderect(door):
                     return True
         return False
-
+    def draw_key(self):
+        for y, x in self.selected_key:
+            key_rect = key.get_rect(topleft=(710 + (x * 40) - self.camera_offset.x, 1112 + (y * 40) - self.camera_offset.y))
+            self.screen.blit(key, key_rect)
+    def check_collecting_key(self, rect):
+        if self.key_rect: 
+            for key in self.key_rect:
+                if rect.colliderect(key):
+                    self.key_rect.remove(key)
+                    self.selected_key.remove(((key.y - 1112) // 40, (key.x - 710) // 40))
+                    return True
+        return False
+    def check_door_condition(self, rect, key):
+        if key != 0:
+            if self.door_game_rect:
+                for door in self.door_game_rect:
+                    if rect.colliderect(door):
+                        print(True)
+                        #Delete wall and wall rect
+                        self.door_game_rect.remove(door)
+                        self.selected_door.remove(((door.y - 1112) // 40, (door.x - 710) // 40))
+                        return True
+        return False
 class gameGeneral:
     def __init__(self) -> None:
         self.player_rect = player_image.get_rect(center=(677, 712))
@@ -418,18 +462,19 @@ class findWayOut(gameGeneral):
         super().__init__()
         self.player_rect = player_image.get_rect(center=(677, 712))
         self.win_all = False
+        self.key_collection = 0
     def gameplay(self):
         self.maze[0][1] = 'o'
-        start_time = 120
+        start_time = 60
         A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
         opening_guide = True
-        # while opening_guide:
-        #     A.opening_guide2(screen)
-        #     pygame.display.flip()
-        #     for event in pygame.event.get():
-        #         if event.type == pygame.KEYDOWN:
-        #             opening_guide = False
-        # A.draw_opening_circle(screen)
+        while opening_guide:
+            A.opening_guide3(screen)
+            pygame.display.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    opening_guide = False
+        A.draw_opening_circle(screen)
         start_ticks = pygame.time.get_ticks()
         A.random_door_key(self.maze)
         while True:
@@ -452,7 +497,7 @@ class findWayOut(gameGeneral):
                 self.player_rect.x += self.player_speed
 
             # Check for collision
-            if A.check_collision(self.player_rect) or A.check_collision_door(self.player_rect):
+            if A.check_collision(self.player_rect) or A.check_collision_door(self.player_rect, self.key_collection):
                 self.player_rect = player_rect_backup  # Restore the previous position if there is a collision
             
             # Check for run out time
@@ -470,20 +515,32 @@ class findWayOut(gameGeneral):
             screen.fill((113, 221, 238))  # Light blue
             ground_rect = ground_image.get_rect(topleft=(0 - camera_offset.x, 0 - camera_offset.y))
             screen.blit(ground_image, ground_rect)
-
+            A.drawlastgame()
+            A.draw_door()
+            A.draw_key()
             # Draw walls based on the maze
             A.camera_offset = camera_offset
-            A.draw()
-            A.draw_door()
+            if A.check_collecting_key(self.player_rect):
+                self.key_collection += 1
+            #Check collect key
             if self.win_all == False:
                 A.game_events(bed)
-            #Check collecting Cure
+            if A.check_door_condition(self.player_rect, self.key_collection):
+                self.key_collection = 0
+            if A.check_win(self.player_rect) and self.win_all == False:
+                closing_guide = True
+                while closing_guide:
+                    A.closing_guide(screen)
+                    pygame.display.flip()
+                    for event in pygame.event.get():
+                        if event.type == pygame.KEYDOWN:
+                            closing_guide = False
+                self.win_all = True
             # Check win
             # Mo ra duoc 3 cua va den dich
             # ra duoc khoi me cung ve man hinh thang cuu duoc cong chua
             if A.checkQuit(self.player_rect):
                 break
-
             # Draw player
             scaled_player_image = pygame.transform.scale(player_image, (int(self.player_rect.width), int(self.player_rect.height)))
             player_rect_scaled = scaled_player_image.get_rect(center=screen.get_rect().center)
@@ -491,6 +548,8 @@ class findWayOut(gameGeneral):
             # Draw princess Move
             if self.win_all == True: 
                 A.draw_arrow(screen, (self.player_rect.centerx, self.player_rect.centery), (3000,3300), (0, 255, 0), camera_offset)
+                self.maze[len(self.maze) - 1][len(self.maze) - 2] = 'o'
+                self.maze[0][1] = 'x'
             princess_rect = princess.get_rect(topleft=(1024//2 - 40 - self.camera_offset.x, 768//2 - 30 - self.camera_offset.y))
             screen.blit(princess, princess_rect)
             mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds: .2f}")
@@ -512,6 +571,5 @@ lava_image = pygame.image.load('graphics/lava.png').convert_alpha()
 door = pygame.image.load('graphics/door.png').convert_alpha()
 cure = pygame.image.load('graphics/cure.png').convert_alpha()
 princess = pygame.image.load('graphics/princess.png').convert_alpha()
-
-C = findWayOut()
-C.gameplay()
+key = pygame.image.load('graphics/key.png').convert_alpha()
+door_ingame = pygame.image.load('graphics/door_ingame.jpg').convert_alpha()
