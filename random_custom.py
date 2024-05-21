@@ -2,6 +2,7 @@ import pygame
 import mazeGeneration as mg 
 from humanMode import gameManually
 from autoMode import gameAutomatically
+import random
 
 class Random_custom:
     def __init__(self):
@@ -46,7 +47,11 @@ class Random_custom:
         if index == 0:
             if mode == 0:
                 if sizemap == 0: # map: 20x20, mode: manual, start point - end point: random
-                    play = gameManually(20)
+                    size = 20
+                    matrix = mg.mazeGeneration().createMaze(size)
+                    player_pos = (0, 0) #Vi tri co the thay doi
+                    player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
+                    play = gameManually(size, matrix, player_pos, player_aimbitation)
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
@@ -54,7 +59,11 @@ class Random_custom:
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 1: # map: 40x40, mode: manual, start point - end point: random
-                    play = gameManually(40)
+                    size = 40
+                    matrix = mg.mazeGeneration().createMaze(size)
+                    player_pos = (0,0) #Vi tri co the thay doi
+                    player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
+                    play = gameManually(size, matrix, player_pos, player_aimbitation)
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
@@ -62,7 +71,11 @@ class Random_custom:
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: random
-                    play = gameManually(100)
+                    size = 100
+                    matrix = mg.mazeGeneration().createMaze(size)
+                    player_pos = (0,0) #Vi tri co the thay doi
+                    player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
+                    play = gameManually(size, matrix, player_pos, player_aimbitation)
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
@@ -97,7 +110,11 @@ class Random_custom:
         elif index == 1:
             if mode == 0:
                 if sizemap == 0: # map: 20x20, mode: manual, start point - end point: custom
-                    play = gameManually(20)
+                    size = 20
+                    matrix = mg.mazeGeneration().createMaze(size)
+                    player_pos = (0,0) #Vi tri co the thay doi
+                    player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
+                    play = gameManually(size, matrix, player_pos, player_aimbitation)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(20)
@@ -106,7 +123,11 @@ class Random_custom:
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)
                 elif sizemap == 1: # map: 40x40, mode: manual, start point - end point: custom
-                    play = gameManually(40)
+                    size = 40
+                    matrix = mg.mazeGeneration().createMaze(size)
+                    player_pos = (0,0) #Vi tri co the thay doi
+                    player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
+                    play = gameManually(size, matrix, player_pos, player_aimbitation)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(40)
@@ -115,7 +136,11 @@ class Random_custom:
                     mg.Initialization().draw_to_delete("")
                     mg.Initialization().draw_text("START POINT - END POINT", 48, (255, 255, 0), 384, 42)                   
                 elif sizemap == 2: # map: 100x100, mode: manual, start point - end point: custom
-                    play = gameManually(100)
+                    size = 100
+                    matrix = mg.mazeGeneration().createMaze(size)
+                    player_pos = (0,0) #Vi tri co the thay doi
+                    player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
+                    play = gameManually(size, matrix, player_pos, player_aimbitation)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(100)
