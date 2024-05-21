@@ -10,7 +10,7 @@ class DrawMaze:
     def __init__(self, maze, screen, camera_offset, wall, lava_image, door) -> None:
         self.maze = maze
         self.screen = screen
-        self.solvedMaze = Maze_bfs_solving(self.maze)
+        self.solvedMaze = Maze_bfs_solving(self.maze, (1,1), (len(maze) - 2, len(maze) - 2))
         self.searching_area = self.solvedMaze.Bfs()
         self.camera_offset = camera_offset
         self.wall = wall
@@ -179,6 +179,50 @@ class DrawMaze:
                     self.cure_rect.remove(cure)
                     self.cure_points.remove(((cure.y - 1112) // 40, (cure.x - 710) // 40))
                     self.count_cure += 1
+    #Round 3
+    def random_door_key(self, maze):
+        solved = Maze_bfs_solving(maze, (1,1), (len(maze) - 2, len(maze) - 2))
+        way = solved.Truyvet()
+        self.selected_door = []
+        self.select_key = []
+        begin = 0
+        end = len(way) // 3 - 1
+        for i in range(3):
+            self.selected_door.append(random.choice(way[begin:end]))
+            begin = end
+            end = end + len(way) // 3 - 1
+        self.door_game_rect = []
+        for y, x in self.selected_door:
+            cure_rect = self.wall.get_rect(topleft=(710 + (x * 40), 1112 + (y * 40)))
+            self.door_game_rect.append(cure_rect)
+        random_key_area = []
+        count = 0
+        begin = (1,1)
+        for pos in self.searching_area:
+            random_key_area.append(pos)
+            if(pos in self.selected_door):
+                while(True):
+                    key = random.choice(random_key_area)
+                    end = key
+                    way_to_key = Maze_bfs_solving(maze, begin, end).Truyvet()
+                    if pos not in way_to_key:
+                        count += 1
+                        begin = pos
+                        random_key_area = []
+                        self.select_key.append(key)
+                        print(key)
+                        break
+            if(count == 3): break    
+    def draw_door(self):
+        for y, x in self.selected_door:
+            door_rect = self.door.get_rect(topleft=(710 + (x * 40) - self.camera_offset.x, 1112 + (y * 40) - self.camera_offset.y))
+            self.screen.blit(door, door_rect)
+    def check_collision_door(self,rect):
+        if self.door_game_rect:
+            for door in self.door_game_rect:
+                if rect.colliderect(door):
+                    return True
+        return False
 
 class gameGeneral:
     def __init__(self) -> None:
@@ -283,7 +327,7 @@ class savePrincess(gameGeneral):
         super().__init__()
         self.player_rect = player_image.get_rect(center=(677, 712))
         self.collecting_cure = False
-        self.win_all = False
+        self.win_game2 = False
     def gameplay(self):
         self.maze[0][1] = 'o'
         start_time = 120
@@ -322,7 +366,7 @@ class savePrincess(gameGeneral):
                 self.player_rect = player_rect_backup  # Restore the previous position if there is a collision
             
             # Check for run out time
-            if seconds <= 0 and self.win_all == False:
+            if seconds <= 0 and self.win_game2 == False:
                 seconds = 0
                 #Them man hinh thua
                 A.draw_lose2(screen)
@@ -341,16 +385,102 @@ class savePrincess(gameGeneral):
             A.camera_offset = camera_offset
             A.draw()
             A.draw_selected_point()
-            if self.win_all == False:
+            if self.win_game2 == False:
                 A.game_events(princess)#Sau nay thay doi thanh princess
             #Check collecting Cure
             A.check_collecting_cure(self.player_rect)
             # Check win
             if A.check_win(self.player_rect) and A.count_cure == 5:
-                self.win_all = True
+                self.win_game2 = True
                 self.maze[len(self.maze) - 1][len(self.maze) - 2] = 'o'
                 self.maze[0][1] = 'x'
                # ra duoc khoi me cung ve man hinh thang cuu duoc cong chua
+            if A.checkQuit(self.player_rect):
+                break
+            if(self.win_game2 == True and A.checkNextRound(self.player_rect) == True):
+                C = findWayOut()
+                C.gameplay()
+                break
+            # Draw player
+            scaled_player_image = pygame.transform.scale(player_image, (int(self.player_rect.width), int(self.player_rect.height)))
+            player_rect_scaled = scaled_player_image.get_rect(center=screen.get_rect().center)
+            screen.blit(scaled_player_image, player_rect_scaled)
+            # Draw princess Move
+            if self.win_game2 == True:
+                A.draw_arrow(screen, (self.player_rect.centerx, self.player_rect.centery), (3000,3300), (0, 255, 0), camera_offset)
+                princess_rect = princess.get_rect(topleft=(1024//2 - 40 - self.camera_offset.x, 768//2 - 30 - self.camera_offset.y))
+                screen.blit(princess, princess_rect)
+            mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds: .2f}")
+            pygame.display.flip()
+            clock.tick(60)
+class findWayOut(gameGeneral):
+    def __init__(self) -> None:
+        super().__init__()
+        self.player_rect = player_image.get_rect(center=(677, 712))
+        self.win_all = False
+    def gameplay(self):
+        self.maze[0][1] = 'o'
+        start_time = 120
+        A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
+        opening_guide = True
+        # while opening_guide:
+        #     A.opening_guide2(screen)
+        #     pygame.display.flip()
+        #     for event in pygame.event.get():
+        #         if event.type == pygame.KEYDOWN:
+        #             opening_guide = False
+        # A.draw_opening_circle(screen)
+        start_ticks = pygame.time.get_ticks()
+        A.random_door_key(self.maze)
+        while True:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+            seconds = start_time - (pygame.time.get_ticks() - start_ticks) / 1000
+            keys = pygame.key.get_pressed()
+            # Store the current position
+            player_rect_backup = self.player_rect.copy()
+            # Draw ambitation pos
+            if keys[pygame.K_UP]:
+                self.player_rect.y -= self.player_speed
+            elif keys[pygame.K_DOWN]:
+                self.player_rect.y += self.player_speed
+            if keys[pygame.K_LEFT]:
+                self.player_rect.x -= self.player_speed
+            elif keys[pygame.K_RIGHT]:
+                self.player_rect.x += self.player_speed
+
+            # Check for collision
+            if A.check_collision(self.player_rect) or A.check_collision_door(self.player_rect):
+                self.player_rect = player_rect_backup  # Restore the previous position if there is a collision
+            
+            # Check for run out time
+            if seconds <= 0 and self.win_all == False:
+                seconds = 0
+                #Them man hinh thua
+                A.draw_lose2(screen)
+                pygame.display.flip()
+                pygame.time.wait(5000)
+                break
+            # Calculate camera offset to keep player in the center
+            camera_offset = pygame.Vector2(self.player_rect.center) - pygame.Vector2(screen.get_rect().center)
+
+            # Draw ground
+            screen.fill((113, 221, 238))  # Light blue
+            ground_rect = ground_image.get_rect(topleft=(0 - camera_offset.x, 0 - camera_offset.y))
+            screen.blit(ground_image, ground_rect)
+
+            # Draw walls based on the maze
+            A.camera_offset = camera_offset
+            A.draw()
+            A.draw_door()
+            if self.win_all == False:
+                A.game_events(bed)
+            #Check collecting Cure
+            # Check win
+            # Mo ra duoc 3 cua va den dich
+            # ra duoc khoi me cung ve man hinh thang cuu duoc cong chua
             if A.checkQuit(self.player_rect):
                 break
 
@@ -359,10 +489,10 @@ class savePrincess(gameGeneral):
             player_rect_scaled = scaled_player_image.get_rect(center=screen.get_rect().center)
             screen.blit(scaled_player_image, player_rect_scaled)
             # Draw princess Move
-            if self.win_all == True:
+            if self.win_all == True: 
                 A.draw_arrow(screen, (self.player_rect.centerx, self.player_rect.centery), (3000,3300), (0, 255, 0), camera_offset)
-                princess_rect = princess.get_rect(topleft=(1024//2 - 40 - self.camera_offset.x, 768//2 - 30 - self.camera_offset.y))
-                screen.blit(princess, princess_rect)
+            princess_rect = princess.get_rect(topleft=(1024//2 - 40 - self.camera_offset.x, 768//2 - 30 - self.camera_offset.y))
+            screen.blit(princess, princess_rect)
             mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds: .2f}")
             pygame.display.flip()
             clock.tick(60)
@@ -383,5 +513,5 @@ door = pygame.image.load('graphics/door.png').convert_alpha()
 cure = pygame.image.load('graphics/cure.png').convert_alpha()
 princess = pygame.image.load('graphics/princess.png').convert_alpha()
 
-A = savePrincess()
-A.gameplay()
+C = findWayOut()
+C.gameplay()

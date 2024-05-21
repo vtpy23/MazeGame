@@ -1,11 +1,11 @@
 import numpy as np
 class Maze_bfs_solving:
-    def __init__(self, maze) -> None:
+    def __init__(self, maze, begin, end) -> None:
         self.maze = maze.copy()
-        self.A_x = None
-        self.A_y = None
-        self.B_x = None
-        self.B_y = None
+        self.A_x = begin[0]
+        self.A_y = begin[1]
+        self.B_x = end[0]
+        self.B_y = end[1]
         self.size = len(self.maze)
         self.visited = None
         self.parent = None
@@ -16,8 +16,6 @@ class Maze_bfs_solving:
         self.visited = np.array([[False for i in range(self.size)] for j in range(self.size)])
         self.parent = np.array([[None for i in range(self.size)] for j in range(self.size)])
         self.step = np.array([[0 for i in range(self.size)]for j in range(self.size)])
-        self.A_x, self.A_y = 1, 1
-        self.B_x, self.B_y = self.size - 2 , self.size - 2
         self.maze[self.A_x, self.A_y] = 'A'
         self.maze[self.B_x, self.B_y] = 'B'
 
