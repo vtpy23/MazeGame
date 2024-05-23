@@ -1,5 +1,3 @@
-import numpy as np
-import mazeGeneration as mg
 import json as js
 import time
 import authentication 
@@ -9,8 +7,8 @@ class saveLoad:
     maxFile = 200
     def __init__(self):
         self.dataGame = None
-        self.name = None
         return
+    
     def takeNumericalOrder(self):
         try:
             with open("gameSaving.json", encoding="utf-8") as fr:
