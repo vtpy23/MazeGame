@@ -15,7 +15,6 @@ class LoginForm():
         self.window.geometry('1280x720')
         self.window.title('Authentication')
         self.window.resizable(False, False)
-        self.custom_font = font.Font(font="font/Minecraftia-Regular.TTF", size=12, weight="bold")
         self.current_frame = 'login'
         # =============== Login Frame ================
         self.lg_frame = Frame(self.window, bg='#FFFFFF' , width=1280/8*6, height=600)
@@ -40,24 +39,21 @@ class LoginForm():
         photo = ImageTk.PhotoImage(self.side_image)
         self.side_image_label = Label(self.lg_frame, image=photo, bg= "#FFFFFF")
         self.side_image_label.image = photo
-        self.side_image_label.place(x=240, y= 40) 
+        self.side_image_label.place(x=80, y= 40) 
         # =============== Right Side Image ================
-        #self.side_image = Image.open("rightside.jpg")
-        #photo = ImageTk.PhotoImage(self.side_image)
-        #self.side_image_label = Label(self.lg_frame, image=photo, bg= "#FFFFFF")
-        #self.side_image_label.image = photo
-        #self.side_image_label.place(x=500, y= 20)  
-        # =============== Login Image ================
-        #self.sign_in_image = Image.open("rightside.jpg")
-        #photo = ImageTk.PhotoImage(self.sign_in_image)
-        #self.sign_in_image_label = Label(self.lg_frame, image=photo, bg= "#FFFFFF")
-        #self.sign_in_image_label.image = photo
-        #self.sign_in_image_label.place(x=20, y= 130) 
-        self.sign_in_label = Label(self.lg_frame, text= "Sign In", bg="#FFFFFF",fg= "black", font=self.custom_font)
+        self.side_image = Image.open("Photos\\tomnjerry.png")
+        photo = ImageTk.PhotoImage(self.side_image)
+        self.side_image_label = Label(self.lg_frame, image=photo, bg= "#FFFFFF")
+        self.side_image_label.image = photo
+        self.side_image_label.place(x=500, y= 20)  
+        # =============== Login Warm Welcome ================
+        self.welcome_label = Label(self.lg_frame, text= "Tom&Jerry: Maze Game", bg="#FFFFFF",fg= "black", font=('yu gothic ui', 18, 'bold'))
+        self.welcome_label.place(x=200, y=60)
+        self.sign_in_label = Label(self.lg_frame, text= "Sign In", bg="#FFFFFF",fg= "black", font=('yu gothic ui', 18, 'bold'))
         self.sign_in_label.place(x=250, y=140)
 
         # =============== Username ================
-        self.username_label = Label(self.lg_frame, text= "Username", bg="#FFFFFF",fg= "black", font=self.custom_font)
+        self.username_label = Label(self.lg_frame, text= "Username", bg="#FFFFFF",fg= "black", font=('yu gothic ui', 13, 'bold'))
         self.username_label.place(x=120, y=200)
 
         self.username_entry = Entry(self.lg_frame, highlightthickness=0, relief= FLAT, bg="#FFFFFF", fg="black", font=('yu gothic ui', 12, 'bold') )
