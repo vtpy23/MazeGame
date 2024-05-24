@@ -215,7 +215,7 @@ class gameAutomatically:
         drew = pA.showPath(self.size).show_searching_area(play.searching_area)
         path = play.Truyvet()
         print(path)
-        path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+        path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 255, 0), drew)
         cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
         if cell_end != self.player_aimbitation:
             self.player_pos = cell_end
@@ -228,7 +228,7 @@ class gameAutomatically:
         play = pA.playAutomatically().A_solving(self.matrix)
         path = play.A_star(self.player_pos, self.player_aimbitation)
         drew = pA.showPath(self.size).show_searching_area(play.searching_area)
-        path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (0, 0, 255), drew)
+        path_drew = mg.mazeGeneration().mazeApplication(self.matrix, path, (255, 255, 0), drew)
         cell_end = pA.showPath(self.size).go_to_final_cell(path_drew)
         if cell_end != self.player_aimbitation:
             self.player_pos = cell_end
