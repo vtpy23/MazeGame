@@ -193,5 +193,3 @@ class Random_custom:
         while self.run_random_custom:
             self.handle_menu_events_random_custom(sizemap, mode)
             self.draw_menu_random_custom()
-    
-

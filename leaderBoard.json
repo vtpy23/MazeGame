@@ -10,5 +10,11 @@
         "hard_mode": 20,
         "timer": 0.0,
         "step": 0
+    },
+    {
+        "username": "hoangvu",
+        "hard_mode": 20,
+        "timer": 3.254,
+        "step": 6
     }
 ]

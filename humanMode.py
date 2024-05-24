@@ -4,7 +4,6 @@ from pygame.locals import *
 import playAutomatically as pA
 import saveLoad as sv
 from sys import exit
-import json as js
 import random
 
 screen = mg.screen
@@ -21,26 +20,31 @@ class gameManually:
         self.matrix = matrix
         self.player_pos = pos
         self.player_aimbitation = aimbitation
-        self.player_past = None
-        self.player_step = 0
-        self.mode_play = 0
         self.run_pause = False
-        self.run_exit = False
-        self.run_play_again = False
         self.button_pause_manual = [
         {"text": "SAVE", "pos_x": 896, "pos_y": 304},
         {"text": "RESUME", "pos_x": 896, "pos_y": 384},
         {"text": "EXIT", "pos_x": 896, "pos_y": 464}]
-        self.buttons_menu_exit = [
-        {"text": "Yes", "pos_x": 448, "pos_y": 420},
-        {"text": "No", "pos_x": 576, "pos_y": 420}]
         self.buttons_menu_pause_help = [
         {"text": "PAUSE (P)", "pos_x": 896, "pos_y": 344},
         {"text": "HELP (O)", "pos_x": 896, "pos_y": 424}]
+        self.selected_button_pause_manual = 0
+
+        self.player_past = (0, 0)
+        self.player_step = 0
+        self.mode_play = 0
+        
+        self.run_exit = False
+        self.run_play_again = False
+
+        self.buttons_menu_exit = [
+        {"text": "Yes", "pos_x": 448, "pos_y": 420},
+        {"text": "No", "pos_x": 576, "pos_y": 420}]
+
         self.buttons_menu_play_again = [
         {"text": "PLAY AGAIN", "pos_x": 896, "pos_y": 344},
         {"text": "EXIT", "pos_x": 896, "pos_y": 424}]
-        self.selected_button_pause_manual = 0
+   
         self.selected_button_play_again = 0
         self.selected_button_exit = 0
         self.selected_button = 0
@@ -61,8 +65,6 @@ class gameManually:
         # Khởi tạo Pygame
         pygame.init()
         screen.fill(white)
-        maze_width = size * self.cell_size
-        maze_height = size * self.cell_size
         start_x = 0
         start_y = 0
 
@@ -147,7 +149,7 @@ class gameManually:
                             pygame.draw.rect(screen, (0, 0, 255), (0 + 3 + self.player_aimbitation[1] * self.cell_size 
                                             ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
                             self.draw_menu_pause_help()
-
+            # Hoàn thành trò chơi
             if(self.player_pos == self.player_aimbitation): 
                 save = sv.LeaderBoard()
                 save.saveWin(self.player_step, seconds, self.size)
@@ -320,7 +322,7 @@ class gameManually:
             text_rect = mg.Initialization().draw_text(button["text"], 24, (0, 255, 0), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_exit(i, time)
-    
+    # EXIT MENU 
     def handle_button_click_exit(self, index, time):
         if index == 0: # i want to save before exit
             save = sv.saveLoad()

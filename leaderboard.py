@@ -6,8 +6,8 @@ class LeaderBoard:
     def __init__(self):
         self.buttons_menu_leader_board = [
         {"text": "20x20", "pos_x": 840, "pos_y": 264},
-        {"text": "40x40", "pos_x": 840, "pos_y": 329},
-        {"text": "100x100", "pos_x": 840, "pos_y": 409},
+        {"text": "40x40", "pos_x": 840, "pos_y": 344},
+        {"text": "100x100", "pos_x": 840, "pos_y": 424},
         {"text": "BACK", "pos_x": 840, "pos_y": 504}
         ]
         self.selected_button_leader_board = 0
@@ -18,10 +18,6 @@ class LeaderBoard:
         for i, button in enumerate(self.buttons_menu_leader_board):
             color = (255, 255, 255) if i == self.selected_button_leader_board else (255, 255, 0)
             mg.Initialization().draw_text(button["text"], 36, color, button["pos_x"], button["pos_y"])
-            if i == 1:
-                mg.Initialization().draw_text("TIME", 36, color, 840, 359)
-            elif i == 2:
-                mg.Initialization().draw_text("STEP", 36, color, 840, 439)
         pygame.display.flip()
     def handle_key_events_leader_board(self, event):
         if event.key == pygame.K_UP:

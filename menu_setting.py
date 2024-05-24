@@ -20,6 +20,32 @@ screen_color = (0, 0, 150)
 
 class Menu:
     def __init__(self):
+        self.selected_music = get_song(USERNAME)
+        self.sound_on = get_sound_value(USERNAME)
+        if self.sound_on == 1:
+            self.selected_music = get_song(USERNAME)
+            self.background_musics[self.selected_music].play(-1)
+        else:
+            pass
+        self.background_musics = [
+            pygame.mixer.Sound("audio/music1.wav"),
+            pygame.mixer.Sound("audio/music2.wav"),
+            pygame.mixer.Sound("audio/music3.wav"),
+            pygame.mixer.Sound("audio/music4.wav"),
+            pygame.mixer.Sound("audio/music5.wav")
+        ]
+        self.buttons_menu_setting_on = [
+        {"text": "SOUND ON", "pos_x": 840, "pos_y": 304},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 369},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464}
+        ]
+        self.buttons_menu_setting_off = [
+        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 304},
+        {"text": "CHANGE", "pos_x": 840, "pos_y": 369},
+        {"text": "BACK", "pos_x": 840, "pos_y": 464}
+        ]
+        self.selected_button_setting = 0
+        
         self.buttons_menu = [
         {"text": "START", "pos_x": 840, "pos_y": 144},
         {"text": "LOAD", "pos_x": 840, "pos_y": 224},
@@ -34,36 +60,13 @@ class Menu:
         {"text": "VERSION 2", "pos_x": 840, "pos_y": 384},
         {"text": "QUIT", "pos_x": 840, "pos_y": 464}
         ]
-        self.buttons_menu_setting_on = [
-        {"text": "SOUND ON", "pos_x": 840, "pos_y": 304},
-        {"text": "CHANGE", "pos_x": 840, "pos_y": 369},
-        {"text": "BACK", "pos_x": 840, "pos_y": 464}
-        ]
-        self.buttons_menu_setting_off = [
-        {"text": "SOUND OFF", "pos_x": 840, "pos_y": 304},
-        {"text": "CHANGE", "pos_x": 840, "pos_y": 369},
-        {"text": "BACK", "pos_x": 840, "pos_y": 464}
-        ]
         self.selected_button_menu = 0
         self.selected_button_menu_version = 0
-        self.selected_button_setting = 0
-        self.selected_music = get_song(USERNAME)
-        self.run_setting = False
+       
         self.run_version = False
         self.run_menu = False
-        self.background_musics = [
-            pygame.mixer.Sound("audio/music1.wav"),
-            pygame.mixer.Sound("audio/music2.wav"),
-            pygame.mixer.Sound("audio/music3.wav"),
-            pygame.mixer.Sound("audio/music4.wav"),
-            pygame.mixer.Sound("audio/music5.wav")
-        ]
-        self.sound_on = get_sound_value(USERNAME)
-        if self.sound_on == 1:
-            self.selected_music = get_song(USERNAME)
-            self.background_musics[self.selected_music].play(-1)
-        else:
-            pass
+        
+
         
     # SOUND ON/OFF
     def turn_sound_on_off(self):
@@ -163,10 +166,7 @@ class Menu:
             mg.Initialization().draw_floor()
         elif index == 3:
             mg.Initialization().draw_to_delete("SETTING")
-            self.run_setting = True
-            while self.run_setting:
-                self.handle_menu_events_setting()
-                self.draw_menu_setting()
+            self.run_menu_setting()
             mg.Initialization().draw_floor()
         elif index == 2:
             mg.Initialization().draw_to_delete("LEADER BOARD")
@@ -255,3 +255,8 @@ class Menu:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 self.handle_mouse_events_setting()
 
+    def run_menu_setting(self):
+        self.run_setting = True
+        while self.run_setting:
+            self.handle_menu_events_setting()
+            self.draw_menu_setting()

@@ -28,7 +28,7 @@ class gameAutomatically:
         self.run_algorithm = False        
         self.selected_button_algorithm = 0        
         self.buttons_menu_algorithm = [
-        {"text": "DFS", "pos_x": 896, "pos_y": 304},
+        {"text": "BFS", "pos_x": 896, "pos_y": 304},
         {"text": "DIJKSTRA", "pos_x": 896, "pos_y": 384},
         {"text": "A STAR", "pos_x": 896, "pos_y": 464}
         ]
@@ -88,7 +88,8 @@ class gameAutomatically:
         elif self.selected_algorithm == 2:
             self.run_a_star()
         if self.player_pos == self.player_aimbitation:
-            gameManually(self.size).win_screen(10, 30)
+            mg.Initialization().delete_pause_menu()
+            gameManually(self.size, self.matrix, self.player_pos, self.player_aimbitation).win_screen(10, 30)
             self.run_play_again = True
             while self.run_play_again:
                 self.handle_play_again_events()
@@ -322,6 +323,7 @@ class gameAutomatically:
             self.player_aimbitation = (self.size - random.randint(1, self.size // 2), self.size - random.randint(1, self.size // 2))
             self.matrix = mg.mazeGeneration().createMaze(self.size)
             self.drawMaze()
+            self.choose_start_end_point(self.size)
             self.creatingMaze()
         elif index == 1:
             self.run_play_again = False
