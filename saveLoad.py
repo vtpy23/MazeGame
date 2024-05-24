@@ -48,7 +48,8 @@ class saveLoad:
             player_pos = dataGame[num]["player_pos"]
             player_aimbitation = dataGame[num]["ambitation_pos"]
             ran_cus = dataGame[num]["ran_cus"]
-        return ran_cus, matrix, size, tuple(player_pos), tuple(player_aimbitation)
+            time_start = dataGame[num]["counting_sec"]
+        return ran_cus, matrix, size, tuple(player_pos), tuple(player_aimbitation), time_start
     
     def savebyusername(self):
         with open('gameSaving.json', 'r') as file:

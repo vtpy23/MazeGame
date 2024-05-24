@@ -13,7 +13,7 @@ white, black = (255, 255, 255), (0, 0, 0)
 
 
 class gameManually:
-    def __init__(self, size, matrix, pos, aimbitation) -> None:
+    def __init__(self, size, matrix, pos, aimbitation, time_start) -> None:
         self.screen = None
         self.size = size
         self.cell_size = ((768)**2 / (self.size) ** 2) ** 0.5
@@ -36,7 +36,7 @@ class gameManually:
         
         self.run_exit = False
         self.run_play_again = False
-
+        self.time_start = time_start
         self.buttons_menu_exit = [
         {"text": "Yes", "pos_x": 448, "pos_y": 420},
         {"text": "No", "pos_x": 576, "pos_y": 420}]
@@ -86,6 +86,7 @@ class gameManually:
 
     # CONTROL IN GAME            
     def creatingMaze(self):
+        print(self.time_start)
         self.running = True
         self.play_again = False
         self.draw_menu_pause_help()
@@ -96,12 +97,12 @@ class gameManually:
                                                 ,0 + 3 + self.player_aimbitation[0] * self.cell_size, self.cell_size - 5, self.cell_size - 5))
             pygame.display.flip()
         ###Thoi gian choi
-        start_ticks = pygame.time.get_ticks() 
+        start_ticks = pygame.time.get_ticks()
         ###
         self.time_pause = None
         while self.running:
             seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # milisec --> sec
-            mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds: .2f}")
+            mg.Initialization().draw_rectangle_with_text(824, 20, 140,f"time: {seconds + self.time_start: .2f}")
             pygame.display.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

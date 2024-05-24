@@ -43,6 +43,7 @@ class Load:
         if self.selected_load == False:
             if event.key == pygame.K_RETURN:
                 self.handle_button_click_load_right(self.selected_button_load)
+
         elif self.selected_load == True and len(self.buttons_file_load) != 0:
             if event.key == pygame.K_RETURN:
                 self.handle_button_click_load_left(self.selected_button_load_file)
@@ -65,9 +66,9 @@ class Load:
             self.run_load = False
 
     def handle_button_click_load_left(self, index):
-        mode, matrix, size, player_pos, player_aimbitation = sv.saveLoad().loadGame(index)
+        mode, matrix, size, player_pos, player_aimbitation, time_start = sv.saveLoad().loadGame(index)
         cell_size = ((768)**2 / (size) ** 2) ** 0.5
-        play = gameManually(size, matrix, player_pos, player_aimbitation)
+        play = gameManually(size, matrix, player_pos, player_aimbitation, time_start)
         play.mode_play = mode
         play.drawMaze()
         pygame.draw.rect(screen, (255, 0, 0), (0 + 3 + player_pos[1] * cell_size 

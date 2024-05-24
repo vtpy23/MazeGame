@@ -51,7 +51,7 @@ class Random_custom:
                     matrix = mg.mazeGeneration().createMaze(size)
                     player_pos = (0, 0) #Vi tri co the thay doi
                     player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
-                    play = gameManually(size, matrix, player_pos, player_aimbitation)
+                    play = gameManually(size, matrix, player_pos, player_aimbitation, 0)
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
@@ -63,7 +63,7 @@ class Random_custom:
                     matrix = mg.mazeGeneration().createMaze(size)
                     player_pos = (0,0) #Vi tri co the thay doi
                     player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
-                    play = gameManually(size, matrix, player_pos, player_aimbitation)
+                    play = gameManually(size, matrix, player_pos, player_aimbitation, 0)
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
@@ -75,7 +75,7 @@ class Random_custom:
                     matrix = mg.mazeGeneration().createMaze(size)
                     player_pos = (0,0) #Vi tri co the thay doi
                     player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
-                    play = gameManually(size, matrix, player_pos, player_aimbitation)
+                    play = gameManually(size, matrix, player_pos, player_aimbitation, 0)
                     play.mode_play = 0
                     play.drawMaze()
                     play.creatingMaze()
@@ -114,7 +114,7 @@ class Random_custom:
                     matrix = mg.mazeGeneration().createMaze(size)
                     player_pos = (0,0) #Vi tri co the thay doi
                     player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
-                    play = gameManually(size, matrix, player_pos, player_aimbitation)
+                    play = gameManually(size, matrix, player_pos, player_aimbitation, 0)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(20)
@@ -127,7 +127,7 @@ class Random_custom:
                     matrix = mg.mazeGeneration().createMaze(size)
                     player_pos = (0,0) #Vi tri co the thay doi
                     player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
-                    play = gameManually(size, matrix, player_pos, player_aimbitation)
+                    play = gameManually(size, matrix, player_pos, player_aimbitation, 0)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(40)
@@ -140,7 +140,7 @@ class Random_custom:
                     matrix = mg.mazeGeneration().createMaze(size)
                     player_pos = (0,0) #Vi tri co the thay doi
                     player_aimbitation = (size - random.randint(1, size // 2), size - random.randint(1, size // 2))
-                    play = gameManually(size, matrix, player_pos, player_aimbitation)
+                    play = gameManually(size, matrix, player_pos, player_aimbitation, 0)
                     play.mode_play = 1
                     play.drawMaze()
                     play.choose_start_end_point(100)
