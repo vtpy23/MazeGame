@@ -57,7 +57,7 @@ class Load:
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_load_right(i)
         for i, button in enumerate(self.buttons_file_load):
-            text_rect = mg.Initialization().draw_text(button["text"], 36, (255, 255, 0), button["pos_x"], button["pos_y"])
+            text_rect = mg.Initialization().draw_text(button["text"], 30, (0, 0, 255), button["pos_x"], button["pos_y"])
             if text_rect.collidepoint(mouse_pos):
                 self.handle_button_click_load_left(i)
     def handle_button_click_load_right(self, index):
