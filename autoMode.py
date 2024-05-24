@@ -89,11 +89,16 @@ class gameAutomatically:
             self.run_a_star()
         if self.player_pos == self.player_aimbitation:
             mg.Initialization().delete_pause_menu()
-            gameManually(self.size, self.matrix, self.player_pos, self.player_aimbitation).win_screen(10, 30)
+            self.win_screen()
             self.run_play_again = True
             while self.run_play_again:
                 self.handle_play_again_events()
                 self.draw_play_again()
+
+    def win_screen(self):
+        image = pygame.image.load("image/Tam catch gia huy.png").convert()
+        screen.blit(image, (0, 0))
+        mg.Initialization().draw_text ("YOU WIN", 42, (255, 255, 0), 534, 234)
 
     def draw_player(self):
         # Vẽ hình vuông đại diện cho người chơi
