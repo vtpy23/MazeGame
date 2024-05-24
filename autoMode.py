@@ -323,13 +323,19 @@ class gameAutomatically:
 
     def handle_button_click_play_again(self, index):
         if index == 0 :
-            self.run_play_again = False
-            self.player_pos = (0, 0)
-            self.player_aimbitation = (self.size - random.randint(1, self.size // 2), self.size - random.randint(1, self.size // 2))
-            self.matrix = mg.mazeGeneration().createMaze(self.size)
-            self.drawMaze()
-            self.choose_start_end_point(self.size)
-            self.creatingMaze()
+            if self.mode_play == 0:
+                self.run_play_again = False
+                self.player_pos = (0, 0)
+                self.player_aimbitation = (self.size - random.randint(1, self.size // 2), self.size - random.randint(1, self.size // 2))
+                self.matrix = mg.mazeGeneration().createMaze(self.size)
+                self.drawMaze()
+                self.creatingMaze()
+            elif self.mode_play == 1:
+                self.run_play_again = False
+                self.matrix = mg.mazeGeneration().createMaze(self.size)
+                self.drawMaze()
+                self.choose_start_end_point(self.size)
+                self.creatingMaze()
         elif index == 1:
             self.run_play_again = False
     def handle_play_again_events(self):
