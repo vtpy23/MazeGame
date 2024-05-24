@@ -16,7 +16,7 @@ class Load:
             for i, name in enumerate(self.file_save_name)
         ]
         self.selected_button_load_file = 0
-        self.selected_load = True # chon giua load ben trai va ben phai
+        self.selected_load = False # chon giua load ben trai va ben phai
         self.selected_button_load = 0
         self.run_load = False
 
@@ -43,7 +43,7 @@ class Load:
         if self.selected_load == False:
             if event.key == pygame.K_RETURN:
                 self.handle_button_click_load_right(self.selected_button_load)
-        elif self.selected_load == True:
+        elif self.selected_load == True and len(self.buttons_file_load) != 0:
             if event.key == pygame.K_RETURN:
                 self.handle_button_click_load_left(self.selected_button_load_file)
             elif event.key == pygame.K_UP:
