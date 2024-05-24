@@ -20,13 +20,6 @@ screen_color = (0, 0, 150)
 
 class Menu:
     def __init__(self):
-        self.selected_music = get_song(USERNAME)
-        self.sound_on = get_sound_value(USERNAME)
-        if self.sound_on == 1:
-            self.selected_music = get_song(USERNAME)
-            self.background_musics[self.selected_music].play(-1)
-        else:
-            pass
         self.background_musics = [
             pygame.mixer.Sound("audio/music1.wav"),
             pygame.mixer.Sound("audio/music2.wav"),
@@ -34,6 +27,13 @@ class Menu:
             pygame.mixer.Sound("audio/music4.wav"),
             pygame.mixer.Sound("audio/music5.wav")
         ]
+        self.selected_music = get_song(USERNAME)
+        self.sound_on = get_sound_value(USERNAME)
+        if self.sound_on == 1:
+            self.selected_music = get_song(USERNAME)
+            self.background_musics[self.selected_music].play(-1)
+        else:
+            pass
         self.buttons_menu_setting_on = [
         {"text": "SOUND ON", "pos_x": 840, "pos_y": 304},
         {"text": "CHANGE", "pos_x": 840, "pos_y": 369},
