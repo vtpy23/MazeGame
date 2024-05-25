@@ -316,6 +316,7 @@ class gameGeneral:
                 A.draw_lose1(screen)
                 pygame.display.flip()
                 pygame.time.wait(3000)
+                A.draw_opening_circle(screen)
                 break
             # Check for game starting
             if A.check_game_starting(self.player_rect) == True and self.time is None:
@@ -356,6 +357,7 @@ class gameGeneral:
                 A.draw_arrow(screen, (self.player_rect.centerx, self.player_rect.centery), (3000,3300), (0, 255, 0), camera_offset)
             if A.checkQuit(self.player_rect):
                 print('quit dong 153')
+                A.draw_opening_circle(screen)
                 break
 
             # Draw player
@@ -415,7 +417,8 @@ class savePrincess(gameGeneral):
                 #Them man hinh thua
                 A.draw_lose2(screen)
                 pygame.display.flip()
-                pygame.time.wait(5000)
+                pygame.time.wait(3000)
+                A.draw_opening_circle(screen)
                 break
             # Calculate camera offset to keep player in the center
             camera_offset = pygame.Vector2(self.player_rect.center) - pygame.Vector2(screen.get_rect().center)
@@ -440,6 +443,7 @@ class savePrincess(gameGeneral):
                 self.maze[0][1] = 'x'
                # ra duoc khoi me cung ve man hinh thang cuu duoc cong chua
             if A.checkQuit(self.player_rect):
+                A.draw_opening_circle(screen)
                 break
             if(self.win_game2 == True and A.checkNextRound(self.player_rect) == True):
                 C = findWayOut()
@@ -506,7 +510,8 @@ class findWayOut(gameGeneral):
                 #Them man hinh thua
                 A.draw_lose2(screen)
                 pygame.display.flip()
-                pygame.time.wait(5000)
+                pygame.time.wait(3000)
+                A.draw_opening_circle(screen)
                 break
             # Calculate camera offset to keep player in the center
             camera_offset = pygame.Vector2(self.player_rect.center) - pygame.Vector2(screen.get_rect().center)
@@ -540,6 +545,7 @@ class findWayOut(gameGeneral):
             # Mo ra duoc 3 cua va den dich
             # ra duoc khoi me cung ve man hinh thang cuu duoc cong chua
             if A.checkQuit(self.player_rect):
+                A.draw_opening_circle(screen)
                 break
             # Draw player
             scaled_player_image = pygame.transform.scale(player_image, (int(self.player_rect.width), int(self.player_rect.height)))
