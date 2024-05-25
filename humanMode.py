@@ -109,7 +109,7 @@ class gameManually:
                     pygame.quit()
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    self.handle_mouse_events_pause_help(seconds, start_ticks)    
+                    self.handle_mouse_events_pause_help(seconds + self.time_start, start_ticks)    
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_UP:
                         self.saved = False
@@ -130,7 +130,7 @@ class gameManually:
                     elif event.key == pygame.K_p:
                         mg.Initialization().delete_pause_menu()
                         self.run_pause = True
-                        self.time_pause = self.run_pause_manual(seconds)
+                        self.time_pause = self.run_pause_manual(seconds + self.time_start)
                         start_ticks = start_ticks + self.time_pause * 1000
                         mg.Initialization().delete_pause_menu()
                         self.draw_menu_pause_help()
@@ -153,15 +153,16 @@ class gameManually:
             # Hoàn thành trò chơi
             if(self.player_pos == self.player_aimbitation): 
                 save = sv.LeaderBoard()
-                save.saveWin(self.player_step, seconds, self.size)
+                save.saveWin(self.player_step, seconds + self.time_start, self.size)
                 mg.Initialization().delete_pause_menu()
-                self.win_screen(seconds, self.player_step)
+                self.win_screen(seconds + self.time_start, self.player_step)
                 self.run_play_again = True
                 while self.run_play_again:
                     self.handle_menu_events_play_again()
                     self.draw_menu_play_again()
                 self.running = False
         if self.play_again and self.mode_play == 0:
+            self.time_start = 0
             self.player_pos = (0,0)
             self.player_aimbitation = (self.size - random.randint(1, self.size // 2), self.size - random.randint(1, self.size // 2))
             self.player_step = 0
@@ -170,6 +171,7 @@ class gameManually:
             self.creatingMaze()
         
         if self.play_again and self.mode_play == 1:
+            self.time_start = 0
             self.player_step = 0
             self.matrix = mg.mazeGeneration().createMaze(self.size)
             self.drawMaze()
@@ -180,7 +182,7 @@ class gameManually:
         image = pygame.image.load("image/Tam catch gia huy.png").convert()
         screen.blit(image, (0, 0))
         mg.Initialization().draw_text ("YOU WIN", 42, (255, 255, 0), 534, 234)
-        finish_time = "TIME:  " + str(time)
+        finish_time = "TIME:  " + str(time)[:7]
         finish_step = "STEP:  " + str(step)
         mg.Initialization().draw_text_2(finish_time, 36, (0, 0, 0), 400, 504)
         mg.Initialization().draw_text_2(finish_step, 36, (0, 0, 0), 400, 564)
