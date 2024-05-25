@@ -6,7 +6,7 @@ from old_md import Maze_bfs_solving
 import math
 import random
 import mazeGeneration as mg
-class DrawMaze:
+class DrawEvents:
     def __init__(self, maze, screen, camera_offset, wall, lava_image, door) -> None:
         self.maze = maze
         self.screen = screen
@@ -279,7 +279,7 @@ class gameGeneral:
         self.time = None
     def gameplay(self):
         self.maze[0][1] = 'o'
-        A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
+        A = DrawEvents(self.maze, screen, self.camera_offset, wall, lava_image, door)
         A.castle_draw(screen)
         opening_guide = True
         while opening_guide:
@@ -377,7 +377,7 @@ class savePrincess(gameGeneral):
     def gameplay(self):
         self.maze[0][1] = 'o'
         start_time = 120
-        A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
+        A = DrawEvents(self.maze, screen, self.camera_offset, wall, lava_image, door)
         A.select_points(A.searching_area)
         opening_guide = True
         while opening_guide:
@@ -470,7 +470,7 @@ class findWayOut(gameGeneral):
     def gameplay(self):
         self.maze[0][1] = 'o'
         start_time = 60
-        A = DrawMaze(self.maze, screen, self.camera_offset, wall, lava_image, door)
+        A = DrawEvents(self.maze, screen, self.camera_offset, wall, lava_image, door)
         opening_guide = True
         while opening_guide:
             A.opening_guide3(screen)
