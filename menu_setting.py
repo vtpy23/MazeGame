@@ -173,6 +173,7 @@ class Menu:
             LeaderBoard().run_menu_leader_board()
             mg.Initialization().draw_floor()
         elif index == 4:
+            mg.Initialization().input_image_background("image/guide.png")
             mg.Initialization().draw_to_delete("GUIDE")
             Guide_Credit().run_menu_guide()
             mg.Initialization().draw_floor()
